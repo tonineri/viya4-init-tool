@@ -24,7 +24,7 @@ echo -e "aws-cli configuration deleted"
 sudo apt-get purge google-cloud-sdk 2>/dev/null
 sudo sed -i '/cloud-sdk/d' /etc/apt/sources.list.d/google-cloud-sdk.list 2>/dev/null
 sudo rm -f /usr/share/keyrings/cloud.google.gpg 2>/dev/null
-rm -rf /usr/lib/google-cloud-sdk /home/tonineri/.config/gcloud 2>/dev/null
+rm -rf /usr/lib/google-cloud-sdk $HOME/.config/gcloud 2>/dev/null
 # clear /usr/local/bin
 sudo rm -f /usr/local/bin/* 2>/dev/null 2>/dev/null
 echo -e "/usr/local/bin/ cleared"
