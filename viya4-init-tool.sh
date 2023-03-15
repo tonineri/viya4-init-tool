@@ -1,6 +1,13 @@
 #!/bin/bash
+
+# -------------------------------------------------  header  --------------------------------------------------
+
 # SAS Viya 4 Initializaton Tool
 # ***INTERNAL USE ONLY***
+# Description: the script can fully prepare a bastion host for a SAS Viya 4 cluster creation and management on Azure, AWS and Google Cloud Plaform.
+
+# Copyright © 2023, SAS Institute Inc., Cary, NC, USA. All Rights Reserved.
+# SPDX-License-Identifier: Apache-2.0
 
 # ---------------------------------------------- preRequirements ----------------------------------------------
 
@@ -309,7 +316,7 @@ requiredPackages() {
     cd $deploy
     echo -ne "Installing required packages. This might take a minute or two...\n"
     loadingStart "${loadAniModern[@]}"
-    requiredPackages=("zsh" "zip" "unzip" "git" "mlocate" "jq")
+    requiredPackages=("zsh" "zip" "unzip" "git" "mlocate" "jq" "batcat")
     # requiredPackages | installation
     for package in "${requiredPackages[@]}"; do
         sudo apt install $package -y -qq >> $LOG 2>&1
