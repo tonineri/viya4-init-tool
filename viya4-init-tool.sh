@@ -106,22 +106,23 @@ HIDDEN='\e[8m'
 
 # -------------------------------------------  selectionMenus  -------------------------------------------
 
-cloudProviderMenu(){
+providerMenu(){
 clear
     echo -e "${CYAN}__________________________________________________${NONE}"
     echo -e "\n            ${BOLD}${CYAN}Viya4${NONE} ${BOLD}Initialization Tool${NONE}"
     echo -e "${CYAN}__________________________________________________${NONE}"
-    echo -e "\n             ${BOLD}| Cloud Provider Menu |${NONE}"
+    echo -e "\n                ${BOLD}| Provider Menu |${NONE}"
     echo -e "\nInput ${BOLD}${CYAN}1${NONE} : for Microsoft Azure (AKS)"
     echo -e "Input ${BOLD}${CYAN}2${NONE} : for Amazon Web Services (EKS)"
     echo -e "Input ${BOLD}${CYAN}3${NONE} : for Google Cloud Plaform (GKE)"
+    echo -e "Input ${BOLD}${CYAN}4${NONE} : for Open Source Kubernetes (K8s)"
     echo -e "Input ${BOLD}${YELLOW}s${NONE} : to skip this menu"
     echo -e "Input ${BOLD}${RED}q${NONE} : to exit the tool\n"
 
     read CLOUDOPT
     while [[ "$CLOUDOPT" -ne 1 ]] && [[ "$CLOUDOPT" -ne 2 ]] && [[ "$CLOUDOPT" -ne 3 ]] && [[ "$CLOUDOPT" != "s" ]] && [[ "$CLOUDOPT" != "q" ]]; do
         clear
-        cloudProviderMenu
+        providerMenu
     done
     CLOUDCHECK=0
     case "$CLOUDOPT" in
@@ -136,7 +137,7 @@ clear
                     modeSelectionMenu
                 elif [[ "$CLOUDCONFIRM" == n ]]; then
                     CLOUDCHECK=1
-                    cloudProviderMenu
+                    providerMenu
                 else
                     echo -e "\n${BOLD}${RED}ERROR${NONE}: Invalid input. Accepted inputs [y/n]."
             
@@ -153,7 +154,7 @@ clear
                     modeSelectionMenu
                 elif [[ "$CLOUDCONFIRM" == n ]]; then
                     CLOUDCHECK=1
-                    cloudProviderMenu
+                    providerMenu
                 else
                     echo -e "\n${BOLD}${RED}ERROR${NONE}: Invalid input. Accepted inputs [y/n]."
             
@@ -170,12 +171,28 @@ clear
                     modeSelectionMenu
                 elif [[ "$CLOUDCONFIRM" == n ]]; then
                     CLOUDCHECK=1
-                    cloudProviderMenu
+                    providerMenu
                 else
                     echo -e "\n${BOLD}${RED}ERROR${NONE}: Invalid input. Accepted inputs [y/n]."
                 fi
              done;;
-        "s") NOCLOUD="${BOLD}No Cloud Selected${NONE}"
+        "4") while [[ "$CLOUDCHECK" -eq 0 ]]; do
+                OSK8S="${BOLD}${BLUE}Open Source Kubernetes (K8s)${NONE}"
+                echo -e "\nCloud Provider: $OSK8S"
+                echo -e "Do you confirm? [y/n]"
+                read CLOUDCONFIRM
+                if [[ "$CLOUDCONFIRM" == y ]]; then
+                    CLOUDCHECK=1
+                    CLOUD=k8s && CLOUDNAME="$OSK8S"
+                    modeSelectionMenu
+                elif [[ "$CLOUDCONFIRM" == n ]]; then
+                    CLOUDCHECK=1
+                    providerMenu
+                else
+                    echo -e "\n${BOLD}${RED}ERROR${NONE}: Invalid input. Accepted inputs [y/n]."
+                fi
+             done;;    
+        "s") NOCLOUD="${BOLD}No Provider Selected${NONE}"
              CLOUD="none" && CLOUDNAME="$NOCLOUD"
              modeSelectionMenu;;
         "q") exitTool;;
@@ -190,7 +207,7 @@ clear
     echo -e "\n             ${BOLD}| Mode Selection Menu |${NONE}"
     echo -e "\n${BOLD}${CYAN}default${NONE}:"
     echo -e "- Installs required packages and clients"
-    echo -e "- Installs cli for defined cloud provider (if defined)"
+    echo -e "- Installs provider CLI (if defined)"
     echo -e "- Downloads order assets, license and certificates"
     echo -e "\n${BOLD}${CYAN}full${NONE}:"
     echo -e "- What default does"
@@ -198,14 +215,14 @@ clear
     echo -e "- Downloads latest viya4-IaC"
     echo -e "\n${BOLD}${CYAN}clients-only${NONE}:"
     echo -e "- Installs required packages and clients"
-    echo -e "- Installs cloud provider CLI (if defined)"
+    echo -e "- Installs provider CLI (if defined)"
     echo -e "\n${BOLD}${CYAN}order-only${NONE}:"
     echo -e "- Downloads order assets, license and certificates"
-    echo -e "\n${BOLD}${CYAN}tf-only${NONE} (if Cloud Provider is defined):"
-    echo -e "- Installs cloud provider CLI"
+    echo -e "\n${BOLD}${CYAN}tf-only${NONE} (if Provider is defined):"
+    echo -e "- Installs provider CLI"
     echo -e "- Installs Terraform and configures it"
     echo -e "- Downloads latest viya4-IaC\n"
-    echo -e "\n       Cloud Provider: $CLOUDNAME"
+    echo -e "\n             Provider: $CLOUDNAME"
     echo -e "\n${CYAN}__________________________________________________${NONE}"
     echo -e "\nInput ${BOLD}${CYAN}1${NONE} : for default mode "
     echo -e "Input ${BOLD}${CYAN}2${NONE} : for full mode"
@@ -297,7 +314,7 @@ clear
                     echo -e "\n${BOLD}${RED}ERROR${NONE}: Invalid input. Accepted inputs [y/n]."
                 fi
              done;;
-        "r") cloudProviderMenu;;
+        "r") providerMenu;;
         "q") exitTool;;
     esac
 }
@@ -400,17 +417,55 @@ gcloud-cli() {
     sudo apt-get install apt-transport-https ca-certificates gnupg -y >> $LOG 2>&1
     echo "deb https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list >> $LOG 2>&1
     curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg > /tmp/google-cloud-sdk-key.gpg && sudo gpg --import /tmp/google-cloud-sdk-key.gpg >> $LOG 2>&1
-    #echo "deb https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list >> $LOG 2>&1
-    #curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo tee /usr/share/keyrings/cloud.google.gpg >> $LOG 2>&1
     sudo apt-get update -y -qq >> $LOG 2>&1
     sudo apt-get install google-cloud-cli -y -qq >> $LOG 2>&1
-    echo -e "\n${BOLD}${GREEN}SUCCESS${NONE}: gcloud-cli v$(gcloud version | awk 'NR==1{print $4}') installed."
     # gcloud-cli | post-installation & check if all required packages were installed
     loadingStop
     if which gcloud >/dev/null 2>&1; then
         echo -ne "\n${BOLD}${GREEN}SUCCESS${NONE}: gcloud-cli v$(gcloud version | awk 'NR==1{print $4}') installed."
     else
         echo -ne "\n${BOLD}${RED}ERROR${NONE}: gcloud-cli installation failed. Check $LOG for details."
+    fi
+    echo -e "\n"
+}
+
+k8s() {
+    # k8s | log
+    echo -ne "\n$DATETIME | INFO: ansible and docker installation procedure started." >> $LOG
+    # k8s | pre-installation
+    cd $deploy
+    echo -e "Installing latest docker..."
+    loadingStart "${loadAniModern[@]}"
+    # k8s | docker installation
+    sudo apt install -y -qq ca-certificates curl gnupg lsb-release
+    if [ ! -d "/etc/apt/keyrings" ]; then
+        mkdir -m 0755 -p /etc/apt/keyrings
+    fi
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg >> $LOG 2>&1
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null >> $LOG 2>&1
+    sudo apt-get update -y -qq >> $LOG 2>&1
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y -qq >> $LOG 2>&1
+    loadingStop
+    if which docker >/dev/null 2>&1; then
+        echo -ne "\n${BOLD}${GREEN}SUCCESS${NONE}: docker $(docker --version | cut -d" " -f3 | cut -d"," -f1) installed."
+    else
+        echo -ne "\n${BOLD}${RED}ERROR${NONE}: docker installation failed. Check $LOG for details."
+    fi
+    # k8s | ansible supported version
+    ANSIVER="2.13.4"
+    # k8s | ansible installation
+    echo -e "Installing ansible..."
+    loadingStart "${loadAniModern[@]}"
+    sudo apt-get install python3 -y -qq >> $LOG 2>&1
+    curl -s https://bootstrap.pypa.io/get-pip.py | python3 get-pip.py --user >> $LOG 2>&1
+    python3 -m pip install --user ansible-core==$ANSIVER --no-warn-script-location >> $LOG 2>&1
+    source $HOME/.profile
+    # k8s | post-installation
+    loadingStop
+    if which ansible >/dev/null 2>&1; then
+        echo -ne "\n${BOLD}${GREEN}SUCCESS${NONE}: ansible $(ansible --version | head -n1 | cut -d"[" -f2 | cut -d"]" -f1) installed."
+    else
+        echo -ne "\n${BOLD}${RED}ERROR${NONE}: ansible installation failed. Check $LOG for details."
     fi
     echo -e "\n"
 }
@@ -430,7 +485,7 @@ requiredClients() {
     KUBECTLCHECK=0
     while [[ "$KUBECTLCHECK" -eq 0 ]]; do
         echo -e "Input kubectl version to be installed based on your Kubernetes Cluster version (example 1.24.10):"
-        echo -e "Supported versions: 1.22.0 - 1.25.XX"
+        echo -e "Supported versions: 1.$KCTLVERMINSUPPORTED.0 - 1.$KCTLVERMAXSUPPORTED.xx"
         read KUBECTLVER
         KCTLVERMAJ=$(echo $KUBECTLVER | cut -d"." -f1)
         KCTLVERMIN=$(echo $KUBECTLVER | cut -d"." -f2)
@@ -829,6 +884,10 @@ terraformWhichCloud() {
         if [[ "$TERRAFORMCLICHECK" -eq 1 ]]; then
             terraformGCloudConfig
         fi
+    elif [[ "$CLOUD" == k8s ]]; then
+        if [[ "$TERRAFORMCLICHECK" -eq 1 ]]; then
+            terraformK8sConfig
+        fi
     elif [[ "$CLOUD" == none ]]; then
         if [[ "$TERRAFORMCLICHECK" -eq 1 ]]; then
             echo -e "\nCloud Provider not selected. Will not download cloud provider CLI or configure Terraform."
@@ -1209,6 +1268,40 @@ terraformGCloudConfig() {
     fi
 }
 
+terraformK8sConfig() {
+    # terraformK8sConfig | clone repo
+    echo -e "\nCloning viya4-iac-k8s repository from https://github.com/sassoftware/viya4-iac-k8s..."
+    IACDESTINATION="$HOME/deploy/viya4-iac-k8s"
+    loadingStart "${loadAniModern[@]}"
+    git clone https://github.com/sassoftware/viya4-iac-k8s $IACDESTINATION >> $LOG 2>&1
+    if [ -d "$IACDESTINATION" ] && [ "$(ls -A "$IACDESTINATION")" ]; then
+        loadingStop
+        echo -e "\n${BOLD}${GREEN}SUCCESS${NONE}: Repository cloned in $HOME/deploy/viya4-iac-k8s."
+        echo -e "\nNavigate to https://github.com/sassoftware/viya4-iac-k8s#customize-input-values and follow the steps from ${BOLD}${CYAN}Customize Input Values${NONE}"
+    else
+        IACK8S=0
+        echo -e "\n${BOLD}${RED}ERROR${NONE}: Repository could not be cloned.\n"
+        echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
+        echo -e "${BOLD}${YELLOW}       INPUT REQUIRED       ${NONE}"
+        echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
+        while [[ "$IACK8S" -eq 0 ]];do
+          echo -e "Input ${BOLD}${YELLOW}1${NONE} : to re-try cloning."
+          echo -e "Input ${BOLD}${YELLOW}q${NONE} : to exit the tool."
+          echo -e "\n"
+          read IACK8SRETRY
+          if [[ "$IACK8SRETRY" -eq 1 ]]; then
+            IACK8S=1
+            terraformK8sConfig
+          elif [[ "$IACK8SRETRY" == "q" ]]; then
+            IACK8S=1
+            exitTool
+          else
+            echo -e "\n${BOLD}${RED}ERROR${NONE}: Invalid input. Accepted inputs [1/q]."
+          fi
+        done  
+    fi
+}
+
 # ---------------------------------------------- modes ----------------------------------------------
 
 clientsOnlyMode() {
@@ -1266,6 +1359,12 @@ tfOnlyMode() {
         else
             gcloud-cli
         fi
+    elif [[ "$CLOUD" == k8s ]]; then
+        if which ansible >/dev/null 2>&1 && if which ansible >/dev/null 2>&1; then
+            echo -e "docker and ansible already installed." >> $LOG 2>&1
+        else
+            k8s
+        fi
     elif [[ "$CLOUD" == none ]]; then
         CPSELECT=0
         echo -e "\n${BOLD}${RED}ERROR${NONE}: Cloud Provider not selected. A Cloud Provider must be selected."
@@ -1279,7 +1378,7 @@ tfOnlyMode() {
         read CPSELECTION
         if [[ "$CPSELECTION" -eq 1 ]]; then
           CPSELECT=1
-          cloudProviderMenu
+          providerMenu
         elif [[ "$CPSELECTION" == "q" ]]; then
           CPSELECT=1
           exitTool
@@ -1329,4 +1428,4 @@ fullMode() {
 
 # --------------------------------------------  startScript  --------------------------------------------
 
-cloudProviderMenu
+providerMenu
