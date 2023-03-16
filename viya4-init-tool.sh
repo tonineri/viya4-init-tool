@@ -222,7 +222,7 @@ clear
     echo -e "- Installs provider CLI"
     echo -e "- Installs Terraform and configures it"
     echo -e "- Downloads latest viya4-IaC\n"
-    echo -e "\n             Provider: $CLOUDNAME"
+    echo -e "\n       Provider: $CLOUDNAME"
     echo -e "\n${CYAN}__________________________________________________${NONE}"
     echo -e "\nInput ${BOLD}${CYAN}1${NONE} : for default mode "
     echo -e "Input ${BOLD}${CYAN}2${NONE} : for full mode"
@@ -321,7 +321,7 @@ clear
 
 exitTool() {
     echo -ne "\n$DATETIME | INFO: Tool execution completed." >> $LOG
-    echo -e "\nThank you for using this tool."
+    echo -e "\nThank you for using this tool.\n"
     exit 0
 }
 
@@ -437,11 +437,13 @@ k8s() {
     echo -e "Installing latest docker..."
     loadingStart "${loadAniModern[@]}"
     # k8s | docker installation
-    sudo apt install -y -qq ca-certificates curl gnupg lsb-release
-    if [ ! -d "/etc/apt/keyrings" ]; then
+    sudo apt install -y -qq ca-certificates curl gnupg lsb-release >> $LOG 2>&1
+    if [[ ! -d "/etc/apt/keyrings" ]]; then
         mkdir -m 0755 -p /etc/apt/keyrings
     fi
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg >> $LOG 2>&1
+    if [[ -s "/etc/apt/keyrings/docker.gpg" ]]; then
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg >> $LOG 2>&1
+    fi
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null >> $LOG 2>&1
     sudo apt-get update -y -qq >> $LOG 2>&1
     sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y -qq >> $LOG 2>&1
@@ -454,7 +456,7 @@ k8s() {
     # k8s | ansible supported version
     ANSIVER="2.13.4"
     # k8s | ansible installation
-    echo -e "Installing ansible..."
+    echo -e "\nInstalling ansible $ANSIVER..."
     loadingStart "${loadAniModern[@]}"
     sudo apt-get install python3 -y -qq >> $LOG 2>&1
     curl -s https://bootstrap.pypa.io/get-pip.py | python3 get-pip.py --user >> $LOG 2>&1
@@ -463,7 +465,7 @@ k8s() {
     # k8s | post-installation
     loadingStop
     if which ansible >/dev/null 2>&1; then
-        echo -ne "\n${BOLD}${GREEN}SUCCESS${NONE}: ansible $(ansible --version | head -n1 | cut -d"[" -f2 | cut -d"]" -f1) installed."
+        echo -ne "\n${BOLD}${GREEN}SUCCESS${NONE}: ansible-$(ansible --version | head -n1 | cut -d"[" -f2 | cut -d"]" -f1) installed."
     else
         echo -ne "\n${BOLD}${RED}ERROR${NONE}: ansible installation failed. Check $LOG for details."
     fi
@@ -1270,14 +1272,14 @@ terraformGCloudConfig() {
 
 terraformK8sConfig() {
     # terraformK8sConfig | clone repo
-    echo -e "\nCloning viya4-iac-k8s repository from https://github.com/sassoftware/viya4-iac-k8s..."
+    echo -e "Cloning viya4-iac-k8s repository from https://github.com/sassoftware/viya4-iac-k8s..."
     IACDESTINATION="$HOME/deploy/viya4-iac-k8s"
     loadingStart "${loadAniModern[@]}"
     git clone https://github.com/sassoftware/viya4-iac-k8s $IACDESTINATION >> $LOG 2>&1
     if [ -d "$IACDESTINATION" ] && [ "$(ls -A "$IACDESTINATION")" ]; then
         loadingStop
         echo -e "\n${BOLD}${GREEN}SUCCESS${NONE}: Repository cloned in $HOME/deploy/viya4-iac-k8s."
-        echo -e "\nNavigate to https://github.com/sassoftware/viya4-iac-k8s#customize-input-values and follow the steps from ${BOLD}${CYAN}Customize Input Values${NONE}"
+        echo -e "\n${BOLD}${YELLOW}INFO${NONE}Navigate to ${ITALIC}https://github.com/sassoftware/viya4-iac-k8s#customize-input-values${NONE} and follow the steps from ${BOLD}${CYAN}Customize Input Values${NONE}"
     else
         IACK8S=0
         echo -e "\n${BOLD}${RED}ERROR${NONE}: Repository could not be cloned.\n"
