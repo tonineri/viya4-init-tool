@@ -111,7 +111,7 @@ clear
     echo -e "${CYAN}__________________________________________________${NONE}"
     echo -e "\n            ${BOLD}${CYAN}Viya4${NONE} ${BOLD}Initialization Tool${NONE}"
     echo -e "${CYAN}__________________________________________________${NONE}"
-    echo -e "\n                ${BOLD}| Provider Menu |${NONE}"
+    echo -e "\n          ${BOLD}| Provider Selection Menu |${NONE}"
     echo -e "\nInput ${BOLD}${CYAN}1${NONE} : for Microsoft Azure (AKS)"
     echo -e "Input ${BOLD}${CYAN}2${NONE} : for Amazon Web Services (EKS)"
     echo -e "Input ${BOLD}${CYAN}3${NONE} : for Google Cloud Plaform (GKE)"
