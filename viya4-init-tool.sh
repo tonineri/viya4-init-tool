@@ -1360,7 +1360,7 @@ tfOnlyMode() {
             gcloud-cli
         fi
     elif [[ "$CLOUD" == k8s ]]; then
-        if which ansible >/dev/null 2>&1 && if which ansible >/dev/null 2>&1; then
+        if which ansible >/dev/null && which ansible >/dev/null; then
             echo -e "docker and ansible already installed." >> $LOG 2>&1
         else
             k8s
