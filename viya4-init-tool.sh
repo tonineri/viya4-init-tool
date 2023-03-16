@@ -120,7 +120,7 @@ clear
     echo -e "Input ${BOLD}${RED}q${NONE} : to exit the tool\n"
 
     read CLOUDOPT
-    while [[ "$CLOUDOPT" -ne 1 ]] && [[ "$CLOUDOPT" -ne 2 ]] && [[ "$CLOUDOPT" -ne 3 ]] && [[ "$CLOUDOPT" != "s" ]] && [[ "$CLOUDOPT" != "q" ]]; do
+    while [[ "$CLOUDOPT" -ne 1 ]] && [[ "$CLOUDOPT" -ne 2 ]] && [[ "$CLOUDOPT" -ne 3 ]] && [[ "$CLOUDOPT" -ne 4 ]] && [[ "$CLOUDOPT" != "s" ]] && [[ "$CLOUDOPT" != "q" ]]; do
         clear
         providerMenu
     done
