@@ -14,6 +14,7 @@ The viya4-init-tool can fully prepare a bastion host for a SAS Viya 4 cluster cr
 It's interactive and guides the user through every step of the way asking for input when necessary.
 The tool consists of 2 menus which will let the user select the Provider and the Mode desired to then follow a guided process.
 <div align="center">
+	
 **Provider Selection Menu**
 
 ![viya-init-tool | Provider Selection Menu](assets/providerMenu.png)
