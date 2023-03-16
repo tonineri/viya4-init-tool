@@ -6,7 +6,7 @@
 
 </div>
 
-[![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)]
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE.md)
 
 ## Overview
 The viya4-init-tool can fully prepare a bastion host for a SAS Viya 4 cluster creation and management on:
