@@ -19,12 +19,18 @@ The tool consists of 2 menus which will let the user select the Provider and the
 
 <div align="center">
 
-**Provider Selection Menu**
+### Provider Selection Menu
 
 ![viya-init-tool | Provider Selection Menu](assets/providerSelectionMenu.png)
 
 
-**Mode Selection Menu**
+### Mode Selection Menu
 
 ![viya-init-tool | Mode Selection Menu](assets/modeSelectionMenu.png)
 </div>
+
+## Requirements
+
+* Sudoer / Root
+* Internet access
+* Provider admin privileges
