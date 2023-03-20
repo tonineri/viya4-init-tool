@@ -27,9 +27,9 @@ This powerful tool streamlines the cluster initialization process by providing a
 
 ## Requirements
 
->* Sudoer / Root
->* Internet access
->* Provider admin privileges
+* Sudoer / Root
+* Internet access
+* Provider admin privileges
 
 ## Getting Started
 
@@ -54,14 +54,14 @@ To get started with the viya4-Init-Tool, follow these steps:
 
 The Viya4-Init-Tool consists of two menus:
 
-1. **Provider Selection**: Choose from a list of supported cloud providers (Azure, AWS, GCP) or Open Source K8s. The provider selection determines the platform for which the tool will prepare the bastion host for SAS Viya 4 cluster creation and management.
+1. **Provider Selection Menu**: Choose from a list of supported cloud providers (Azure, AWS, GCP) or Open Source K8s. The provider selection determines the platform for which the tool will prepare the bastion host for SAS Viya 4 cluster creation and management.
 <div align="center">
 
 ![viya-init-tool | Provider Selection Menu](assets/providerSelectionMenu.png)
 
 </div>
 
-2. **Mode Selection**: Select the desired mode for your task. The modes determine the type of process you will be guided through and may vary depending on the chosen provider.
+2. **Mode Selection Menu**: Select the desired mode for your task. The modes determine the type of process you will be guided through and may vary depending on the chosen provider.
 
 <div align="center">
 
@@ -77,7 +77,7 @@ We welcome contributions to improve the Viya4-Init-Tool. Please submit your idea
 
 ## License
 
-> This project is licensed under the [Apache 2.0 License](LICENSE.md).
+This project is licensed under the [Apache 2.0 License](LICENSE.md).
 
 ## Additional Resources
 
@@ -90,7 +90,7 @@ We welcome contributions to improve the Viya4-Init-Tool. Please submit your idea
 >* [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/)
 >* [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html)
 >* [gCloud CLI](https://cloud.google.com/sdk/gcloud)
->* [viya4-iac-azure](https://github.com/sassoftware/viya4-iac-azure)
->* [viya4-iac-aws](https://github.com/sassoftware/viya4-iac-aws)
->* [viya4-iac-gcp](https://github.com/sassoftware/viya4-iac-gcp)
->* [viya4-iac-k8s](https://github.com/sassoftware/viya4-iac-k8s)
+>* [SAS Viya4-IaC-Azure](https://github.com/sassoftware/viya4-iac-azure)
+>* [SAS Viya4-IaC-AWS](https://github.com/sassoftware/viya4-iac-aws)
+>* [SAS Viya4-IaC-GCP](https://github.com/sassoftware/viya4-iac-gcp)
+>* [SAS Viya4-IaC-k8s](https://github.com/sassoftware/viya4-iac-k8s)
