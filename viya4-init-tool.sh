@@ -450,7 +450,7 @@ k8s() {
     if [[ ! -d "/etc/apt/keyrings" ]]; then
         mkdir -m 0755 -p /etc/apt/keyrings
     fi
-    if [[ -s "/etc/apt/keyrings/docker.gpg" ]]; then
+    if [[ ! -s "/etc/apt/keyrings/docker.gpg" ]]; then
         curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg >> $LOG 2>&1
     fi
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null >> $LOG 2>&1
@@ -468,13 +468,15 @@ k8s() {
     echo -e "\nInstalling ansible-core $ANSIVER..."
     loadingStart "${loadAniModern[@]}"
     sudo apt-get install python3 -y -qq >> $LOG 2>&1
-    curl -s https://bootstrap.pypa.io/get-pip.py | python3 get-pip.py --user >> $LOG 2>&1
+    curl -sfSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py >> $LOG 2>&1
+    python3 get-pip.py --user >> $LOG 2>&1
     python3 -m pip install --user ansible-core==$ANSIVER --no-warn-script-location >> $LOG 2>&1
     source $HOME/.profile
     # k8s | post-installation
     loadingStop
-    ANSIPING=$(ansible localhost -m ping)
+    ANSIPING=$(ansible localhost -m ping 2>/dev/null)
     if which ansible >/dev/null 2>&1 && [[ "$ANSIPING" == *SUCCESS* ]]; then
+        rm -f get-pip.py
         echo -ne "\n${BOLD}${GREEN}SUCCESS${NONE}: ansible-$(ansible --version | head -n1 | cut -d"[" -f2 | cut -d"]" -f1) installed."
     else
         echo -ne "\n${BOLD}${RED}ERROR${NONE}: ansible installation failed. Check $LOG for details."
