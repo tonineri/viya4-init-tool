@@ -152,7 +152,7 @@ clear
             
                 fi
              done;;
-        "2") while [[ "$CLOUDCHECK" -eq 0 ]]; do 
+        "2") while [[ "$CLOUDCHECK" -eq 0 ]]; do
                 AMAZONAWS="${BOLD}${YELLOW}Amazon Web Services (EKS)${NONE}"
                 echo -e "\nCloud Provider: $AMAZONAWS"
                 echo -e "Do you confirm? [y/n]"
@@ -248,7 +248,7 @@ clear
     done
     MODECHECK=0
     case "$MODEOPT" in
-        "1") while [[ "$MODECHECK" -eq 0 ]]; do 
+        "1") while [[ "$MODECHECK" -eq 0 ]]; do
                 echo -e "\nMode selected: ${CYAN}default${NONE}"
                 echo -e "Do you confirm? [y/n]"
                 read MODECONFIRM
@@ -263,7 +263,7 @@ clear
                     echo -e "\n${BOLD}${RED}ERROR${NONE}: Invalid input. Accepted inputs [y/n]."
                 fi
              done;;
-        "2") while [[ "$MODECHECK" -eq 0 ]]; do 
+        "2") while [[ "$MODECHECK" -eq 0 ]]; do
                 echo -e "\nMode selected: ${CYAN}full${NONE}"
                 echo -e "Do you confirm? [y/n]"
                 read MODECONFIRM
@@ -278,7 +278,7 @@ clear
                     echo -e "\n${BOLD}${RED}ERROR${NONE}: Invalid input. Accepted inputs [y/n]."
                 fi
              done;;
-        "3") while [[ "$MODECHECK" -eq 0 ]]; do 
+        "3") while [[ "$MODECHECK" -eq 0 ]]; do
                 echo -e "\nMode selected: ${CYAN}clients-only${NONE}"
                 echo -e "Do you confirm? [y/n]"
                 read MODECONFIRM
@@ -293,7 +293,7 @@ clear
                     echo -e "\n${BOLD}${RED}ERROR${NONE}: Invalid input. Accepted inputs [y/n]."
                 fi
              done;;
-        "4") while [[ "$MODECHECK" -eq 0 ]]; do 
+        "4") while [[ "$MODECHECK" -eq 0 ]]; do
                 echo -e "\nMode selected: ${CYAN}order-only${NONE}"
                 echo -e "Do you confirm? [y/n]"
                 read MODECONFIRM
@@ -308,7 +308,7 @@ clear
                     echo -e "\n${BOLD}${RED}ERROR${NONE}: Invalid input. Accepted inputs [y/n]."
                 fi
              done;;
-        "5") while [[ "$MODECHECK" -eq 0 ]]; do 
+        "5") while [[ "$MODECHECK" -eq 0 ]]; do
                 echo -e "\nMode selected: ${CYAN}tf-only${NONE}"
                 echo -e "Do you confirm? [y/n]"
                 read MODECONFIRM
@@ -465,7 +465,7 @@ k8s() {
     # k8s | ansible supported version
     ANSIVER="2.13.4"
     # k8s | ansible installation
-    echo -e "\nInstalling ansible $ANSIVER..."
+    echo -e "\nInstalling ansible-core $ANSIVER..."
     loadingStart "${loadAniModern[@]}"
     sudo apt-get install python3 -y -qq >> $LOG 2>&1
     curl -s https://bootstrap.pypa.io/get-pip.py | python3 get-pip.py --user >> $LOG 2>&1
@@ -474,7 +474,7 @@ k8s() {
     # k8s | post-installation
     loadingStop
     ANSIPING=$(ansible localhost -m ping)
-    if [[ which ansible >/dev/null 2>&1 ]] && [[ "$ANSIPING" == *SUCCESS* ]]; then
+    if which ansible >/dev/null 2>&1 && [[ "$ANSIPING" == *SUCCESS* ]]; then
         echo -ne "\n${BOLD}${GREEN}SUCCESS${NONE}: ansible-$(ansible --version | head -n1 | cut -d"[" -f2 | cut -d"]" -f1) installed."
     else
         echo -ne "\n${BOLD}${RED}ERROR${NONE}: ansible installation failed. Check $LOG for details."
@@ -524,7 +524,7 @@ requiredClients() {
             else
                 echo -ne "\n${BOLD}${RED}ERROR${NONE}: kubectl installation failed. Check $LOG for details."
             fi
-        else 
+        else
             echo -e "\n${BOLD}${RED}ERROR${NONE}: Kubectl version is incorrect, unsupported or null."
         fi
         echo -e "\n"
@@ -727,9 +727,9 @@ getOrder() {
         echo -e "\nInput software Cadence [stable/lts]:"
         read CADENCE
         ### getOrder | check if cadence is valid
-        if [[ "$CADENCE" == stable ]] || [[ "$CADENCE" == lts ]]; then 
+        if [[ "$CADENCE" == stable ]] || [[ "$CADENCE" == lts ]]; then
             CADENCECHECK=1
-        else 
+        else
             echo -e "\n${BOLD}${RED}ERROR${NONE}: Invalid software Cadence. Accepted inputs [stable/lts]."
         fi
     done
@@ -1028,7 +1028,7 @@ terraformAzureConfig() {
       echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
       echo -e "${BOLD}${YELLOW}       INPUT REQUIRED       ${NONE}"
       echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
-      while [[ "$AZTFCHECK" -eq 0 ]];do
+      while [[ "$AZTFCHECK" -eq 0 ]]; do
         echo -e "Input ${BOLD}${YELLOW}1${NONE} : to re-try Azure/Terraform binding."
         echo -e "Input ${BOLD}${YELLOW}q${NONE} : to exit the tool."
         echo -e "\n"
@@ -1082,7 +1082,7 @@ terraformAWSConfig() {
           echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
           echo -e "${BOLD}${YELLOW}       INPUT REQUIRED       ${NONE}"
           echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
-          while [[ "$AWSCREDEX" -eq 0 ]];do
+          while [[ "$AWSCREDEX" -eq 0 ]]; do
             echo -e "Input ${BOLD}${YELLOW}1${NONE} : to re-try aws configure."
             echo -e "Input ${BOLD}${YELLOW}q${NONE} : to exit the tool."
             echo -e "\n"
@@ -1118,7 +1118,7 @@ terraformAWSConfig() {
           echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
           echo -e "${BOLD}${YELLOW}       INPUT REQUIRED       ${NONE}"
           echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
-          while [[ "$AWSTFCHECK" -eq 0 ]];do
+          while [[ "$AWSTFCHECK" -eq 0 ]]; do
             echo -e "Input ${BOLD}${YELLOW}1${NONE} : to re-try AWS/Terraform binding."
             echo -e "Input ${BOLD}${YELLOW}q${NONE} : to exit the tool."
             echo -e "\n"
@@ -1147,7 +1147,7 @@ terraformGCloudConfig() {
     echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
     echo -e "Create a new GCP Service Account or use an existing one?"
     GCPSACHOICE=0
-    while [[ "$GCPSACHOICE" -eq 0 ]];do
+    while [[ "$GCPSACHOICE" -eq 0 ]]; do
         echo -e "Input ${BOLD}${YELLOW}1${NONE} : to create a new GCP Service Account (Recommended)."
         echo -e "Input ${BOLD}${YELLOW}2${NONE} : to select an existing GCP Service Account."
         echo -e "Input ${BOLD}${YELLOW}q${NONE} : to exit the tool."
@@ -1261,7 +1261,7 @@ terraformGCloudConfig() {
         echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
         echo -e "${BOLD}${YELLOW}       INPUT REQUIRED       ${NONE}"
         echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
-        while [[ "$GCPTFCHECK" -eq 0 ]];do
+        while [[ "$GCPTFCHECK" -eq 0 ]]; do
           echo -e "Input ${BOLD}${YELLOW}1${NONE} : to re-try GCP/Terraform binding."
           echo -e "Input ${BOLD}${YELLOW}q${NONE} : to exit the tool."
           echo -e "\n"
@@ -1289,14 +1289,14 @@ terraformK8sConfig() {
     if [ -d "$IACDESTINATION" ] && [ "$(ls -A "$IACDESTINATION")" ]; then
         loadingStop
         echo -e "\n${BOLD}${GREEN}SUCCESS${NONE}: Repository cloned in $HOME/deploy/viya4-iac-k8s."
-        echo -e "\n${BOLD}${YELLOW}INFO${NONE}Navigate to ${ITALIC}https://github.com/sassoftware/viya4-iac-k8s#customize-input-values${NONE} and follow the steps from ${BOLD}${CYAN}Customize Input Values${NONE}"
+        echo -e "\n${BOLD}${YELLOW}INFO${NONE}: Navigate to ${ITALIC}https://github.com/sassoftware/viya4-iac-k8s#customize-input-values${NONE} and follow the steps from ${BOLD}${CYAN}Customize Input Values${NONE}"
     else
         IACK8S=0
         echo -e "\n${BOLD}${RED}ERROR${NONE}: Repository could not be cloned.\n"
         echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
         echo -e "${BOLD}${YELLOW}       INPUT REQUIRED       ${NONE}"
         echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
-        while [[ "$IACK8S" -eq 0 ]];do
+        while [[ "$IACK8S" -eq 0 ]]; do
           echo -e "Input ${BOLD}${YELLOW}1${NONE} : to re-try cloning."
           echo -e "Input ${BOLD}${YELLOW}q${NONE} : to exit the tool."
           echo -e "\n"
@@ -1383,7 +1383,7 @@ tfOnlyMode() {
         echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
         echo -e "${BOLD}${YELLOW}       INPUT REQUIRED       ${NONE}"
         echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
-        while [[ "$CPSELECT" -eq 0 ]];do
+        while [[ "$CPSELECT" -eq 0 ]]; do
         echo -e "Input ${BOLD}${YELLOW}1${NONE} : to return to Cloud Provider Selection Menu."
         echo -e "Input ${BOLD}${YELLOW}q${NONE} : to exit the tool."
         echo -e "\n"
