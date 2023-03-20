@@ -9,6 +9,15 @@
 # Copyright © 2023, SAS Institute Inc., Cary, NC, USA. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+# -------------------------------------------------  version  -------------------------------------------------
+
+V4ITVER="v1.0.0"
+
+if [ "$1" == "--version" ]; then
+  echo "viya4-init-tool $V4ITVER"
+  exit 0
+fi
+
 # ---------------------------------------------- preRequirements ----------------------------------------------
 
 DATETIME=$(date +'%Y-%m-%d | %H:%M:%S') # DATETIME in YYYY-MM-DD | HH:MM:SS format for logging
