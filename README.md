@@ -82,7 +82,7 @@ We welcome contributions to improve the `viya4-init-tool`. Please submit your id
 
 ## License
 
-This `viya4-init-tool` project is licensed under the [Apache 2.0 License](LICENSE.md).
+This project is licensed under the [Apache 2.0 License](LICENSE.md).
 
 ## Additional Resources
 
