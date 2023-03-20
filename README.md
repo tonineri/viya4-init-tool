@@ -36,17 +36,17 @@ This powerful tool streamlines the cluster initialization process by providing a
 To get started with the viya4-Init-Tool, follow these steps:
 
 1. Clone the repository and navigate to the project directory:
-```bash
-cd ~
-git clone https://github.com/tonineri/viya4-init-tool.git
-cd viya4-init-tool
-```
+	```bash
+	cd ~
+	git clone https://github.com/tonineri/viya4-init-tool.git
+	cd viya4-init-tool
+	```
 
 2. Run the main script to launch the tool:
-```bash
-chmod +x viya4-init-tool.sh
-./viya4-init-tool.sh
-```
+	```bash
+	chmod +x viya4-init-tool.sh
+	./viya4-init-tool.sh
+	```
 
 3. Interact with the tool: Follow the on-screen prompts to navigate through the menus, select your `Provider` and `Mode`, and engage in the guided process tailored to your choices.
 
@@ -57,7 +57,7 @@ The Viya4-Init-Tool consists of two menus:
 1. **Provider Selection**: Choose from a list of supported cloud providers (Azure, AWS, GCP) or Open Source K8s. The provider selection determines the platform for which the tool will prepare the bastion host for SAS Viya 4 cluster creation and management.
 <div align="center">
 
-	![viya-init-tool | Provider Selection Menu](assets/providerSelectionMenu.png)
+![viya-init-tool | Provider Selection Menu](assets/providerSelectionMenu.png)
 
 </div>
 
@@ -65,7 +65,7 @@ The Viya4-Init-Tool consists of two menus:
 
 <div align="center">
 
-	![viya-init-tool | Mode Selection Menu](assets/modeSelectionMenu.png)
+![viya-init-tool | Mode Selection Menu](assets/modeSelectionMenu.png)
 
 </div>
 
