@@ -20,14 +20,14 @@ This powerful tool streamlines the cluster initialization process by providing a
 
 ## Key Features
 
-* Comprehensive platform support: The `viya4-init-tool` supports Azure, AWS, GCP, and Open Source K8s, providing a flexible solution for various cloud environments.
-* Interactive user interface: The tool is designed to engage with you, prompting for necessary input and providing helpful feedback throughout the process.
-* Two-tiered menu system: The tool features two distinct menus for selecting the Provider and Mode, allowing you to easily customize your experience based on your preferences and cloud environment.
-* Guided process: Once you've made your selections, the tool will lead you through a comprehensive, step-by-step process tailored to your choices, ensuring you understand each step and have the opportunity to provide input where necessary.
+* **Comprehensive platform support**: The `viya4-init-tool` supports Azure, AWS, GCP, and Open Source K8s, providing a flexible solution for various cloud environments.
+* **Interactive user interface**: The tool is designed to engage with you, prompting for necessary input and providing helpful feedback throughout the process.
+* **Two-tiered menu system**: The tool features two distinct menus for selecting the Provider and Mode, allowing you to easily customize your experience based on your preferences and cloud environment.
+* **Guided process**: Once you've made your selections, the tool will lead you through a comprehensive, step-by-step process tailored to your choices, ensuring you understand each step and have the opportunity to provide input where necessary.
 
 ## Prerequisites
 
-Before using the Viya4-Init-Tool, ensure you have met the following requirements:
+Before using the `viya4-init-tool`, ensure you have met the following requirements:
 
 * **Root or sudoer access**
   > The tool requires elevated privileges to perform certain tasks during the setup process.
