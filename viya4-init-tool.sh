@@ -1291,7 +1291,7 @@ terraformK8sConfig() {
     if [ -d "$IACDESTINATION" ] && [ "$(ls -A "$IACDESTINATION")" ]; then
         loadingStop
         echo -e "\n${BOLD}${GREEN}SUCCESS${NONE}: Repository cloned in $HOME/deploy/viya4-iac-k8s."
-        echo -e "\n${BOLD}${YELLOW}INFO${NONE}: Navigate to ${ITALIC}https://github.com/sassoftware/viya4-iac-k8s#customize-input-values${NONE} and follow the steps from ${BOLD}${CYAN}Customize Input Values${NONE}"
+        echo -e "\n${BOLD}${YELLOW}INFO${NONE}: Navigate to ${ITALIC}${CYAN}https://github.com/sassoftware/viya4-iac-k8s#customize-input-values${NONE} and follow the steps from ${BOLD}${YELLOW}Customize Input Values${NONE}"
     else
         IACK8S=0
         echo -e "\n${BOLD}${RED}ERROR${NONE}: Repository could not be cloned.\n"
