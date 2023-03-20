@@ -33,9 +33,9 @@ The tool consists of 2 menus which will let the user select the Provider and the
 
 ## Requirements
 
-* Sudoer / Root
-* Internet access
-* Provider admin privileges
+>* Sudoer / Root
+>* Internet access
+>* Provider admin privileges
 
 ## License
 
