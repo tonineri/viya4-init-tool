@@ -1,5 +1,4 @@
 ![SAS Viya](assets/sasviya_logo_header_gh.png)
-
 <div align="center">
 
 # **SAS Viya 4 Initialization Tool**
