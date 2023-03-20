@@ -473,7 +473,8 @@ k8s() {
     source $HOME/.profile
     # k8s | post-installation
     loadingStop
-    if which ansible >/dev/null 2>&1; then
+    ANSIPING=$(ansible localhost -m ping)
+    if [[ which ansible >/dev/null 2>&1 ]] && [[ "$ANSIPING" == *SUCCESS* ]]; then
         echo -ne "\n${BOLD}${GREEN}SUCCESS${NONE}: ansible-$(ansible --version | head -n1 | cut -d"[" -f2 | cut -d"]" -f1) installed."
     else
         echo -ne "\n${BOLD}${RED}ERROR${NONE}: ansible installation failed. Check $LOG for details."
