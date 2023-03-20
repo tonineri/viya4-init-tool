@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE.md)
 
 ## Overview
-Welcome to the viya4-Init-Tool, a comprehensive and user-friendly solution designed to fully prepare a bastion host for SAS Viya 4 cluster creation and management on: 
+Welcome to the `viya4-Init-tool`, a comprehensive and user-friendly solution designed to fully prepare a bastion host for SAS Viya 4 cluster creation and management on: 
 
 * Microsoft Azure - [viya4-iac-azure](https://github.com/sassoftware/viya4-iac-azure) by [sassoftware](@sassoftware)
 * Amazon Web Services - [viya4-iac-aws](https://github.com/sassoftware/viya4-iac-aws) by [sassoftware](@sassoftware)
@@ -20,20 +20,25 @@ This powerful tool streamlines the cluster initialization process by providing a
 
 ## Key Features
 
-* Comprehensive platform support: The Viya4-Init-Tool supports Azure, AWS, GCP, and Open Source K8s, providing a flexible solution for various cloud environments.
+* Comprehensive platform support: The `viya4-init-tool` supports Azure, AWS, GCP, and Open Source K8s, providing a flexible solution for various cloud environments.
 * Interactive user interface: The tool is designed to engage with you, prompting for necessary input and providing helpful feedback throughout the process.
 * Two-tiered menu system: The tool features two distinct menus for selecting the Provider and Mode, allowing you to easily customize your experience based on your preferences and cloud environment.
 * Guided process: Once you've made your selections, the tool will lead you through a comprehensive, step-by-step process tailored to your choices, ensuring you understand each step and have the opportunity to provide input where necessary.
 
-## Requirements
+## Prerequisites
 
-* Sudoer / Root
-* Internet access
-* Provider admin privileges
+Before using the Viya4-Init-Tool, ensure you have met the following requirements:
+
+* **Root or sudoer access**
+  > The tool requires elevated privileges to perform certain tasks during the setup process.
+* **Internet access**
+  > A stable internet connection is necessary for downloading dependencies and interacting with cloud provider APIs.
+* **Provider admin privileges**
+  > Ensure you have administrator-level access to your chosen cloud provider, as the tool needs to perform tasks that require higher-level permissions.
 
 ## Getting Started
 
-To get started with the viya4-Init-Tool, follow these steps:
+To get started with the `viya4-init-tool`, follow these steps:
 
 1. Clone the repository and navigate to the project directory:
 	```bash
@@ -52,12 +57,12 @@ To get started with the viya4-Init-Tool, follow these steps:
 
 ## Usage
 
-The Viya4-Init-Tool consists of two menus:
+The `viya4-init-tool` consists of two menus:
 
 1. **Provider Selection Menu**: Choose from a list of supported cloud providers (Azure, AWS, GCP) or Open Source K8s. The provider selection determines the platform for which the tool will prepare the bastion host for SAS Viya 4 cluster creation and management.
 <div align="center">
 
-![viya-init-tool | Provider Selection Menu](assets/providerSelectionMenu.png)
+![Provider Selection Menu](assets/providerSelectionMenu.png)
 
 </div>
 
@@ -65,7 +70,7 @@ The Viya4-Init-Tool consists of two menus:
 
 <div align="center">
 
-![viya-init-tool | Mode Selection Menu](assets/modeSelectionMenu.png)
+![Mode Selection Menu](assets/modeSelectionMenu.png)
 
 </div>
 
@@ -73,11 +78,11 @@ After making your selections, you will be guided through a tailored process, wit
 
 ## Contributing
 
-We welcome contributions to improve the Viya4-Init-Tool. Please submit your ideas, bug reports, or feature requests via the [issue tracker](https://github.com/tonineri/viya4-init-tool/issues).
+We welcome contributions to improve the `viya4-init-tool`. Please submit your ideas, bug reports, or feature requests via the [issue tracker](https://github.com/tonineri/viya4-init-tool/issues).
 
 ## License
 
-This project is licensed under the [Apache 2.0 License](LICENSE.md).
+This `viya4-init-tool` project is licensed under the [Apache 2.0 License](LICENSE.md).
 
 ## Additional Resources
 
