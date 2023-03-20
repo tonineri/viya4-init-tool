@@ -14,7 +14,7 @@ Welcome to the `viya4-Init-tool`, a comprehensive and user-friendly solution des
 * Microsoft Azure | [viya4-iac-azure](https://github.com/sassoftware/viya4-iac-azure) by [SAS](@sassoftware)
 * Amazon Web Services | [viya4-iac-aws](https://github.com/sassoftware/viya4-iac-aws) by [SAS](@sassoftware)
 * Google Cloud Plaform | [viya4-iac-gcp](https://github.com/sassoftware/viya4-iac-gcp) by [SAS](@sassoftware)
-* Open Source Kubernetes | [viya4-iac-k8s](https://github.com/sassoftware/viya4-iac-k8s) by [SAS](@sassoftware)
+* Open Source K8s | [viya4-iac-k8s](https://github.com/sassoftware/viya4-iac-k8s) by [SAS](@sassoftware)
 
 This powerful tool streamlines the cluster initialization process by providing an interactive experience that guides you through each step, requesting input when necessary and ensuring a smooth setup experience.
 
