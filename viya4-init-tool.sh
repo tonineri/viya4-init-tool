@@ -14,7 +14,10 @@
 V4ITVER="v1.0.0"
 
 if [ "$1" == "--version" ]; then
-  echo "viya4-init-tool $V4ITVER"
+  echo ""
+  echo "SAS Viya 4 Initialization Tool"
+  echo "$V4ITVER | June 20th, 2023"
+  echo ""
   exit 0
 fi
 
@@ -342,18 +345,23 @@ requiredPackages() {
     cd $deploy
     echo -ne "Installing required packages. This might take a minute or two...\n"
     loadingStart "${loadAniModern[@]}"
-    requiredPackages=("zsh" "zip" "unzip" "git" "mlocate" "jq" "batcat")
+    requiredPackages=("zsh" "zip" "unzip" "git" "mlocate" "jq" "bat")
     # requiredPackages | installation
     for package in "${requiredPackages[@]}"; do
         sudo apt install $package -y -qq >> $LOG 2>&1
     done
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended >> $LOG 2>&1
+    rm -rf $HOME/.oh-my-zsh >> $LOG 2>&1
+    curl -fsSL -o zsh-install.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh >> $LOG 2>&1
+    sudo chmod +x zsh-install.sh && ./zsh-install.sh --unattended >> $LOG 2>&1
+    rm -f zsh-install.sh >> $LOG 2>&1
+    sh -c "$(curl -fsSL https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh)" "" --unattended >> $LOG 2>&1
     # requiredPackages | zsh customization
-    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions >> $LOG 2>&1
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting >> $LOG 2>&1
-    sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting kubectl)/g' ~/.zshrc
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions >> $LOG 2>&1
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting >> $LOG 2>&1
+    git clone https://github.com/jonmosco/kube-ps1.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/kube-ps1 >> $LOG 2>&1
+    sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting kubectl kube-ps1)/g' ~/.zshrc
     sed -i 's/robbyrussell/agnoster/g' ~/.zshrc 
-    echo "\nTERM=xterm-256color" >> ~/.zshrc
+    zshrcContent
     # requiredPackages | updatedb for mlocate
     sudo updatedb >> $LOG 2>&1
     # requiredPackages | post-installation & check if all required packages were installed
@@ -484,6 +492,51 @@ k8s() {
     echo -e "\n"
 }
 
+# --------------------------------------------  zshrc contents  -------------------------------------------
+zshrcContent() {
+tee ~/.zshrc >> /dev/null << EOF
+# zsh
+## zsh | kube-ps1
+PROMPT='\$(kube_ps1)'\$PROMPT
+KUBE_PS1_NS_COLOR='red'
+function get_cluster_short() {
+  echo "\$1" | cut -d "/" -f 3
+}
+### zsh | kube-ps1 | Only show namespace in green
+KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
+KUBE_PS1_NS_COLOR='green'
+
+TERM=xterm-256color
+
+# Global
+export KUBECONFIG=~/path/to/kubeconfig
+alias bat="batcat"
+alias ll="ls -la"
+
+# SAS Viya variables
+export ORDER=9CXXX
+export CADENCE=lts
+export VERSION=2023.03
+export VIYA_NS=sas-viya
+export deploy=~/sas-viya/\$VIYA_NS/deploy
+
+# Container Registry
+export REGISTRY=cr.hostname.com
+export REGISTRY_USER=username
+export REGISTRY_PASS="Passw0rd1"
+
+# SAS Viya aliases
+alias setviya="kubectl config set-context --current --namespace=\$VIYA_NS"
+alias kb="cd \$deploy && kustomize build -o site.yaml"
+alias start-sas-viya="kubectl create job sas-start-all-`date +%s` --from cronjobs/sas-start-all -n \$VIYA_NS"
+alias stop-sas-viya="kubectl create job sas-stop-all-`date +%s` --from cronjobs/sas-stop-all -n \$VIYA_NS"
+alias status-sas-viya="watch -n1 'kubectl get sasdeployments -n \$VIYA_NS && echo -e && kubectl get pods -n \$VIYA_NS'"
+alias k9s-sas-viya="k9s --kubeconfig \$KUBECONFIG --namespace \$VIYA_NS"
+alias docker-sas-viya="docker run --rm -v ~/sas-viya/\$VIYA_NS:/cwd/ sas-orchestration create sas-deployment-cr --deployment-data /cwd/license/SASViyaV4_certs.zip --license /cwd/license/license.jwt --user-content /cwd/deploy --cadence-name \$CADENCE --cadence-version \$VERSION --cadence-release \$RELEASE --image-registry \$REGISTRY > \$deploy/\$VIYA_NS-sasdeployment.yaml"
+#alias podman-sas-viya="podman run --rm -v ~/sas-viya/\$VIYA_NS:/cwd/ sas-orchestration create sas-deployment-cr --deployment-data /cwd/license/SASViyaV4_certs.zip --license /cwd/license/license.jwt --user-content /cwd/deploy --cadence-name \$CADENCE --cadence-version \$VERSION --cadence-release \$RELEASE --image-registry \$REGISTRY --repository-warehouse http://hostname.com/sas_repos > \$deploy/\$VIYA_NS-sasdeployment.yaml"
+EOF
+}
+
 # -------------------------------------------  requiredClients  -------------------------------------------
 requiredClients() {
     # requiredClients | log
@@ -492,14 +545,14 @@ requiredClients() {
     echo -ne "\n$DATETIME | INFO: Required clients - kubectl installation procedure started." >> $LOG
     # requiredClients: kubectl | input
     KCTLVERMINSUPPORTED="22" # <--- Minimum supported version
-    KCTLVERMAXSUPPORTED="25" # <--- Maximum supported version
+    KCTLVERMAXSUPPORTED="26" # <--- Maximum supported version
     echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
     echo -e "${BOLD}${YELLOW}       INPUT REQUIRED       ${NONE}"
     echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
     KUBECTLCHECK=0
     while [[ "$KUBECTLCHECK" -eq 0 ]]; do
         echo -e "Input kubectl version to be installed based on your Kubernetes Cluster version (example 1.24.10):"
-        echo -e "Supported versions: 1.$KCTLVERMINSUPPORTED.0 - 1.$KCTLVERMAXSUPPORTED.xx"
+        echo -e "Supported versions: 1.22.0 - 1.26.XX"
         read KUBECTLVER
         KCTLVERMAJ=$(echo $KUBECTLVER | cut -d"." -f1)
         KCTLVERMIN=$(echo $KUBECTLVER | cut -d"." -f2)
@@ -526,7 +579,7 @@ requiredClients() {
             else
                 echo -ne "\n${BOLD}${RED}ERROR${NONE}: kubectl installation failed. Check $LOG for details."
             fi
-        else
+        else 
             echo -e "\n${BOLD}${RED}ERROR${NONE}: Kubectl version is incorrect, unsupported or null."
         fi
         echo -e "\n"
@@ -575,7 +628,7 @@ requiredClients() {
     cd $deploy
     loadingStart "${loadAniModern[@]}"
     # requiredClients: node-shell | installation
-    curl -LO https://github.com/kvaps/kubectl-node-shell/raw/master/kubectl-node_shell >> $LOG 2>&1
+    curl -fsSL -o kubectl-node_shell https://raw.githubusercontent.com/kvaps/kubectl-node-shell/master/kubectl-node_shell >> $LOG 2>&1
     sudo install kubectl-node_shell -o root -g root -m 755 /usr/local/bin/node-shell >> $LOG 2>&1
     rm -f kubectl-node_shell
     # requiredClients: node-shell | post-installation & check if installed
@@ -593,7 +646,7 @@ requiredClients() {
     cd $deploy
     loadingStart "${loadAniModern[@]}"
     # requiredClients: helm 3 | installation
-    curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 >> $LOG 2>&1
+    curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 >> $LOG 2>&1
     chmod 700 get_helm.sh && ./get_helm.sh >> $LOG 2>&1
     rm -f get_helm.sh
     # requiredClients: helm 3 | post-installation & check if installed
@@ -620,6 +673,25 @@ requiredClients() {
         echo -ne "\n${BOLD}${GREEN}SUCCESS${NONE}: yq $(yq --version | cut -d" " -f4) installed."
     else
         echo -ne "\n${BOLD}${RED}ERROR${NONE}: yq installation failed. Check $LOG for details."
+    fi
+    echo -e "\n"
+    # requiredClients: k9s | log
+    echo -ne "\n$DATETIME | INFO: Required clients - k9s installation procedure started." >> $LOG
+    # requiredClients: k9s | pre-installation
+    echo -e "Installing latest k9s..."
+    cd $deploy
+    loadingStart "${loadAniModern[@]}"
+    # requiredClients: k9s | installation
+    wget https://github.com/derailed/k9s/releases/latest/download/k9s_Linux_amd64.tar.gz >> $LOG 2>&1
+    tar xf k9s_Linux_amd64.tar.gz >> $LOG 2>&1
+    sudo install k9s -o root -g root -m 755 /usr/local/bin/k9s >> $LOG 2>&1
+    rm -f k9s_Linux_amd64.tar.gz k9s
+    # requiredClients: k9s | post-installation & check if installed
+    loadingStop
+    if which k9s >/dev/null 2>&1; then
+        echo -ne "\n${BOLD}${GREEN}SUCCESS${NONE}: k9s $(k9s version | grep "Version:" | awk '{print $2}') installed."
+    else
+        echo -ne "\n${BOLD}${RED}ERROR${NONE}: k9s installation failed. Check $LOG for details."
     fi
     echo -e "\n"
 }
