@@ -587,18 +587,23 @@ requiredClients() {
     # requiredClients: kustomize | log
     echo -ne "\n$DATETIME | INFO: Required clients - kustomize installation procedure started." >> $LOG
     # requiredClients: kustomize | input
-    KUSTOMIZESUPPORTED1="3.7.0" # for all versions <= SAS Viya 2023.01
-    KUSTOMIZESUPPORTED2="4.5.7" # only for SAS Viya 2023.02 - performance issues!
-    KUSTOMIZESUPPORTED3="5.0.0" # for SAS Viya 2023.03 or later
+    KUSTOMIZESUPPORTED1="3.7.0" # for SAS Viya <= SAS Viya 2023.01
+    KUSTOMIZESUPPORTED2="4.5.7" # for SAS Viya 2023.02 - performance issues!
+    KUSTOMIZESUPPORTED3="5.0.0" # for SAS Viya >= 2023.03 and <= 2023.05
+    KUSTOMIZESUPPORTED4="5.0.3" # for SAS Viya 2023.06 or later
     echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
     echo -e "${BOLD}${YELLOW}       INPUT REQUIRED       ${NONE}"
     echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
     KUSTOCHECK=0
     while [[ "$KUSTOCHECK" -eq 0 ]]; do
         echo -e "Input kustomize version to be installed based on your SAS Viya version:"
-        echo -e "Supported versions: [ $KUSTOMIZESUPPORTED1 | $KUSTOMIZESUPPORTED2 | $KUSTOMIZESUPPORTED3 ]"
+        echo -e "Supported versions:"
+        echo -e "$KUSTOMIZESUPPORTED1 | SAS Viya <= 2023.01 "
+        echo -e "$KUSTOMIZESUPPORTED2 | SAS Viya 2023.02 - performance issues!"
+        echo -e "$KUSTOMIZESUPPORTED3 | SAS Viya >= 2023.03 and <= 2023.05"
+        echo -e "$KUSTOMIZESUPPORTED4 | SAS Viya 2023.06 or later"
         read KUSTOMIZEVERSION
-        if [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED1" ]] || [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED2" ]] || [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED3" ]]; then
+        if [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED1" ]] || [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED2" ]] || [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED3" ]] || [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED4" ]]; then
             # requiredClients: kustomize | pre-installation
             echo -e "Installing kustomize $KUSTOMIZEVERSION..."
             cd $deploy
