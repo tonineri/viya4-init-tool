@@ -596,12 +596,13 @@ requiredClients() {
     echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
     KUSTOCHECK=0
     while [[ "$KUSTOCHECK" -eq 0 ]]; do
-        echo -e "Input kustomize version to be installed based on your SAS Viya version:"
-        echo -e "Supported versions:"
+        echo -e "Supported kustomize versions:"
         echo -e "$KUSTOMIZESUPPORTED1 | SAS Viya <= 2023.01 "
         echo -e "$KUSTOMIZESUPPORTED2 | SAS Viya 2023.02 - performance issues!"
         echo -e "$KUSTOMIZESUPPORTED3 | SAS Viya >= 2023.03 and <= 2023.05"
         echo -e "$KUSTOMIZESUPPORTED4 | SAS Viya 2023.06 or later"
+        echo ""
+        echo -e "Input kustomize version to be installed based on your SAS Viya version:"
         read KUSTOMIZEVERSION
         if [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED1" ]] || [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED2" ]] || [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED3" ]] || [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED4" ]]; then
             # requiredClients: kustomize | pre-installation
