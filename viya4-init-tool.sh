@@ -16,7 +16,7 @@ V4ITVER="v1.0.0"
 if [ "$1" == "--version" ]; then
   echo ""
   echo "SAS Viya 4 Initialization Tool"
-  echo "$V4ITVER | June 20th, 2023"
+  echo "$V4ITVER | June 21st, 2023"
   echo ""
   exit 0
 fi
@@ -618,7 +618,7 @@ requiredClients() {
             loadingStop
             if which kustomize >/dev/null 2>&1; then
                 KUSTOCHECK=1
-                echo -ne "\n${BOLD}${GREEN}SUCCESS${NONE}: kustomize $(kustomize version --short | cut -d"/" -f2 | cut -d" " -f1) installed."
+                echo -ne "\n${BOLD}${GREEN}SUCCESS${NONE}: kustomize $(kustomize version) installed."
             else
                 echo -ne "\n${BOLD}${RED}ERROR${NONE}: kustomize installation failed. Check $LOG for details."
             fi
