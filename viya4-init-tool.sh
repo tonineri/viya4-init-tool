@@ -359,8 +359,6 @@ requiredPackages() {
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions >> $LOG 2>&1
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting >> $LOG 2>&1
     git clone https://github.com/jonmosco/kube-ps1.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/kube-ps1 >> $LOG 2>&1
-    sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting kubectl kube-ps1)/g' ~/.zshrc
-    sed -i 's/robbyrussell/agnoster/g' ~/.zshrc 
     zshrcContent
     # requiredPackages | updatedb for mlocate
     sudo updatedb >> $LOG 2>&1
@@ -496,15 +494,12 @@ k8s() {
 zshrcContent() {
 tee ~/.zshrc >> /dev/null << EOF
 # zsh
-## zsh | kube-ps1
-PROMPT='\$(kube_ps1)'\$PROMPT
-KUBE_PS1_NS_COLOR='red'
-function get_cluster_short() {
-  echo "\$1" | cut -d "/" -f 3
-}
-### zsh | kube-ps1 | Only show namespace in green
-KUBE_PS1_CLUSTER_FUNCTION=get_cluster_short
-KUBE_PS1_NS_COLOR='green'
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="robbyrussell"
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting kubectl)
+source $ZSH/oh-my-zsh.sh
+
+#ZSH_THEME="agnoster"
 
 TERM=xterm-256color
 
