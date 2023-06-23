@@ -1429,6 +1429,7 @@ orderOnlyMode() {
     if [[ "$MODESELECTED" == "orderOnlyMode" ]]; then
         exitTool
     fi
+    rm -f $HOME/.viya4-orders-cli
 }
 
 tfOnlyMode() {
