@@ -61,24 +61,38 @@ To get started with the `viya4-init-tool`, follow these steps:
 
 ## Usage
 
-The `viya4-init-tool` consists of two menus:
+- To run the tool, execute:
+	```bash
+	./viya4-init-tool.sh
+	```
+	The `viya4-init-tool` consists of two menus:
+	
+	1. **Provider Selection Menu**: Choose from a list of supported cloud providers (Azure, AWS, GCP) or Open Source K8s. The provider selection determines the platform for which the tool will prepare the bastion host for SAS Viya 4 	cluster creation and management.
+	<div align="center">
+	
+	![Provider Selection Menu](assets/providerSelectionMenu.png)
+	
+	</div>
+	
+	2. **Mode Selection Menu**: Select the desired mode for your task. The modes determine the type of process you will be guided through and may vary depending on the chosen provider.
+	
+	<div align="center">
+	
+	![Mode Selection Menu](assets/modeSelectionMenu.png)
+	
+	</div>
+	
+	After making your selections, you will be guided through a tailored process, with the tool asking for your input and providing feedback when necessary. This ensures a smooth, efficient, and user-centric experience.
 
-1. **Provider Selection Menu**: Choose from a list of supported cloud providers (Azure, AWS, GCP) or Open Source K8s. The provider selection determines the platform for which the tool will prepare the bastion host for SAS Viya 4 cluster creation and management.
-<div align="center">
+- To show the tool version, execute:
+	```bash
+	./viya4-init-tool.sh --version
+	```
 
-![Provider Selection Menu](assets/providerSelectionMenu.png)
-
-</div>
-
-2. **Mode Selection Menu**: Select the desired mode for your task. The modes determine the type of process you will be guided through and may vary depending on the chosen provider.
-
-<div align="center">
-
-![Mode Selection Menu](assets/modeSelectionMenu.png)
-
-</div>
-
-After making your selections, you will be guided through a tailored process, with the tool asking for your input and providing feedback when necessary. This ensures a smooth, efficient, and user-centric experience.
+- To show the URLs that need to be whitelisted for the script to run fully, execute:
+	```bash
+	./viya4-init-tool.sh --whitelist
+	```
 
 ## Contributing
 
@@ -93,6 +107,8 @@ This project is licensed under the [Apache 2.0 License](LICENSE.md).
 >* [Kubernetes](https://kubernetes.io/docs/tasks/tools/)
 >* [Terraform](https://developer.hashicorp.com/terraform/intro)
 >* [jq](https://stedolan.github.io/jq/)
+>* [k9s](https://github.com/derailed/k9s)
+>* [zsh](https://github.com/ohmyzsh/ohmyzsh)
 >* [Docker](https://docs.docker.com/)
 >* [Helm](https://helm.sh/docs/)
 >* [Ansible](https://docs.ansible.com/ansible/2.9/index.html)
