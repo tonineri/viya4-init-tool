@@ -3,7 +3,6 @@
 # -------------------------------------------------  header  --------------------------------------------------
 
 # SAS Viya 4 Initializaton Tool
-# ***INTERNAL USE ONLY***
 # Description: the script can fully prepare a bastion host for a SAS Viya 4 cluster creation and management on Azure, AWS and Google Cloud Plaform.
 
 # Copyright © 2023, SAS Institute Inc., Cary, NC, USA. All Rights Reserved.
@@ -11,12 +10,14 @@
 
 # -------------------------------------------------  options  -------------------------------------------------
 
-V4ITVER="v1.0.1"
+V4ITVER="v1.0.1"        # viya4-init-tool version
+LSVIYASTABLE="2023.06"  # latest SAS Viya Stable supported version by tool
+LSVIYALTS="2023.03"     # latest SAS Viya LTS supported version by tool
 
 if [ "$1" == "--version" ]; then
     echo ""
     echo "SAS Viya 4 Initialization Tool"
-    echo "$V4ITVER | June 23rd, 2023"
+    echo "  $V4ITVER | June 23rd, 2023"
     echo ""
     exit 0
 elif [ "$1" == "--whitelist" ]; then
@@ -45,7 +46,40 @@ elif [ "$1" == "--whitelist" ]; then
     done
     # Join the modified URLs with line breaks
     new_urls_str=$(printf "%s\n" "${new_urls[@]}")
+    echo ""
+    echo "----------------------------------------------------------------------"
+    echo "List of URLs to be whitelisted for the script to be able to run fully:"
+    echo "----------------------------------------------------------------------"
     echo "$new_urls_str"
+    echo "----------------------------------------------------------------------"
+    echo ""
+    exit 0
+elif [ "$1" == "--support" ]; then
+    echo ""
+    echo "-----------------------------------"
+    echo "Latest supported SAS Viya versions:"
+    echo "-----------------------------------"
+    echo "- Stable $LSVIYASTABLE"
+    echo "- LTS $LSVIYALTS"
+    echo "-----------------------------------"
+    echo "NOTE: The tool is not maintained by SAS Institute Inc."
+    echo "For support, open an issue at https://github.com/tonineri/viya4-init-tool"
+    echo ""
+    exit 0
+elif [ "$1" == "--help" ]; then
+    echo -e ""
+    echo -e "-----------------------------------------------------------------------------------------------"
+    echo -e "|                           SAS Viya 4 Initialization Tool - Usage                            |"
+    echo -e "-----------------------------------------------------------------------------------------------"
+    echo -e "|   OPTION   |         EXAMPLE COMMAND          |                 DESCRIPTION                 |"
+    echo -e "|------------|----------------------------------|---------------------------------------------|"
+    echo -e "|[no option] | ./viya4-init-tool.sh             | executes the GUI                            |"
+    echo -e "|--version   | ./viya4-init-tool.sh --version   | shows the tool's version                    |"
+    echo -e "|--whitelist | ./viya4-init-tool.sh --whitelist | prints the URLs to be whitelisted           |"
+    echo -e "|--support   | ./viya4-init-tool.sh --support   | shows the latest SAS Viya supported versions|"
+    echo -e "|--help      | ./viya4-init-tool.sh --help      | shows the usage message                     |"
+    echo -e "-----------------------------------------------------------------------------------------------"
+    echo -e ""
     exit 0
 fi
 

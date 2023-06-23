@@ -94,6 +94,16 @@ To get started with the `viya4-init-tool`, follow these steps:
 	./viya4-init-tool.sh --whitelist
 	```
 
+- To show the latest SAS Viya versions supported by the tool, execute:
+	```bash
+	./viya4-init-tool.sh --support
+	```
+
+- - To show the all available usage options, execute:
+	```bash
+	./viya4-init-tool.sh --help
+	```
+
 ## Contributing
 
 We welcome contributions to improve the `viya4-init-tool`. Please submit your ideas, bug reports, or feature requests via the [issue tracker](https://github.com/tonineri/viya4-init-tool/issues).
