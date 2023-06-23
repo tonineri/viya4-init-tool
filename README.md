@@ -99,7 +99,7 @@ To get started with the `viya4-init-tool`, follow these steps:
 	./viya4-init-tool.sh --support
 	```
 
-- - To show the all available usage options, execute:
+- To show the all available usage options, execute:
 	```bash
 	./viya4-init-tool.sh --help
 	```
