@@ -9,16 +9,44 @@
 # Copyright © 2023, SAS Institute Inc., Cary, NC, USA. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-# -------------------------------------------------  version  -------------------------------------------------
+# -------------------------------------------------  options  -------------------------------------------------
 
-V4ITVER="v1.0.0"
+V4ITVER="v1.0.1"
 
 if [ "$1" == "--version" ]; then
-  echo ""
-  echo "SAS Viya 4 Initialization Tool"
-  echo "$V4ITVER | June 21st, 2023"
-  echo ""
-  exit 0
+    echo ""
+    echo "SAS Viya 4 Initialization Tool"
+    echo "$V4ITVER | June 23rd, 2023"
+    echo ""
+    exit 0
+elif [ "$1" == "--whitelist" ]; then
+    urls=$(grep -oE 'https?://[^/"]+' "$0" | awk -F/ '{ print $1 "//" $3 "/" }' | sort -u)
+    # Split the URLs by line breaks
+    IFS=$'\n' read -r -d '' -a url_array <<< "$urls"
+    new_urls=()
+    for url in "${url_array[@]}"
+    do
+      # Remove "http://" URLs
+      if [[ $url != *"http://"* ]]; then
+        # Remove URLs with spaces
+        if [[ $url != *" "* ]]; then
+          # Replace "./" with "/"
+          url=${url//.\//}
+          # Remove trailing dot (if present)
+          url=${url%/}
+          # Add a trailing slash if missing
+          if [[ $url != */ ]]; then
+            url="$url/"
+          fi
+          # Add the modified URL to the new_urls array
+          new_urls+=("$url")
+        fi
+      fi
+    done
+    # Join the modified URLs with line breaks
+    new_urls_str=$(printf "%s\n" "${new_urls[@]}")
+    echo "$new_urls_str"
+    exit 0
 fi
 
 # ---------------------------------------------- preRequirements ----------------------------------------------
@@ -1517,3 +1545,5 @@ fullMode() {
 # --------------------------------------------  startScript  --------------------------------------------
 
 providerMenu
+
+# ---------------------------------------------  scriptEnd  ---------------------------------------------
