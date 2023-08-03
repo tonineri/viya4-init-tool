@@ -997,6 +997,34 @@ printFinalDate() {
     fi
 }
 
+mirrormgrCli() {
+    while [[ "$MIRRORMGRCHECK" -ne 1 ]]; do
+        # mirrormgrCli | log
+        echo -ne "\n$DATETIME | INFO: SAS Mirror Manager installation procedure started." >> $LOG
+        # mirrormgrCli | pre-installation
+        echo -e "\nInstalling latest mirrormgr..."
+        loadingStart "${loadAniModern[@]}"
+        # mirrormgrCli | pre-installation
+        mkdir "$deploy/mirrormgr" && cd "$deploy/mirrormgr" >> $LOG 2>&1
+        wget -N https://support.sas.com/installation/viya/4/sas-mirror-manager/lax/mirrormgr-linux.tgz > /dev/null 2>&1
+        tar --extract --file mirrormgr-linux.tgz mirrormgr >> $LOG 2>&1
+        sudo chmod +x mirrormgr && sudo mv mirrormgr /usr/local/bin/mirrormgr >> $LOG 2>&1
+        cd $deploy
+        rm -rf "$deploy/mirrormgr"
+        # mirrormgrCli | post-installation
+        loadingStop
+        if which mirrormgr >/dev/null 2>&1; then
+            MIRRORMGRCHECK=1
+            echo -ne "\n${BOLD}${GREEN}SUCCESS${NONE}: SAS Mirror Manager $(mirrormgr -v | awk '/version/ {match($0, /version[[:space:]]*:[[:space:]]*(v[[:digit:].-]+)/, arr); print arr[1]}') installed."
+            echo -e "\n"
+        else
+            MIRRORMGRCHECK=0
+            echo -ne "\n${BOLD}${RED}ERROR${NONE}: SAS Mirror Manager installation failed. Check $LOG for details."
+        fi
+        echo -e "\n"
+    done
+}
+
 # ---------------------------------------------- terraform ----------------------------------------------
 
 terraformClient() {
@@ -1485,6 +1513,7 @@ orderOnlyMode() {
     clear
     viya4OrdersCli
     getOrder
+    mirrormgrCli
     if [[ "$MODESELECTED" == "orderOnlyMode" ]]; then
         exitTool
     fi
