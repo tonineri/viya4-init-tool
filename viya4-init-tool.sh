@@ -889,7 +889,7 @@ getOrder() {
             fi
         ## accept 2023.01 and later versions without limiting yet unreleased versions and limit version characters to 7
         elif [[ "$VERSIONY" -ge 2023 ]] && [[ "$VERSIONMOCTAL" -ge 1 && "$VERSIONMOCTAL" -le 12 ]] && [[ ${#VERSION} -eq 7 ]]; then
-          if [[ "$CADENCE" == lts ]] && [ "$VERSIONY" -ge 2023 ]] && [[ "$VERSIONMOCTAL" != 3 && "$VERSIONMOCTAL" != 9 ]]; then
+          if [[ "$CADENCE" == lts ]] && [[ "$VERSIONY" -ge 2023 ]] && [[ "$VERSIONMOCTAL" != 3 && "$VERSIONMOCTAL" != 9 ]]; then
             echo -e "\n${BOLD}${RED}ERROR${NONE}: LTS versions can only be YYYY.03 or YYYY.09"
           else
             VERSIONCHECK=1
