@@ -913,24 +913,25 @@ getOrder() {
             # getOrder | pre-download
             CONFIRMCHECK=1
             echo -e "\nDownloading deploymentAssets, license and certificates..."
-            cd $deploy
+            if [[ ! -d "$HOME/$VIYA_NS/license" ]]; then
+              mkdir "$HOME/$VIYA_NS/license" >> $LOG 2>&1
+            fi
             loadingStart "${loadAniModern[@]}"
             # getOrder | download
+            cd "$HOME/$VIYA_NS"
             RELEASE=$(viya4-orders-cli deploymentAssets $ORDER $CADENCE $VERSION --file-name assets 2>/dev/null | grep CadenceRelease | cut -d' ' -f2) >> $LOG 2>&1
-            echo $RELEASE > current_release.txt
-            tar xf assets.tgz >> $LOG 2>&1
-            if [[ ! -d "$HOME/deploy/license" ]]; then
-              mkdir ~/deploy/license >> $LOG 2>&1
-            fi
-            cd $deploy/license >> $LOG 2>&1
+            echo $RELEASE > "$HOME/$VIYA_NS/current_release.txt"
+            tar xf assets.tgz -C $deploy >> $LOG 2>&1
+            cd "$HOME/$VIYA_NS/license" >> $LOG 2>&1
             viya4-orders-cli license $ORDER $CADENCE $VERSION --file-name license >> $LOG 2>&1
-            viya4-orders-cli certs $ORDER >> $LOG 2>&1
+            viya4-orders-cli certs $ORDER --file-name SASViyaV4_certs >> $LOG 2>&1
             cd $deploy
             # getOrder | post-download checks
             loadingStop
-            if [[ -f "$HOME/deploy/assets.tgz" && -d "$HOME/deploy/license" && -f "$HOME/deploy/license/license.jwt" && -f "$HOME/deploy/license/SASViyaV4_${ORDER}_certs.zip" ]]; then
+            if [[ -f "$HOME/$VIYA_NS/assets.tgz" && -d "$HOME/$VIYA_NS/license" && -f "$HOME/$VIYA_NS/license/license.jwt" && -f "$HOME/$VIYA_NS/license/SASViyaV4_certs.zip" ]]; then
                 printFinalDate
-                echo -e "\n${BOLD}${GREEN}SUCCESS${NONE}: DeploymentAssets, license and certificates downloaded in ~/deploy."
+                echo -e "\n${BOLD}${GREEN}SUCCESS${NONE}: DeploymentAssets downloaded in $HOME/$VIYA_NS"
+                echo -e "\n${BOLD}${GREEN}SUCCESS${NONE}: License and certificates downloaded in $HOME/$VIYA_NS/license."
             else
                 RETURNSELECTION=0
                 echo -e "\n${BOLD}${RED}ERROR${NONE}: Issue while downloading deploymentAssets, license and certificates."
@@ -973,8 +974,8 @@ getOrder() {
 }
 
 printFinalDate() {
-    LICFILE=$(cat "$HOME/deploy/license/license.jwt")
-    if [[ -f "$HOME/deploy/license/license.jwt" ]]; then
+    LICFILE=$(cat "$HOME/$VIYA_NS/license/license.jwt")
+    if [[ -f "$HOME/$VIYA_NS/license/license.jwt" ]]; then
         LICINFO="$(jq -R 'split(".") | .[1] | @base64d | fromjson' <<< "$LICFILE" | awk 'NR==4' | cut -d";" -f2 | sed 's+  + +g' | sed "s+'D +' +g")"
         LICREAD=$(jq -R 'split(".") | .[1] | @base64d | fromjson' <<< "$LICFILE" | awk 'NR==4' | cut -d";" -f2 | sed 's+  + +g' | sed "s+'D +' +g" | cut -d" " -f3- | sed 's+RECREATE ++g' | sed 's/ PASSWORD=.*//')
         # printFinalDate | get the EXPIRE value
@@ -1146,10 +1147,10 @@ terraformAzureConfig() {
       done
     fi
     echo -e "\nCloning viya4-iac-azure repository from https://github.com/sassoftware/viya4-iac-azure..."
-    IACDESTINATION="$HOME/deploy/viya4-iac-azure"
+    IACDESTINATION="$deploy/viya4-iac-azure"
     git clone https://github.com/sassoftware/viya4-iac-azure $IACDESTINATION >> $LOG 2>&1
     if [ -d "$IACDESTINATION" ] && [ "$(ls -A "$IACDESTINATION")" ]; then
-      echo -e "\n${BOLD}${GREEN}SUCCESS${NONE}: Repository cloned in $HOME/deploy/viya4-iac-azure."
+      echo -e "\n${BOLD}${GREEN}SUCCESS${NONE}: Repository cloned in $deploy/viya4-iac-azure."
       echo -e "\nValidating Terraform..."
       loadingStart "${loadAniModern[@]}"
       cd $IACDESTINATION
@@ -1238,10 +1239,10 @@ terraformAWSConfig() {
         fi
       done
       echo -e "\nCloning viya4-iac-aws repository from https://github.com/sassoftware/viya4-iac-aws..."
-      IACDESTINATION="$HOME/deploy/viya4-iac-aws"
+      IACDESTINATION="$deploy/viya4-iac-aws"
       git clone https://github.com/sassoftware/viya4-iac-aws $IACDESTINATION >> $LOG 2>&1
       if [ -d "$IACDESTINATION" ] && [ "$(ls -A "$IACDESTINATION")" ]; then
-        echo -e "\n${BOLD}${GREEN}SUCCESS${NONE}: Repository cloned in $HOME/deploy/viya4-iac-aws."
+        echo -e "\n${BOLD}${GREEN}SUCCESS${NONE}: Repository cloned in $deploy/viya4-iac-aws."
         echo -e "\nValidating Terraform..."
         loadingStart "${loadAniModern[@]}"
         cd $IACDESTINATION
@@ -1381,10 +1382,10 @@ terraformGCloudConfig() {
         echo -e "\n${BOLD}${GREEN}SUCCESS${NONE}: gcp-cli service account key file stored in $GCPSA_KEY_FILE."
     fi
     echo -e "\nCloning viya4-iac-gcp repository from https://github.com/sassoftware/viya4-iac-gcp..."
-    IACDESTINATION="$HOME/deploy/viya4-iac-gcp"
+    IACDESTINATION="$deploy/viya4-iac-gcp"
     git clone https://github.com/sassoftware/viya4-iac-gcp $IACDESTINATION >> $LOG 2>&1
     if [ -d "$IACDESTINATION" ] && [ "$(ls -A "$IACDESTINATION")" ]; then
-      echo -e "\n${BOLD}${GREEN}SUCCESS${NONE}: Repository cloned in $HOME/deploy/viya4-iac-gcp."
+      echo -e "\n${BOLD}${GREEN}SUCCESS${NONE}: Repository cloned in $deploy/viya4-iac-gcp."
       echo -e "\nValidating Terraform..."
       loadingStart "${loadAniModern[@]}"
       cd $IACDESTINATION
@@ -1421,12 +1422,12 @@ terraformGCloudConfig() {
 terraformK8sConfig() {
     # terraformK8sConfig | clone repo
     echo -e "Cloning viya4-iac-k8s repository from https://github.com/sassoftware/viya4-iac-k8s..."
-    IACDESTINATION="$HOME/deploy/viya4-iac-k8s"
+    IACDESTINATION="$deploy/viya4-iac-k8s"
     loadingStart "${loadAniModern[@]}"
     git clone https://github.com/sassoftware/viya4-iac-k8s $IACDESTINATION >> $LOG 2>&1
     if [ -d "$IACDESTINATION" ] && [ "$(ls -A "$IACDESTINATION")" ]; then
         loadingStop
-        echo -e "\n${BOLD}${GREEN}SUCCESS${NONE}: Repository cloned in $HOME/deploy/viya4-iac-k8s."
+        echo -e "\n${BOLD}${GREEN}SUCCESS${NONE}: Repository cloned in $deploy/viya4-iac-k8s."
         echo -e "\n${BOLD}${YELLOW}INFO${NONE}: Navigate to ${ITALIC}${CYAN}https://github.com/sassoftware/viya4-iac-k8s#customize-input-values${NONE} and follow the steps from ${BOLD}${YELLOW}Customize Input Values${NONE}"
     else
         IACK8S=0
