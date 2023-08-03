@@ -11,7 +11,7 @@
 # -------------------------------------------------  options  -------------------------------------------------
 
 V4ITVER="v1.0.2"        # viya4-init-tool version
-LSVIYASTABLE="2023.06"  # latest SAS Viya Stable supported version by tool
+LSVIYASTABLE="2023.07"  # latest SAS Viya Stable supported version by tool
 LSVIYALTS="2023.03"     # latest SAS Viya LTS supported version by tool
 
 if [ "$1" == "--version" ]; then
