@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE.md)
 
 ## Latest supported SAS Viya versions
-- **Stable**:	`2023.06`
+- **Stable**:	`2023.07`
 - **LTS**:	`2023.03`
 
 ## Overview
@@ -65,7 +65,7 @@ To get started with the `viya4-init-tool`, follow these steps:
 	```bash
 	./viya4-init-tool.sh
 	```
-	The `viya4-init-tool` consists of two menus:
+	You will be prompted to input the desired name for your SAS Viya namespace. The tool will then proceed with the two menus:
 	
 	1. **Provider Selection Menu**: Choose from a list of supported cloud providers (Azure, AWS, GCP) or Open Source K8s. The provider selection determines the platform for which the tool will prepare the bastion host for SAS Viya 4 	cluster creation and management.
 	<div align="center">
