@@ -10,14 +10,14 @@
 
 # -------------------------------------------------  options  -------------------------------------------------
 
-V4ITVER="v1.0.1"        # viya4-init-tool version
+V4ITVER="v1.0.2"        # viya4-init-tool version
 LSVIYASTABLE="2023.06"  # latest SAS Viya Stable supported version by tool
 LSVIYALTS="2023.03"     # latest SAS Viya LTS supported version by tool
 
 if [ "$1" == "--version" ]; then
     echo ""
     echo "SAS Viya 4 Initialization Tool"
-    echo "  $V4ITVER | June 23rd, 2023"
+    echo "  $V4ITVER | August 3rd, 2023"
     echo ""
     exit 0
 elif [ "$1" == "--whitelist" ]; then
