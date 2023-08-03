@@ -86,18 +86,19 @@ fi
 # ---------------------------------------------- preRequirements ----------------------------------------------
 
 DATETIME=$(date +'%Y-%m-%d | %H:%M:%S') # DATETIME in YYYY-MM-DD | HH:MM:SS format for logging
-
-# create "~/deploy directory"
-if [ ! -d "$HOME/deploy" ]; then
-    mkdir $HOME/deploy && cd $HOME/deploy
-    deploy="$HOME/deploy"
+echo -e "Input desired SAS Viya namespace name:"
+read VIYA_NS
+# create "$deploy directory"
+if [ ! -d "$HOME/$VIYA_NS/deploy" ]; then
+    mkdir -p "$HOME/$VIYA_NS/deploy" && cd "$HOME/$VIYA_NS/deploy"
+    deploy="$HOME/$VIYA_NS/deploy"
 else
-    deploy="$HOME/deploy"
+    deploy="$HOME/$VIYA_NS/deploy"
     cd $deploy
 fi
 
 # create log
-LOG="$deploy/viya4-init-tool.log"
+LOG="$HOME/$VIYA_NS/viya4-init-tool.log"
 touch $LOG
 echo -e "\n" > $LOG
 echo -e "      .:-======-:.      " >> $LOG
@@ -574,8 +575,8 @@ alias ll="ls -la"
 export ORDER=9CXXX
 export CADENCE=lts
 export VERSION=2023.03
-export VIYA_NS=sas-viya
-export deploy=~/sas-viya/\$VIYA_NS/deploy
+export VIYA_NS=\$VIYA_NS
+export deploy=~/\$HOME/\$VIYA_NS/deploy
 
 # Container Registry
 export REGISTRY=cr.hostname.com
