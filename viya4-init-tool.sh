@@ -10,14 +10,14 @@
 
 # -------------------------------------------------  options  -------------------------------------------------
 
-V4ITVER="v1.0.2"        # viya4-init-tool version
-LSVIYASTABLE="2023.07"  # latest SAS Viya Stable supported version by tool
+V4ITVER="v1.0.3"        # viya4-init-tool version
+LSVIYASTABLE="2023.09"  # latest SAS Viya Stable supported version by tool
 LSVIYALTS="2023.03"     # latest SAS Viya LTS supported version by tool
 
 if [ "$1" == "--version" ]; then
     echo ""
     echo "SAS Viya 4 Initialization Tool"
-    echo "  $V4ITVER | August 3rd, 2023"
+    echo "  $V4ITVER | October 13th, 2023"
     echo ""
     exit 0
 elif [ "$1" == "--whitelist" ]; then
@@ -603,14 +603,14 @@ requiredClients() {
     echo -ne "\n$DATETIME | INFO: Required clients - kubectl installation procedure started." >> $LOG
     # requiredClients: kubectl | input
     KCTLVERMINSUPPORTED="22" # <--- Minimum supported version
-    KCTLVERMAXSUPPORTED="26" # <--- Maximum supported version
+    KCTLVERMAXSUPPORTED="27" # <--- Maximum supported version
     echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
     echo -e "${BOLD}${YELLOW}       INPUT REQUIRED       ${NONE}"
     echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
     KUBECTLCHECK=0
     while [[ "$KUBECTLCHECK" -eq 0 ]]; do
         echo -e "Input kubectl version to be installed based on your Kubernetes Cluster version (example 1.24.10):"
-        echo -e "Supported versions: 1.22.0 - 1.26.XX"
+        echo -e "Supported versions: 1.${KCTLVERMINSUPPORTED}.0 - 1.${KCTLVERMAXSUPPORTED}.XX"
         read KUBECTLVER
         KCTLVERMAJ=$(echo $KUBECTLVER | cut -d"." -f1)
         KCTLVERMIN=$(echo $KUBECTLVER | cut -d"." -f2)
@@ -889,14 +889,14 @@ getOrder() {
             fi
         ## accept 2023.01 and later versions without limiting yet unreleased versions and limit version characters to 7
         elif [[ "$VERSIONY" -ge 2023 ]] && [[ "$VERSIONMOCTAL" -ge 1 && "$VERSIONMOCTAL" -le 12 ]] && [[ ${#VERSION} -eq 7 ]]; then
-          if [[ "$CADENCE" == lts ]] && [[ "$VERSIONY" -ge 2023 ]] && [[ "$VERSIONMOCTAL" != 3 && "$VERSIONMOCTAL" != 9 ]]; then
-            echo -e "\n${BOLD}${RED}ERROR${NONE}: LTS versions can only be YYYY.03 or YYYY.09"
+          if [[ "$CADENCE" == lts ]] && [[ "$VERSIONY" -ge 2023 ]] && [[ "$VERSIONMOCTAL" != 3 && "$VERSIONMOCTAL" != 10 ]]; then
+            echo -e "\n${BOLD}${RED}ERROR${NONE}: The only 2023 LTS versions available are 2023.03 and 2023.10"
           else
             VERSIONCHECK=1
           fi
         else
             echo -e "\n${BOLD}${RED}ERROR${NONE}: Invalid or unsupported software Version."
-            echo -e "Supported versions: Min 2022.09 | Max latest available Stable/LTS version."
+            echo -e "Supported versions: Min Stable/LTS 2022.09 | Max Stable $LSVIYASTABLE / LTS $LSVIYALTS."
         fi
     done
     ## getOrder | ask for info confirmation
@@ -1125,10 +1125,10 @@ terraformAzureConfig() {
     TF_VAR_subscription_id=$(az account show --query 'id' --output tsv)
     export TF_VAR_subscription_id
     ## obtain a client secret
-    TF_VAR_client_secret=$(az ad sp create-for-rbac --skip-assignment --name "$AZSP" --query password --output tsv --only-show-errors 2> /dev/null)
+    TF_VAR_client_secret=$(az ad sp create-for-rbac --role "Contributor" --scopes="/subscriptions/$TF_VAR_subscription_id" --name http://$AZSP --query password --output tsv --only-show-errors 2> /dev/null)
     export TF_VAR_client_secret
     ## obtain the client ID
-    TF_VAR_client_id=$(az ad sp list --display-name "$AZSP" --query "[0].appId" | sed -e 's/^"//' -e 's/"$//')
+    TF_VAR_client_id=$(az ad sp list --display-name http://$AZSP --query "[0].appId" | sed -e 's/^"//' -e 's/"$//')
     export TF_VAR_client_id
     # write values to .terraform.env
     echo -e "TF_VAR_tenant_id=$TF_VAR_tenant_id\nTF_VAR_subscription_name=$TF_VAR_subscription_name\nTF_VAR_subscription_id=$TF_VAR_subscription_id\nTF_VAR_client_secret=$TF_VAR_client_secret\nTF_VAR_client_id=$TF_VAR_client_id" > $HOME/.terraform.env
