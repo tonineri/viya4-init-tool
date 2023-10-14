@@ -44,10 +44,10 @@ Before using the `viya4-init-tool`, ensure you have met the following requiremen
 
 To get started with the `viya4-init-tool`, follow these steps:
 
-1. Clone the repository and navigate to the project directory:
+1. Get the latest version of the tool:
 	```bash
 	cd ~
-	git clone https://github.com/tonineri/viya4-init-tool.git
+	wget -O - https://github.com/tonineri/viya4-init-tool/releases/latest/download/viya4-init-tool.tar.gz | tar xz
 	cd viya4-init-tool
 	```
 
