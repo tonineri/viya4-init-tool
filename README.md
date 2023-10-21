@@ -13,7 +13,7 @@
 - **LTS**:	`2023.03`
 
 ## Overview
-Welcome to the `viya4-Init-tool`, a comprehensive and user-friendly solution designed to fully prepare a bastion host for SAS Viya 4 cluster creation and management on: 
+Welcome to the `viya4-init-tool`, a comprehensive and user-friendly solution designed to fully prepare a bastion host for SAS Viya 4 cluster creation and management on: 
 
 * Microsoft Azure | [viya4-iac-azure](https://github.com/sassoftware/viya4-iac-azure) by [SAS](@sassoftware)
 * Amazon Web Services | [viya4-iac-aws](https://github.com/sassoftware/viya4-iac-aws) by [SAS](@sassoftware)
