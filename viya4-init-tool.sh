@@ -10,14 +10,14 @@
 
 # -------------------------------------------------  options  -------------------------------------------------
 
-V4ITVER="v1.0.3"        # viya4-init-tool version
-LSVIYASTABLE="2023.09"  # latest SAS Viya Stable supported version by tool
+V4ITVER="v1.0.4"        # viya4-init-tool version
+LSVIYASTABLE="2023.10"  # latest SAS Viya Stable supported version by tool
 LSVIYALTS="2023.03"     # latest SAS Viya LTS supported version by tool
 
 if [ "$1" == "--version" ]; then
     echo ""
     echo "SAS Viya 4 Initialization Tool"
-    echo "  $V4ITVER | October 13th, 2023"
+    echo "  $V4ITVER | October 23rd, 2023"
     echo ""
     exit 0
 elif [ "$1" == "--whitelist" ]; then
@@ -408,7 +408,7 @@ requiredPackages() {
     cd $deploy
     echo -ne "Installing required packages. This might take a minute or two...\n"
     loadingStart "${loadAniModern[@]}"
-    requiredPackages=("zsh" "zip" "unzip" "git" "mlocate" "jq" "bat")
+    requiredPackages=("zsh" "zip" "unzip" "git" "mlocate" "jq" "bat" "python3" "python3-pip")
     # requiredPackages | installation
     for package in "${requiredPackages[@]}"; do
         sudo apt install $package -y -qq >> $LOG 2>&1
@@ -425,6 +425,11 @@ requiredPackages() {
     zshrcContent
     # requiredPackages | updatedb for mlocate
     sudo updatedb >> $LOG 2>&1
+    # requiredPackages | clone pyviyatools & viya4-ark
+    mkdir $HOME/$VIYA_NS/viya-utils && cd $HOME/$VIYA_NS/viya-utils
+    git clone https://github.com/sassoftware/pyviyatools
+    git clone https://github.com/sassoftware/viya4-ark
+    cd $deploy
     # requiredPackages | post-installation & check if all required packages were installed
     loadingStop
     not_installed=()
@@ -1111,7 +1116,7 @@ terraformAzureConfig() {
     done
     echo -e "\nCurrent Service Principal: ►►► $AZSP ◄◄◄"
     echo -e "\nLaunching ${ITALIC}az login${NONE}:"
-    az login -o table --query "[].{Name:name, IsDefault:isDefault, State:state, TenantId:tenantId}"
+    az login --use-device-code -o table --query "[].{Name:name, IsDefault:isDefault, State:state, TenantId:tenantId}"
     echo -e "\nInput the name of desired subscription (value from 1st column above):"
     read AZSUBSCRIPTION
     az account set --subscription $AZSUBSCRIPTION 

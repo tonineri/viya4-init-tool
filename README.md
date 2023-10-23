@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE.md)
 
 ## Latest supported SAS Viya versions
-- **Stable**:	`2023.09`
+- **Stable**:	`2023.10`
 - **LTS**:	`2023.03`
 
 ## Overview
@@ -45,11 +45,19 @@ Before using the `viya4-init-tool`, ensure you have met the following requiremen
 To get started with the `viya4-init-tool`, follow these steps:
 
 1. Get the latest version of the tool:
-	```bash
-	cd ~
-	wget -O - https://github.com/tonineri/viya4-init-tool/releases/latest/download/viya4-init-tool.tar.gz | tar xz
-	cd viya4-init-tool
-	```
+	* Option 1 - Download the latest tarball:
+		```bash
+		cd ~
+		wget -O - https://github.com/tonineri/viya4-init-tool/releases/latest/download/viya4-init-tool.tar.gz | tar xz
+		cd viya4-init-tool
+		```
+
+	* Option 2 - Clone the repository:
+		```bash
+		cd ~
+		git clone https://github.com/tonineri/viya4-init-tool
+		cd viya4-init-tool
+		```
 
 2. Run the main script to launch the tool:
 	```bash
