@@ -48,7 +48,7 @@ To get started with the `viya4-init-tool`, follow these steps:
 	* Option 1 - Download the latest tarball:
 		```bash
 		cd ~
-		wget -O - https://github.com/tonineri/viya4-init-tool/releases/latest/download/viya4-init-tool.tar.gz | tar xz
+		wget -O - https://github.com/tonineri/viya4-init-tool/releases/latest/download/viya4-init-tool.tgz | tar xz
 		cd viya4-init-tool
 		```
 
