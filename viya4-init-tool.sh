@@ -10,14 +10,16 @@
 
 # -------------------------------------------------  options  -------------------------------------------------
 
-V4ITVER="v1.0.4"        # viya4-init-tool version
-LSVIYASTABLE="2023.10"  # latest SAS Viya Stable supported version by tool
-LSVIYALTS="2023.03"     # latest SAS Viya LTS supported version by tool
+V4ITVER="v1.0.5"        # viya4-init-tool version
+LSVIYASTABLE="2023.12"  # latest SAS Viya Stable supported version by tool
+ESVIYASTABLE="2023.09"  # earliest SAS Viya Stable supported version by tool
+LSVIYALTS="2023.10"     # latest SAS Viya LTS supported version by tool
+ESVIYALTS="2022.09"     # earliest SAS Viya LTS supported version by tool
 
 if [ "$1" == "--version" ]; then
     echo ""
     echo "SAS Viya 4 Initialization Tool"
-    echo "  $V4ITVER | October 23rd, 2023"
+    echo "  $V4ITVER | January 10th, 2024"
     echo ""
     exit 0
 elif [ "$1" == "--whitelist" ]; then
@@ -537,7 +539,7 @@ k8s() {
         echo -ne "\n${BOLD}${RED}ERROR${NONE}: docker installation failed. Check $LOG for details."
     fi
     # k8s | ansible supported version
-    ANSIVER="2.13.4"
+    ANSIVER="2.15.6"
     # k8s | ansible installation
     echo -e "\nInstalling ansible-core $ANSIVER..."
     loadingStart "${loadAniModern[@]}"
@@ -579,7 +581,7 @@ alias ll="ls -la"
 # SAS Viya variables
 export ORDER=9CXXX
 export CADENCE=lts
-export VERSION=2023.03
+export VERSION=2023.10
 export VIYA_NS=\$VIYA_NS
 export deploy=~/\$HOME/\$VIYA_NS/deploy
 
@@ -590,13 +592,16 @@ export REGISTRY_PASS="Passw0rd1"
 
 # SAS Viya aliases
 alias setviya="kubectl config set-context --current --namespace=\$VIYA_NS"
-alias kb="cd \$deploy && kustomize build -o site.yaml"
-alias start-sas-viya="kubectl create job sas-start-all-`date +%s` --from cronjobs/sas-start-all -n \$VIYA_NS"
-alias stop-sas-viya="kubectl create job sas-stop-all-`date +%s` --from cronjobs/sas-stop-all -n \$VIYA_NS"
-alias status-sas-viya="watch -n1 'kubectl get sasdeployments -n \$VIYA_NS && echo -e && kubectl get pods -n \$VIYA_NS'"
-alias k9s-sas-viya="k9s --kubeconfig \$KUBECONFIG --namespace \$VIYA_NS"
-alias docker-sas-viya="docker run --rm -v ~/sas-viya/\$VIYA_NS:/cwd/ sas-orchestration create sas-deployment-cr --deployment-data /cwd/license/SASViyaV4_certs.zip --license /cwd/license/license.jwt --user-content /cwd/deploy --cadence-name \$CADENCE --cadence-version \$VERSION --cadence-release \$RELEASE --image-registry \$REGISTRY > \$deploy/\$VIYA_NS-sasdeployment.yaml"
-#alias podman-sas-viya="podman run --rm -v ~/sas-viya/\$VIYA_NS:/cwd/ sas-orchestration create sas-deployment-cr --deployment-data /cwd/license/SASViyaV4_certs.zip --license /cwd/license/license.jwt --user-content /cwd/deploy --cadence-name \$CADENCE --cadence-version \$VERSION --cadence-release \$RELEASE --image-registry \$REGISTRY --repository-warehouse http://hostname.com/sas_repos > \$deploy/\$VIYA_NS-sasdeployment.yaml"
+alias sas-viya-build="cd \$deploy && kustomize build -o site.yaml"
+alias sas-viya-dobuild="docker run --rm -v ~/sas-viya/\$VIYA_NS:/cwd/ sas-orchestration create sas-deployment-cr --deployment-data /cwd/license/SASViyaV4_certs.zip --license /cwd/license/license.jwt --user-content /cwd/deploy --cadence-name \$CADENCE --cadence-version \$VERSION --cadence-release \$RELEASE --image-registry \$REGISTRY > \$deploy/\$VIYA_NS-sasdeployment.yaml"
+#OpenShift: alias sas-viya-dobuild="podman-sas-viya="podman run --rm -v ~/sas-viya/\$VIYA_NS:/cwd/ sas-orchestration create sas-deployment-cr --deployment-data /cwd/license/SASViyaV4_certs.zip --license /cwd/license/license.jwt --user-content /cwd/deploy --cadence-name \$CADENCE --cadence-version \$VERSION --cadence-release \$RELEASE --image-registry \$REGISTRY --repository-warehouse http://hostname.com/sas_repos > \$deploy/\$VIYA_NS-sasdeployment.yaml"
+alias sas-viya-deploy="cd \$deploy && 'kubectl apply --selector="sas.com/admin=cluster-api" --server-side --force-conflicts -f site.yaml && echo -e "1/4 Done" && kubectl apply --selector="sas.com/admin=cluster-wide" -f site.yaml && echo -e "2/4 Done" && kubectl apply --selector="sas.com/admin=cluster-local" -f site.yaml --prune && echo -e "3/4 Done" && kubectl apply --selector="sas.com/admin=namespace" -f site.yaml --prune && echo -e "4/4 Done"'"
+alias sas-viya-redeploy="sas-viya-build && sas-viya-deploy"
+alias sas-viya-update="sas-viya-redeploy && echo -e "Update configuration..." kubectl apply --selector="sas.com/admin=namespace" -f \$deploy/site.yaml --prune --prune-whitelist=autoscaling/v2/HorizontalPodAutoscaler && echo -e "Update configuration done.""
+alias sas-viya-start="kubectl create job sas-start-all-`date +%s` --from cronjobs/sas-start-all -n \$VIYA_NS"
+alias sas-viya-stop="kubectl create job sas-stop-all-`date +%s` --from cronjobs/sas-stop-all -n \$VIYA_NS"
+alias sas-viya-status="watch -n1 'kubectl get sasdeployments -n \$VIYA_NS && echo -e && kubectl get pods -n \$VIYA_NS'"
+alias sas-viya-k9s="k9s --kubeconfig \$KUBECONFIG --namespace \$VIYA_NS"
 EOF
 }
 
@@ -607,7 +612,7 @@ requiredClients() {
     # requiredClients: kubectl | log
     echo -ne "\n$DATETIME | INFO: Required clients - kubectl installation procedure started." >> $LOG
     # requiredClients: kubectl | input
-    KCTLVERMINSUPPORTED="22" # <--- Minimum supported version
+    KCTLVERMINSUPPORTED="24" # <--- Minimum supported version
     KCTLVERMAXSUPPORTED="27" # <--- Maximum supported version
     echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
     echo -e "${BOLD}${YELLOW}       INPUT REQUIRED       ${NONE}"
@@ -653,21 +658,23 @@ requiredClients() {
     KUSTOMIZESUPPORTED1="3.7.0" # for SAS Viya <= SAS Viya 2023.01
     KUSTOMIZESUPPORTED2="4.5.7" # for SAS Viya 2023.02 - performance issues!
     KUSTOMIZESUPPORTED3="5.0.0" # for SAS Viya >= 2023.03 and <= 2023.05
-    KUSTOMIZESUPPORTED4="5.0.3" # for SAS Viya 2023.06 or later
+    KUSTOMIZESUPPORTED4="5.0.3" # for SAS Viya >= 2023.06 and <= 2023.11
+    KUSTOMIZESUPPORTED5="5.1.1" # for SAS Viya 2023.12 or later
     echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
     echo -e "${BOLD}${YELLOW}       INPUT REQUIRED       ${NONE}"
     echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
     KUSTOCHECK=0
     while [[ "$KUSTOCHECK" -eq 0 ]]; do
         echo -e "Supported kustomize versions:"
-        echo -e "$KUSTOMIZESUPPORTED1 | SAS Viya <= 2023.01 "
+        echo -e "$KUSTOMIZESUPPORTED1 | SAS Viya <= 2023.01"
         echo -e "$KUSTOMIZESUPPORTED2 | SAS Viya 2023.02 - performance issues!"
         echo -e "$KUSTOMIZESUPPORTED3 | SAS Viya >= 2023.03 and <= 2023.05"
-        echo -e "$KUSTOMIZESUPPORTED4 | SAS Viya 2023.06 or later"
+        echo -e "$KUSTOMIZESUPPORTED4 | SAS Viya >= 2023.06 and <= 2023.11"
+        echo -e "$KUSTOMIZESUPPORTED5 | SAS Viya 2023.12 or later"
         echo ""
         echo -e "Input kustomize version to be installed based on your SAS Viya version:"
         read KUSTOMIZEVERSION
-        if [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED1" ]] || [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED2" ]] || [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED3" ]] || [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED4" ]]; then
+        if [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED1" ]] || [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED2" ]] || [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED3" ]] || [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED4" || [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED5" ]]; then
             # requiredClients: kustomize | pre-installation
             echo -e "Installing kustomize $KUSTOMIZEVERSION..."
             cd $deploy
@@ -864,44 +871,43 @@ getOrder() {
           echo -e "- If the second character is capital letter 'C' for external orders or [A-Z] for internal ones"
       fi
     done
-    ## getOrder | input cadence
+    ## getOrder | input cadence and version
     CADENCECHECK=0
+    VERSIONCHECK=0  
     while [[ "$CADENCECHECK" -eq 0 ]] ; do
         echo -e "\nInput software Cadence [stable/lts]:"
         read CADENCE
-        ### getOrder | check if cadence is valid
+        ## getOrder | check if cadence is valid
         if [[ "$CADENCE" == stable ]] || [[ "$CADENCE" == lts ]]; then
             CADENCECHECK=1
+            ## getOrder | input version
+            while [[ "$VERSIONCHECK" -eq 0 ]]; do
+                echo -e "\nInput SAS Viya software version (example 2023.03):"
+                read VERSION
+                VERSIONY=$(echo $VERSION | cut -d"." -f1)
+                VERSIONM=$(echo $VERSION | cut -d"." -f2)
+                VERSIONMOCTAL=$(echo $VERSIONM | sed 's/^0*//') # remove leading zero
+                ## getOrder | check if version is valid / supported
+                if [[ "$CADENCE" == stable ]]; then
+                    if [[ "$VERSIONY" -eq 2023 && "$VERSIONMOCTAL" -ge 9 && "$VERSIONMOCTAL" -le 12 && ${#VERSION} -eq 7 ]]; then
+                        VERSIONCHECK=1
+                    else
+                        echo -e "\n${BOLD}${RED}ERROR${NONE}: Invalid or unsupported software Version for stable Cadence."
+                        echo -e "Supported stable versions: Min $ESVIYASTABLE | Max $LSVIYASTABLE."
+                    fi
+                elif [[ "$CADENCE" == lts ]]; then
+                    if [[ "$VERSIONY" -eq 2022 && "$VERSIONMOCTAL" -eq 9 && ${#VERSION} -eq 7 ]]; then
+                        VERSIONCHECK=1
+                    elif [[ "$VERSIONY" -eq 2023 && ( "$VERSIONMOCTAL" -eq 3 || "$VERSIONMOCTAL" -eq 10 ) && ${#VERSION} -eq 7 ]]; then
+                        VERSIONCHECK=1
+                    else
+                        echo -e "\n${BOLD}${RED}ERROR${NONE}: Invalid or unsupported software Version for LTS Cadence."
+                        echo -e "Supported versions: Min LTS $ESVIYALTS | Max LTS $LSVIYALTS."
+                    fi
+                fi
+            done
         else
             echo -e "\n${BOLD}${RED}ERROR${NONE}: Invalid software Cadence. Accepted inputs [stable/lts]."
-        fi
-    done
-    ## getOrder | input version
-    VERSIONCHECK=0
-    while [[ "$VERSIONCHECK" -eq 0 ]]; do
-        echo -e "\nInput SAS Viya software version (example 2023.03):"
-        read VERSION
-        VERSIONY=$(echo $VERSION | cut -d"." -f1)
-        VERSIONM=$(echo $VERSION | cut -d"." -f2)
-        VERSIONMOCTAL=$(echo $VERSION | cut -d"." -f2 | sed 's/^0*//') # remove leading zero
-        # getOrder | check if version is valid / supported
-        ## accept only 2022.[09-12] versions for 2022 and limit version characters to 7
-        if [[ "$VERSIONY" -eq 2022 ]] && [[ "$VERSIONMOCTAL" -ge 9 && "$VERSIONMOCTAL" -le 12 ]] && [[ ${#VERSION} -eq 7 ]]; then
-            if [[ "$CADENCE" == lts ]] && [[ "$VERSIONMOCTAL" != 9 ]]; then
-              echo -e "\n${BOLD}${RED}ERROR${NONE}: The only 2022 LTS version supported is 2022.09"
-            else
-              VERSIONCHECK=1
-            fi
-        ## accept 2023.01 and later versions without limiting yet unreleased versions and limit version characters to 7
-        elif [[ "$VERSIONY" -ge 2023 ]] && [[ "$VERSIONMOCTAL" -ge 1 && "$VERSIONMOCTAL" -le 12 ]] && [[ ${#VERSION} -eq 7 ]]; then
-          if [[ "$CADENCE" == lts ]] && [[ "$VERSIONY" -ge 2023 ]] && [[ "$VERSIONMOCTAL" != 3 && "$VERSIONMOCTAL" != 10 ]]; then
-            echo -e "\n${BOLD}${RED}ERROR${NONE}: The only 2023 LTS versions available are 2023.03 and 2023.10"
-          else
-            VERSIONCHECK=1
-          fi
-        else
-            echo -e "\n${BOLD}${RED}ERROR${NONE}: Invalid or unsupported software Version."
-            echo -e "Supported versions: Min Stable/LTS 2022.09 | Max Stable $LSVIYASTABLE / LTS $LSVIYALTS."
         fi
     done
     ## getOrder | ask for info confirmation
@@ -1013,7 +1019,7 @@ mirrormgrCli() {
         mkdir "$deploy/mirrormgr" && cd "$deploy/mirrormgr" >> $LOG 2>&1
         wget -N https://support.sas.com/installation/viya/4/sas-mirror-manager/lax/mirrormgr-linux.tgz > /dev/null 2>&1
         tar --extract --file mirrormgr-linux.tgz mirrormgr >> $LOG 2>&1
-        sudo chmod +x mirrormgr && sudo mv mirrormgr /usr/local/bin/mirrormgr >> $LOG 2>&1
+        sudo install mirrormgr -o root -g root -m 755 /usr/local/mirrormgr >> $LOG 2>&1
         cd $deploy
         rm -rf "$deploy/mirrormgr"
         # mirrormgrCli | post-installation
