@@ -59,10 +59,10 @@ elif [ "$1" == "--whitelist" ]; then
 elif [ "$1" == "--support" ]; then
     echo ""
     echo "-----------------------------------"
-    echo "Latest supported SAS Viya versions:"
+    echo "   Supported SAS Viya versions:"
     echo "-----------------------------------"
-    echo "- Stable $LSVIYASTABLE"
-    echo "- LTS $LSVIYALTS"
+    echo "- Stable $ESVIYASTABLE-$LSVIYASTABLE"
+    echo "- LTS    $ESVIYALTS-$LSVIYALTS"
     echo "-----------------------------------"
     echo "NOTE: The tool is not maintained by SAS Institute Inc."
     echo "For support, open an issue at https://github.com/tonineri/viya4-init-tool"
@@ -82,6 +82,9 @@ elif [ "$1" == "--help" ]; then
     echo -e "|--help      | ./viya4-init-tool.sh --help      | shows the usage message                     |"
     echo -e "-----------------------------------------------------------------------------------------------"
     echo -e ""
+    exit 0
+else
+    echo -e "ERROR: Unsupported arguement."
     exit 0
 fi
 
