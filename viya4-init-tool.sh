@@ -8,85 +8,14 @@
 # Copyright © 2023, SAS Institute Inc., Cary, NC, USA. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-# -------------------------------------------------  options  -------------------------------------------------
+# --------------------------------------------------  info  ---------------------------------------------------
 
-V4ITVER="v1.0.5"        # viya4-init-tool version
-LSVIYASTABLE="2023.12"  # latest SAS Viya Stable supported version by tool
-ESVIYASTABLE="2023.09"  # earliest SAS Viya Stable supported version by tool
-LSVIYALTS="2023.10"     # latest SAS Viya LTS supported version by tool
-ESVIYALTS="2022.09"     # earliest SAS Viya LTS supported version by tool
-
-if [ "$1" == "--version" ]; then
-    echo ""
-    echo "SAS Viya 4 Initialization Tool"
-    echo "  $V4ITVER | January 10th, 2024"
-    echo ""
-    exit 0
-elif [ "$1" == "--whitelist" ]; then
-    urls=$(grep -oE 'https?://[^/"]+' "$0" | awk -F/ '{ print $1 "//" $3 "/" }' | sort -u)
-    # Split the URLs by line breaks
-    IFS=$'\n' read -r -d '' -a url_array <<< "$urls"
-    new_urls=()
-    for url in "${url_array[@]}"
-    do
-      # Remove "http://" URLs
-      if [[ $url != *"http://"* ]]; then
-        # Remove URLs with spaces
-        if [[ $url != *" "* ]]; then
-          # Replace "./" with "/"
-          url=${url//.\//}
-          # Remove trailing dot (if present)
-          url=${url%/}
-          # Add a trailing slash if missing
-          if [[ $url != */ ]]; then
-            url="$url/"
-          fi
-          # Add the modified URL to the new_urls array
-          new_urls+=("$url")
-        fi
-      fi
-    done
-    # Join the modified URLs with line breaks
-    new_urls_str=$(printf "%s\n" "${new_urls[@]}")
-    echo ""
-    echo "----------------------------------------------------------------------"
-    echo "List of URLs to be whitelisted for the script to be able to run fully:"
-    echo "----------------------------------------------------------------------"
-    echo "$new_urls_str"
-    echo "----------------------------------------------------------------------"
-    echo ""
-    exit 0
-elif [ "$1" == "--support" ]; then
-    echo ""
-    echo "-----------------------------------"
-    echo "   Supported SAS Viya versions:"
-    echo "-----------------------------------"
-    echo "- Stable $ESVIYASTABLE-$LSVIYASTABLE"
-    echo "- LTS    $ESVIYALTS-$LSVIYALTS"
-    echo "-----------------------------------"
-    echo "NOTE: The tool is not maintained by SAS Institute Inc."
-    echo "For support, open an issue at https://github.com/tonineri/viya4-init-tool"
-    echo ""
-    exit 0
-elif [ "$1" == "--help" ]; then
-    echo -e ""
-    echo -e "-----------------------------------------------------------------------------------------------"
-    echo -e "|                           SAS Viya 4 Initialization Tool - Usage                            |"
-    echo -e "-----------------------------------------------------------------------------------------------"
-    echo -e "|   OPTION   |         EXAMPLE COMMAND          |                 DESCRIPTION                 |"
-    echo -e "|------------|----------------------------------|---------------------------------------------|"
-    echo -e "|[no option] | ./viya4-init-tool.sh             | executes the GUI                            |"
-    echo -e "|--version   | ./viya4-init-tool.sh --version   | shows the tool's version                    |"
-    echo -e "|--whitelist | ./viya4-init-tool.sh --whitelist | prints the URLs to be whitelisted           |"
-    echo -e "|--support   | ./viya4-init-tool.sh --support   | shows the latest SAS Viya supported versions|"
-    echo -e "|--help      | ./viya4-init-tool.sh --help      | shows the usage message                     |"
-    echo -e "-----------------------------------------------------------------------------------------------"
-    echo -e ""
-    exit 0
-else
-    echo -e "ERROR: Unsupported arguement."
-    exit 0
-fi
+V4ITVER="v1.0.6"                # viya4-init-tool version
+VERDATE="January 24th, 2024"    # viya4-init-tool version date
+LSVIYASTABLE="2024.01"          # latest SAS Viya Stable supported version by tool
+ESVIYASTABLE="2023.09"          # earliest SAS Viya Stable supported version by tool
+LSVIYALTS="2023.10"             # latest SAS Viya LTS supported version by tool
+ESVIYALTS="2022.09"             # earliest SAS Viya LTS supported version by tool
 
 # ---------------------------------------------- preRequirements ----------------------------------------------
 
@@ -432,8 +361,8 @@ requiredPackages() {
     sudo updatedb >> $LOG 2>&1
     # requiredPackages | clone pyviyatools & viya4-ark
     mkdir $HOME/$VIYA_NS/viya-utils && cd $HOME/$VIYA_NS/viya-utils
-    git clone https://github.com/sassoftware/pyviyatools
-    git clone https://github.com/sassoftware/viya4-ark
+    git clone https://github.com/sassoftware/pyviyatools >> $LOG 2>&1
+    git clone https://github.com/sassoftware/viya4-ark >> $LOG 2>&1
     cd $deploy
     # requiredPackages | post-installation & check if all required packages were installed
     loadingStop
@@ -566,14 +495,11 @@ k8s() {
 # --------------------------------------------  zshrc contents  -------------------------------------------
 zshrcContent() {
 tee ~/.zshrc >> /dev/null << EOF
-# zsh
+# zsh customization
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="robbyrussell"
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting kubectl)
+ZSH_THEME="agnoster"
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting kubectl kube-ps1)
 source $ZSH/oh-my-zsh.sh
-
-#ZSH_THEME="agnoster"
-
 TERM=xterm-256color
 
 # Global
@@ -589,9 +515,9 @@ export VIYA_NS=\$VIYA_NS
 export deploy=~/\$HOME/\$VIYA_NS/deploy
 
 # Container Registry
-export REGISTRY=cr.hostname.com
-export REGISTRY_USER=username
-export REGISTRY_PASS="Passw0rd1"
+export REGISTRY="<cr.hostname.com>"
+export REGISTRY_USER="<username>"
+export REGISTRY_PASS="<password>"
 
 # SAS Viya aliases
 alias setviya="kubectl config set-context --current --namespace=\$VIYA_NS"
@@ -622,7 +548,7 @@ requiredClients() {
     echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
     KUBECTLCHECK=0
     while [[ "$KUBECTLCHECK" -eq 0 ]]; do
-        echo -e "Input kubectl version to be installed based on your Kubernetes Cluster version (example 1.24.10):"
+        echo -e "Input kubectl version to be installed based on your Kubernetes Cluster version (example 1.27.7):"
         echo -e "Supported versions: 1.${KCTLVERMINSUPPORTED}.0 - 1.${KCTLVERMAXSUPPORTED}.XX"
         read KUBECTLVER
         KCTLVERMAJ=$(echo $KUBECTLVER | cut -d"." -f1)
@@ -677,9 +603,14 @@ requiredClients() {
         echo ""
         echo -e "Input kustomize version to be installed based on your SAS Viya version:"
         read KUSTOMIZEVERSION
-        if [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED1" ]] || [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED2" ]] || [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED3" ]] || [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED4" || [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED5" ]]; then
+        if  [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED1" ]] || \
+            [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED2" ]] || \
+            [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED3" ]] || \
+            [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED4" ]] || \
+            [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED5" ]]; then
             # requiredClients: kustomize | pre-installation
-            echo -e "Installing kustomize $KUSTOMIZEVERSION..."
+            echo 
+            echo -e "INFO: Installing kustomize $KUSTOMIZEVERSION..."
             cd $deploy
             loadingStart "${loadAniModern[@]}"
             # requiredClients: kustomize | installation
@@ -703,7 +634,7 @@ requiredClients() {
     # requiredClients: node-shell | log
     echo -ne "\n$DATETIME | INFO: Required clients - node-shell installation procedure started." >> $LOG
     # requiredClients: node-shell | pre-installation
-    echo -e "Installing latest node-shell..."
+    echo -e "INFO: Installing latest node-shell..."
     cd $deploy
     loadingStart "${loadAniModern[@]}"
     # requiredClients: node-shell | installation
@@ -885,14 +816,15 @@ getOrder() {
             CADENCECHECK=1
             ## getOrder | input version
             while [[ "$VERSIONCHECK" -eq 0 ]]; do
-                echo -e "\nInput SAS Viya software version (example 2023.03):"
+                echo -e "\nInput SAS Viya software version (example 2023.10):"
                 read VERSION
                 VERSIONY=$(echo $VERSION | cut -d"." -f1)
                 VERSIONM=$(echo $VERSION | cut -d"." -f2)
                 VERSIONMOCTAL=$(echo $VERSIONM | sed 's/^0*//') # remove leading zero
                 ## getOrder | check if version is valid / supported
                 if [[ "$CADENCE" == stable ]]; then
-                    if [[ "$VERSIONY" -eq 2023 && "$VERSIONMOCTAL" -ge 9 && "$VERSIONMOCTAL" -le 12 && ${#VERSION} -eq 7 ]]; then
+                    if  [[ "$VERSIONY" -eq 2023 && "$VERSIONMOCTAL" -ge 9 && "$VERSIONMOCTAL" -le 12 && ${#VERSION} -eq 7 ]] || \
+                        [[ "$VERSIONY" -eq 2024 && "$VERSIONMOCTAL" -ge 1 && "$VERSIONMOCTAL" -le 1 && ${#VERSION} -eq 7 ]]; then
                         VERSIONCHECK=1
                     else
                         echo -e "\n${BOLD}${RED}ERROR${NONE}: Invalid or unsupported software Version for stable Cadence."
@@ -916,6 +848,7 @@ getOrder() {
     ## getOrder | ask for info confirmation
     CONFIRMCHECK=0
     while [[ "$CONFIRMCHECK" -eq 0 ]]; do
+        echo
         echo -e "${YELLOW}-----------------${NONE}"
         echo -e "Order:   $ORDER"
         echo -e "Cadence: $CADENCE"
@@ -1623,6 +1556,78 @@ fullMode() {
 
 # --------------------------------------------  startScript  --------------------------------------------
 
-providerMenu
+if [ "$#" -eq 0 ]; then
+  providerMenu
+elif [ "$1" == "--version" ]; then
+    echo ""
+    echo "SAS Viya 4 Initialization Tool"
+    echo "  $V4ITVER | $VERDATE"
+    echo ""
+    exit 0
+elif [ "$1" == "--whitelist" ]; then
+    urls=$(grep -oE 'https?://[^/"]+' "$0" | awk -F/ '{ print $1 "//" $3 "/" }' | sort -u)
+    # Split the URLs by line breaks
+    IFS=$'\n' read -r -d '' -a url_array <<< "$urls"
+    new_urls=()
+    for url in "${url_array[@]}"
+    do
+      # Remove "http://" URLs
+      if [[ $url != *"http://"* ]]; then
+        # Remove URLs with spaces
+        if [[ $url != *" "* ]]; then
+          # Replace "./" with "/"
+          url=${url//.\//}
+          # Remove trailing dot (if present)
+          url=${url%/}
+          # Add a trailing slash if missing
+          if [[ $url != */ ]]; then
+            url="$url/"
+          fi
+          # Add the modified URL to the new_urls array
+          new_urls+=("$url")
+        fi
+      fi
+    done
+    # Join the modified URLs with line breaks
+    new_urls_str=$(printf "%s\n" "${new_urls[@]}")
+    echo ""
+    echo "----------------------------------------------------------------------"
+    echo "List of URLs to be whitelisted for the script to be able to run fully:"
+    echo "----------------------------------------------------------------------"
+    echo "$new_urls_str"
+    echo "----------------------------------------------------------------------"
+    echo ""
+    exit 0
+elif [ "$1" == "--support" ]; then
+    echo ""
+    echo "-----------------------------------"
+    echo "   Supported SAS Viya versions:"
+    echo "-----------------------------------"
+    echo "- Stable $ESVIYASTABLE-$LSVIYASTABLE"
+    echo "- LTS    $ESVIYALTS-$LSVIYALTS"
+    echo "-----------------------------------"
+    echo "NOTE: The tool is not maintained by SAS Institute Inc."
+    echo "For support, open an issue at https://github.com/tonineri/viya4-init-tool"
+    echo ""
+    exit 0
+elif [ "$1" == "--help" ]; then
+    echo -e ""
+    echo -e "-----------------------------------------------------------------------------------------------"
+    echo -e "|                           SAS Viya 4 Initialization Tool - Usage                            |"
+    echo -e "-----------------------------------------------------------------------------------------------"
+    echo -e "|   OPTION   |         EXAMPLE COMMAND          |                 DESCRIPTION                 |"
+    echo -e "|------------|----------------------------------|---------------------------------------------|"
+    echo -e "|[no option] | ./viya4-init-tool.sh             | executes the GUI                            |"
+    echo -e "|--version   | ./viya4-init-tool.sh --version   | shows the tool's version                    |"
+    echo -e "|--whitelist | ./viya4-init-tool.sh --whitelist | prints the URLs to be whitelisted           |"
+    echo -e "|--support   | ./viya4-init-tool.sh --support   | shows the latest SAS Viya supported versions|"
+    echo -e "|--help      | ./viya4-init-tool.sh --help      | shows the usage message                     |"
+    echo -e "-----------------------------------------------------------------------------------------------"
+    echo -e ""
+    exit 0
+else
+    echo -e "ERROR: Unsupported arguement."
+    exit 0
+fi
 
 # ---------------------------------------------  scriptEnd  ---------------------------------------------

@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE.md)
 
 ## Latest supported SAS Viya versions
-- **Stable**:	`2023.12`
+- **Stable**:	`2024.01`
 - **LTS**:	`2023.10`
 
 ## Overview
