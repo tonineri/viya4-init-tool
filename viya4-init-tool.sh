@@ -10,10 +10,10 @@
 
 # --------------------------------------------------  info  ---------------------------------------------------
 
-V4ITVER="v1.0.6"                # viya4-init-tool version
-VERDATE="January 24th, 2024"    # viya4-init-tool version date
-LSVIYASTABLE="2024.01"          # latest SAS Viya Stable supported version by tool
-ESVIYASTABLE="2023.09"          # earliest SAS Viya Stable supported version by tool
+V4ITVER="v1.0.7"                # viya4-init-tool version
+VERDATE="February 29th, 2024"    # viya4-init-tool version date
+LSVIYASTABLE="2024.02"          # latest SAS Viya Stable supported version by tool
+ESVIYASTABLE="2023.11"          # earliest SAS Viya Stable supported version by tool
 LSVIYALTS="2023.10"             # latest SAS Viya LTS supported version by tool
 ESVIYALTS="2022.09"             # earliest SAS Viya LTS supported version by tool
 
@@ -542,7 +542,7 @@ requiredClients() {
     echo -ne "\n$DATETIME | INFO: Required clients - kubectl installation procedure started." >> $LOG
     # requiredClients: kubectl | input
     KCTLVERMINSUPPORTED="24" # <--- Minimum supported version
-    KCTLVERMAXSUPPORTED="27" # <--- Maximum supported version
+    KCTLVERMAXSUPPORTED="28" # <--- Maximum supported version
     echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
     echo -e "${BOLD}${YELLOW}       INPUT REQUIRED       ${NONE}"
     echo -e "${BOLD}${YELLOW}----------------------------${NONE}"
@@ -823,8 +823,8 @@ getOrder() {
                 VERSIONMOCTAL=$(echo $VERSIONM | sed 's/^0*//') # remove leading zero
                 ## getOrder | check if version is valid / supported
                 if [[ "$CADENCE" == stable ]]; then
-                    if  [[ "$VERSIONY" -eq 2023 && "$VERSIONMOCTAL" -ge 9 && "$VERSIONMOCTAL" -le 12 && ${#VERSION} -eq 7 ]] || \
-                        [[ "$VERSIONY" -eq 2024 && "$VERSIONMOCTAL" -ge 1 && "$VERSIONMOCTAL" -le 1 && ${#VERSION} -eq 7 ]]; then
+                    if  [[ "$VERSIONY" -eq 2023 && "$VERSIONMOCTAL" -ge 11 && "$VERSIONMOCTAL" -le 12 && ${#VERSION} -eq 7 ]] || \
+                        [[ "$VERSIONY" -eq 2024 && "$VERSIONMOCTAL" -ge 1 && "$VERSIONMOCTAL" -le 2 && ${#VERSION} -eq 7 ]]; then
                         VERSIONCHECK=1
                     else
                         echo -e "\n${BOLD}${RED}ERROR${NONE}: Invalid or unsupported software Version for stable Cadence."

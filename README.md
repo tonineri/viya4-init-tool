@@ -8,9 +8,11 @@
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE.md)
 
-## Latest supported SAS Viya versions
-- **Stable**:	`2024.01`
-- **LTS**:	`2023.10`
+## Supported SAS Viya versions
+| **Cadence** | **Version(s)** |
+|---------|----------|
+| **Stable**  | `2023.11` \| `2023.12` \| `2024.01` \| `2024.02` |
+| **LTS**    | `2022.09` \| `2023.03` \| `2023.10` |
 
 ## Overview
 Welcome to the `viya4-init-tool`, a comprehensive and user-friendly solution designed to fully prepare a bastion host for SAS Viya 4 cluster creation and management on: 
