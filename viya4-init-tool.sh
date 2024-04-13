@@ -10,10 +10,10 @@
 
 # --------------------------------------------------  info  ---------------------------------------------------
 
-V4ITVER="v1.0.7"                # viya4-init-tool version
-VERDATE="February 29th, 2024"    # viya4-init-tool version date
-LSVIYASTABLE="2024.02"          # latest SAS Viya Stable supported version by tool
-ESVIYASTABLE="2023.11"          # earliest SAS Viya Stable supported version by tool
+V4ITVER="v1.0.8"                # viya4-init-tool version
+VERDATE="April 13th, 2024"      # viya4-init-tool version date
+LSVIYASTABLE="2024.03"          # latest SAS Viya Stable supported version by tool
+ESVIYASTABLE="2023.12"          # earliest SAS Viya Stable supported version by tool
 LSVIYALTS="2023.10"             # latest SAS Viya LTS supported version by tool
 ESVIYALTS="2022.09"             # earliest SAS Viya LTS supported version by tool
 
@@ -816,15 +816,15 @@ getOrder() {
             CADENCECHECK=1
             ## getOrder | input version
             while [[ "$VERSIONCHECK" -eq 0 ]]; do
-                echo -e "\nInput SAS Viya software version (example 2023.10):"
+                echo -e "\nInput SAS Viya software version (example 2024.03):"
                 read VERSION
                 VERSIONY=$(echo $VERSION | cut -d"." -f1)
                 VERSIONM=$(echo $VERSION | cut -d"." -f2)
                 VERSIONMOCTAL=$(echo $VERSIONM | sed 's/^0*//') # remove leading zero
                 ## getOrder | check if version is valid / supported
                 if [[ "$CADENCE" == stable ]]; then
-                    if  [[ "$VERSIONY" -eq 2023 && "$VERSIONMOCTAL" -ge 11 && "$VERSIONMOCTAL" -le 12 && ${#VERSION} -eq 7 ]] || \
-                        [[ "$VERSIONY" -eq 2024 && "$VERSIONMOCTAL" -ge 1 && "$VERSIONMOCTAL" -le 2 && ${#VERSION} -eq 7 ]]; then
+                    if  [[ "$VERSIONY" -eq 2023 && "$VERSIONMOCTAL" -eq 12 && ${#VERSION} -eq 7 ]] || \
+                        [[ "$VERSIONY" -eq 2024 && "$VERSIONMOCTAL" -ge 1 && "$VERSIONMOCTAL" -le 3 && ${#VERSION} -eq 7 ]]; then
                         VERSIONCHECK=1
                     else
                         echo -e "\n${BOLD}${RED}ERROR${NONE}: Invalid or unsupported software Version for stable Cadence."
