@@ -1,6 +1,6 @@
-![SAS Viya](assets/sasviya_logo_header_gh.png)
-
 <div align="center">
+
+![SAS Viya](/assets/sasviya_logo_header_gh.png)
 
 # **SAS Viya 4 Initialization Tool**
 
@@ -9,13 +9,15 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE.md)
 
 ## Supported SAS Viya versions
+
 | **Cadence** | **Version(s)** |
 |---------|----------|
-| **Stable**  | `2023.11` \| `2023.12` \| `2024.01` \| `2024.02` |
+| **Stable**  | `2023.12` \| `2024.01` \| `2024.02` \| `2024.03` |
 | **LTS**    | `2022.09` \| `2023.03` \| `2023.10` |
 
 ## Overview
-Welcome to the `viya4-init-tool`, a comprehensive and user-friendly solution designed to fully prepare a bastion host for SAS Viya 4 cluster creation and management on: 
+
+Welcome to the `viya4-init-tool`, a comprehensive and user-friendly solution designed to fully prepare a bastion host for SAS Viya 4 cluster creation and management on:
 
 * Microsoft Azure | [viya4-iac-azure](https://github.com/sassoftware/viya4-iac-azure) by [SAS](@sassoftware)
 * Amazon Web Services | [viya4-iac-aws](https://github.com/sassoftware/viya4-iac-aws) by [SAS](@sassoftware)
@@ -47,72 +49,78 @@ Before using the `viya4-init-tool`, ensure you have met the following requiremen
 To get started with the `viya4-init-tool`, follow these steps:
 
 1. Get the latest version of the tool:
-	* Option 1 - Download the latest tarball:
-		```bash
-		cd ~
-		wget -O - https://github.com/tonineri/viya4-init-tool/releases/latest/download/viya4-init-tool.tgz | tar xz
-		cd viya4-init-tool
-		```
 
-	* Option 2 - Clone the repository:
-		```bash
-		cd ~
-		git clone https://github.com/tonineri/viya4-init-tool
-		cd viya4-init-tool
-		```
+ * Option 1 - Download the latest tarball:
+
+  ```bash
+  cd ~
+  wget -O - https://github.com/tonineri/viya4-init-tool/releases/latest/download/viya4-init-tool.tgz | tar xz
+  cd viya4-init-tool
+  ```
+
+ * Option 2 - Clone the repository:
+
+  ```bash
+  cd ~
+  git clone https://github.com/tonineri/viya4-init-tool
+  cd viya4-init-tool
+  ```
 
 2. Run the main script to launch the tool:
-	```bash
-	chmod +x viya4-init-tool.sh
-	./viya4-init-tool.sh
-	```
+
+ ```bash
+ chmod +x viya4-init-tool.sh
+ ./viya4-init-tool.sh
+ ```
 
 3. Interact with the tool: Follow the on-screen prompts to navigate through the menus, select your `Provider` and `Mode`, and engage in the guided process tailored to your choices.
 
 ## Usage
 
-- To run the tool, execute:
-	```bash
-	./viya4-init-tool.sh
-	```
-	You will be prompted to input the desired name for your SAS Viya namespace. The tool will then proceed with the two menus:
-	
-	1. **Provider Selection Menu**: Choose from a list of supported cloud providers (Azure, AWS, GCP) or Open Source K8s. The provider selection determines the platform for which the tool will prepare the bastion host for SAS Viya 4 	cluster creation and management.
-	<div align="center">
-	
-	![Provider Selection Menu](assets/providerSelectionMenu.png)
-	
-	</div>
-	
-	2. **Mode Selection Menu**: Select the desired mode for your task. The modes determine the type of process you will be guided through and may vary depending on the chosen provider.
-	
-	<div align="center">
-	
-	![Mode Selection Menu](assets/modeSelectionMenu.png)
-	
-	</div>
-	
-	After making your selections, you will be guided through a tailored process, with the tool asking for your input and providing feedback when necessary. This ensures a smooth, efficient, and user-centric experience.
+* To run the tool, execute:
 
-- To show the tool version, execute:
-	```bash
-	./viya4-init-tool.sh --version
-	```
+ ```bash
+ ./viya4-init-tool.sh
+ ```
 
-- To show the URLs that need to be whitelisted for the script to run fully, execute:
-	```bash
-	./viya4-init-tool.sh --whitelist
-	```
+You will be prompted to input the desired name for your SAS Viya namespace. The tool will then proceed with the two menus:
+ 
+ 1. **Provider Selection Menu**: Choose from a list of supported cloud providers (Azure, AWS, GCP) or Open Source K8s. The provider selection determines the platform for which the tool will prepare the bastion host for SAS Viya 4  cluster creation and management.
+ <div align="center">
+ 
+ ![Provider Selection Menu](/assets/providerSelectionMenu.png)
+ 
+ </div>
+ 
+ 2. **Mode Selection Menu**: Select the desired mode for your task. The modes determine the type of process you will be guided through and may vary depending on the chosen provider.
+ 
+ <div align="center">
+ 
+ ![Mode Selection Menu](/assets/modeSelectionMenu.png)
+ 
+ </div>
+ 
+ After making your selections, you will be guided through a tailored process, with the tool asking for your input and providing feedback when necessary. This ensures a smooth, efficient, and user-centric experience.
 
-- To show the latest SAS Viya versions supported by the tool, execute:
-	```bash
-	./viya4-init-tool.sh --support
-	```
+* To show the tool version, execute:
+ ```bash
+ ./viya4-init-tool.sh --version
+ ```
 
-- To show the all available usage options, execute:
-	```bash
-	./viya4-init-tool.sh --help
-	```
+* To show the URLs that need to be whitelisted for the script to run fully, execute:
+ ```bash
+ ./viya4-init-tool.sh --whitelist
+ ```
+
+* To show the latest SAS Viya versions supported by the tool, execute:
+ ```bash
+ ./viya4-init-tool.sh --support
+ ```
+
+* To show the all available usage options, execute:
+ ```bash
+ ./viya4-init-tool.sh --help
+ ```
 
 ## Contributing
 
