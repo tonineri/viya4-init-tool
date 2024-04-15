@@ -470,15 +470,13 @@ k8s() {
     else
         echo -ne "\n${BOLD}${RED}ERROR${NONE}: docker installation failed. Check $LOG for details."
     fi
-    # k8s | ansible supported version
-    ANSIVER="2.15.6"
     # k8s | ansible installation
-    echo -e "\nInstalling ansible-core $ANSIVER..."
+    echo -e "\nInstalling latest ansible-core..."
     loadingStart "${loadAniModern[@]}"
     sudo apt-get install python3 -y -qq >> $LOG 2>&1
     curl -sfSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py >> $LOG 2>&1
     python3 get-pip.py --user >> $LOG 2>&1
-    python3 -m pip install --user ansible-core==$ANSIVER --no-warn-script-location >> $LOG 2>&1
+    python3 -m pip install --user ansible-core --no-warn-script-location >> $LOG 2>&1
     source $HOME/.profile
     # k8s | post-installation
     loadingStop
@@ -496,10 +494,10 @@ k8s() {
 zshrcContent() {
 tee ~/.zshrc >> /dev/null << EOF
 # zsh customization
-export ZSH="$HOME/.oh-my-zsh"
+export ZSH="\$HOME/.oh-my-zsh"
 ZSH_THEME="agnoster"
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting kubectl kube-ps1)
-source $ZSH/oh-my-zsh.sh
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting kubectl)
+source \$ZSH/oh-my-zsh.sh
 TERM=xterm-256color
 
 # Global
@@ -508,16 +506,38 @@ alias bat="batcat"
 alias ll="ls -la"
 
 # SAS Viya variables
-export ORDER=9CXXX
-export CADENCE=lts
-export VERSION=2023.10
-export VIYA_NS=\$VIYA_NS
-export deploy=~/\$HOME/\$VIYA_NS/deploy
+export ORDER=<ORDER>
+export CADENCE=<cadence>
+export VERSION=<version>
+export VIYA_NS=<viya-namespace>
+export VIYA_HOME=\$HOME/sas-viya/\$VIYA_NS
+export DEPLOY=\$VIYA_HOME/deploy
+export deploy=\$DEPLOY
+export RELEASE=$(cat \$deploy/current_release.txt)
+
+# SAS Viya CLI
+export SAS_CLI_PROFILE=<sas-viya-cli-profile-name>
+export SSL_CERT_FILE="\$VIYA_HOME/viya-utilities/\$SAS_CLI_PROFILE.pem"
+export REQUESTS_CA_BUNDLE="\$VIYA_HOME/viya-utilities/\${SAS_CLI_PROFILE}_CA.pem"
 
 # Container Registry
+#DOCKER_OPTS="--insecure-registry=registry.domain.com:port"
 export REGISTRY="<cr.hostname.com>"
 export REGISTRY_USER="<username>"
 export REGISTRY_PASS="<password>"
+
+# OpenShift
+#export OCPSERVER="https://api.ocpdemo.domain.com:6443"
+#export OCPUSER="ocpadmin"
+#alias oc-login="oc login -u \$OCPUSER --server \$OCPSERVER --insecure-skip-tls-verify=true"
+
+# Kubectl aliases
+alias kgpv="kubectl get pv"
+alias kgsc="kubectl get storageclass"
+alias kdel="kubectl delete pod"
+alias klog="kubectl logs -f"
+alias kns="node-shell"
+alias kdelj="kubectl get jobs --no-headers | grep '1/1' | awk '{print \$1}' | xargs -I {} kubectl delete job {}"
 
 # SAS Viya aliases
 alias setviya="kubectl config set-context --current --namespace=\$VIYA_NS"
@@ -531,6 +551,11 @@ alias sas-viya-start="kubectl create job sas-start-all-`date +%s` --from cronjob
 alias sas-viya-stop="kubectl create job sas-stop-all-`date +%s` --from cronjobs/sas-stop-all -n \$VIYA_NS"
 alias sas-viya-status="watch -n1 'kubectl get sasdeployments -n \$VIYA_NS && echo -e && kubectl get pods -n \$VIYA_NS'"
 alias sas-viya-k9s="k9s --kubeconfig \$KUBECONFIG --namespace \$VIYA_NS"
+
+# Startup commands
+# oc-login
+export WORKDIR $VIYA_HOME
+
 EOF
 }
 
