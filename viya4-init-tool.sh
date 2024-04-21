@@ -10,12 +10,12 @@
 
 # --------------------------------------------------  info  ---------------------------------------------------
 
-V4ITVER="v1.0.9"                # viya4-init-tool version
-VERDATE="April 21st, 2024"      # viya4-init-tool version date
-LSVIYASTABLE="2024.04"          # latest SAS Viya Stable supported version by tool
-ESVIYASTABLE="2024.01"          # earliest SAS Viya Stable supported version by tool
-LSVIYALTS="2023.10"             # latest SAS Viya LTS supported version by tool
-ESVIYALTS="2022.09"             # earliest SAS Viya LTS supported version by tool
+V4ITVER="v1.1.0"            # viya4-init-tool version
+VERDATE="May 19th, 2024"    # viya4-init-tool version date
+LSVIYASTABLE="2024.05"      # latest SAS Viya Stable supported version by tool
+ESVIYASTABLE="2024.02"      # earliest SAS Viya Stable supported version by tool
+LSVIYALTS="2024.03"         # latest SAS Viya LTS supported version by tool
+ESVIYALTS="2023.03"         # earliest SAS Viya LTS supported version by tool
 
 # ---------------------------------------------- preRequirements ----------------------------------------------
 
