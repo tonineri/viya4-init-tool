@@ -20,48 +20,6 @@ ESVIYALTS="2023.03"         # earliest SAS Viya LTS supported version by tool
 # ---------------------------------------------- preRequirements ----------------------------------------------
 
 DATETIME=$(date +'%Y-%m-%d | %H:%M:%S') # DATETIME in YYYY-MM-DD | HH:MM:SS format for logging
-echo -e "${CYAN}__________________________________________________${NONE}"
-echo -e "\n            ${BCYAN}SAS Viya${NONE} ${BOLD}Initialization Tool${NONE}"
-echo -e "${CYAN}__________________________________________________${NONE}"
-echo -e "\nInput desired ${BCYAN}SAS Viya{$NODE} namespace name:"
-read VIYA_NS
-
-# create "$deploy directory"
-if [ ! -d "$HOME/$VIYA_NS/deploy" ]; then
-    mkdir -p "$HOME/$VIYA_NS/deploy"
-    deploy="$HOME/$VIYA_NS/deploy"
-    DEPLOY=$DEPLOY
-    cd $deploy
-else
-    deploy="$HOME/$VIYA_NS/deploy"
-    DEPLOY=$DEPLOY
-    cd $deploy
-fi
-clear
-
-# create log
-LOG="$HOME/$VIYA_NS/viya4-init-tool.log"
-touch $LOG
-echo -e "\n" > $LOG
-echo -e "      .:-======-:.      " >> $LOG
-echo -e "    .========----==:    " >> $LOG
-echo -e "   -=====-.        .:   " >> $LOG
-echo -e "  -=====.               " >> $LOG
-echo -e "  =====.   :==-         " >> $LOG
-echo -e "  -====.   :====:       " >> $LOG
-echo -e "   ====-    .=====.     " >> $LOG
-echo -e "    -====.    :====-    " >> $LOG
-echo -e "     .====-     =====   " >> $LOG
-echo -e "       :====:   .====-  " >> $LOG
-echo -e "         -==:   .=====  " >> $LOG
-echo -e "               .=====-  " >> $LOG
-echo -e "   :.        .-=====-   " >> $LOG
-echo -e "    :==----========:    " >> $LOG
-echo -e "      .:-======-:.      " >> $LOG
-echo -e "     viya4-init-tool    " >> $LOG
-echo -e "\n" >> $LOG
-echo -ne "\n$DATETIME | ${INFOMSG} | SAS Viya Initialization Tool inizialized." >> $LOG
-echo -e "\n" >> $LOG
 
 # ---------------------------------------------- loadingAnimation ----------------------------------------------
 
@@ -1579,9 +1537,58 @@ fullMode() {
     fi
 }
 
+namespaceDefinition () {
+    echo -e "${CYAN}__________________________________________________${NONE}"
+    echo -e "\n            ${BCYAN}SAS Viya${NONE} ${BOLD}Initialization Tool${NONE}"
+    echo -e "${CYAN}__________________________________________________${NONE}"
+    echo -e "\nInput desired ${BCYAN}SAS Viya{$NODE} namespace name:"
+    read VIYA_NS
+
+    # create "$deploy directory"
+    if [ ! -d "$HOME/$VIYA_NS/deploy" ]; then
+        mkdir -p "$HOME/$VIYA_NS/deploy"
+        deploy="$HOME/$VIYA_NS/deploy"
+        DEPLOY=$DEPLOY
+        cd $deploy
+    else
+        deploy="$HOME/$VIYA_NS/deploy"
+        DEPLOY=$DEPLOY
+        cd $deploy
+    fi
+clear
+}
+
+logCreation () {
+# create log
+LOG="$HOME/$VIYA_NS/viya4-init-tool.log"
+touch $LOG
+echo -e "\n" > $LOG
+echo -e "      .:-======-:.      " >> $LOG
+echo -e "    .========----==:    " >> $LOG
+echo -e "   -=====-.        .:   " >> $LOG
+echo -e "  -=====.               " >> $LOG
+echo -e "  =====.   :==-         " >> $LOG
+echo -e "  -====.   :====:       " >> $LOG
+echo -e "   ====-    .=====.     " >> $LOG
+echo -e "    -====.    :====-    " >> $LOG
+echo -e "     .====-     =====   " >> $LOG
+echo -e "       :====:   .====-  " >> $LOG
+echo -e "         -==:   .=====  " >> $LOG
+echo -e "               .=====-  " >> $LOG
+echo -e "   :.        .-=====-   " >> $LOG
+echo -e "    :==----========:    " >> $LOG
+echo -e "      .:-======-:.      " >> $LOG
+echo -e "     viya4-init-tool    " >> $LOG
+echo -e "\n" >> $LOG
+echo -ne "\n$DATETIME | ${INFOMSG} | SAS Viya Initialization Tool inizialized." >> $LOG
+echo -e "\n" >> $LOG
+}
+
 # --------------------------------------------  startScript  --------------------------------------------
 
 if [ "$#" -eq 0 ]; then
+  namespaceDefinition
+  logCreation
   providerMenu
 elif [ "$1" == "--version" ]; then
     echo ""
