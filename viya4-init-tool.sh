@@ -5,7 +5,7 @@
 # SAS Viya Initializaton Tool
 # Description: the script can fully prepare a bastion host for a SAS Viya 4 cluster creation and management on Azure, AWS and Google Cloud Plaform.
 
-# Copyright © 2023, SAS Institute Inc., Cary, NC, USA. All Rights Reserved.
+# Copyright © 2024, SAS Institute Inc., Cary, NC, USA. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
 # --------------------------------------------------  info  ---------------------------------------------------
@@ -20,16 +20,24 @@ ESVIYALTS="2022.09"             # earliest SAS Viya LTS supported version by too
 # ---------------------------------------------- preRequirements ----------------------------------------------
 
 DATETIME=$(date +'%Y-%m-%d | %H:%M:%S') # DATETIME in YYYY-MM-DD | HH:MM:SS format for logging
-echo -e "Input desired SAS Viya namespace name:"
+echo -e "${CYAN}__________________________________________________${NONE}"
+echo -e "\n            ${BCYAN}SAS Viya${NONE} ${BOLD}Initialization Tool${NONE}"
+echo -e "${CYAN}__________________________________________________${NONE}"
+echo -e "\nInput desired ${BCYAN}SAS Viya{$NODE} namespace name:"
 read VIYA_NS
+
 # create "$deploy directory"
 if [ ! -d "$HOME/$VIYA_NS/deploy" ]; then
-    mkdir -p "$HOME/$VIYA_NS/deploy" && cd "$HOME/$VIYA_NS/deploy"
+    mkdir -p "$HOME/$VIYA_NS/deploy"
     deploy="$HOME/$VIYA_NS/deploy"
+    DEPLOY=$DEPLOY
+    cd $deploy
 else
     deploy="$HOME/$VIYA_NS/deploy"
+    DEPLOY=$DEPLOY
     cd $deploy
 fi
+clear
 
 # create log
 LOG="$HOME/$VIYA_NS/viya4-init-tool.log"
@@ -52,7 +60,7 @@ echo -e "    :==----========:    " >> $LOG
 echo -e "      .:-======-:.      " >> $LOG
 echo -e "     viya4-init-tool    " >> $LOG
 echo -e "\n" >> $LOG
-echo -ne "\n$DATETIME | ${INFOMSG} | Tool inizialized." >> $LOG
+echo -ne "\n$DATETIME | ${INFOMSG} | SAS Viya Initialization Tool inizialized." >> $LOG
 echo -e "\n" >> $LOG
 
 # ---------------------------------------------- loadingAnimation ----------------------------------------------
@@ -112,14 +120,14 @@ REVERSE='\e[7m'
 HIDDEN='\e[8m'
 
 # textStyle | mixed
-BBLACK='\033[1;30m'  # Black
-BRED='\033[1;31m'    # Red
-BGREEN='\033[1;32m'  # Green
-BYELLOW='\033[1;33m' # Yellow
-BBLUE='\033[1;34m'   # Blue
-BPURPLE='\033[1;35m' # Purple
-BCYAN='\033[1;36m'   # Cyan
-BWHITE='\033[1;37m'  # White
+BBLACK='\033[1;30m'
+BRED='\033[1;31m'
+BGREEN='\033[1;32m'
+BYELLOW='\033[1;33m'
+BBLUE='\033[1;34m'
+BPURPLE='\033[1;35m'
+BCYAN='\033[1;36m'
+BWHITE='\033[1;37m'
 
 # textStyle | messages
 INFOMSG="${BCYAN}INFO${NONE}"
@@ -519,7 +527,7 @@ source $ZSH/oh-my-zsh.sh
 TERM=xterm-256color
 
 # Global
-export KUBECONFIG=~/path/to/kubeconfig
+export KUBECONFIG=\$HOME/.kube/config
 alias bat="batcat"
 alias ll="ls -la"
 
@@ -529,6 +537,7 @@ export CADENCE=lts
 export VERSION=2023.10
 export VIYA_NS=\$VIYA_NS
 export deploy=~/\$HOME/\$VIYA_NS/deploy
+export DEPLOY=\$deploy
 
 # Container Registry
 export REGISTRY="<cr.hostname.com>"

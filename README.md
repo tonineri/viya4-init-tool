@@ -2,7 +2,7 @@
 
 ![SAS Viya](/assets/sasviya_logo_header_gh.png)
 
-# **SAS Viya 4 Initialization Tool**
+# **SAS Viya Initialization Tool**
 
 </div>
 
@@ -13,7 +13,7 @@
 | **Cadence** | **Version(s)** |
 |---------|----------|
 | **Stable**  | `2024.01` \| `2024.02` \| `2024.03` \| `2024.04` |
-| **LTS**    | `2022.09` \| `2023.03` \| `2023.10` |
+| **LTS**    | `2022.09` \| `2023.03` \| `2023.10` \| `2024.03` |
 
 ## Overview
 
@@ -84,40 +84,45 @@ To get started with the `viya4-init-tool`, follow these steps:
  ```
 
 You will be prompted to input the desired name for your SAS Viya namespace. The tool will then proceed with the two menus:
- 
- 1. **Provider Selection Menu**: Choose from a list of supported cloud providers (Azure, AWS, GCP) or Open Source K8s. The provider selection determines the platform for which the tool will prepare the bastion host for SAS Viya 4  cluster creation and management.
- <div align="center">
- 
+
+1. **Provider Selection Menu**: Choose from a list of supported cloud providers (Azure, AWS, GCP) or Open Source K8s. The provider selection determines the platform for which the tool will prepare the bastion host for SAS Viya 4  cluster creation and management.
+
+<div align="center">
+
  ![Provider Selection Menu](/assets/providerSelectionMenu.png)
- 
- </div>
- 
- 2. **Mode Selection Menu**: Select the desired mode for your task. The modes determine the type of process you will be guided through and may vary depending on the chosen provider.
- 
- <div align="center">
- 
+
+</div>
+
+2. **Mode Selection Menu**: Select the desired mode for your task. The modes determine the type of process you will be guided through and may vary depending on the chosen provider.
+
+<div align="center">
+
  ![Mode Selection Menu](/assets/modeSelectionMenu.png)
- 
- </div>
- 
- After making your selections, you will be guided through a tailored process, with the tool asking for your input and providing feedback when necessary. This ensures a smooth, efficient, and user-centric experience.
+
+</div>
+
+After making your selections, you will be guided through a tailored process, with the tool asking for your input and providing feedback when necessary. This ensures a smooth, efficient, and user-centric experience.
 
 * To show the tool version, execute:
+
  ```bash
  ./viya4-init-tool.sh --version
  ```
 
 * To show the URLs that need to be whitelisted for the script to run fully, execute:
+
  ```bash
  ./viya4-init-tool.sh --whitelist
  ```
 
 * To show the latest SAS Viya versions supported by the tool, execute:
+
  ```bash
  ./viya4-init-tool.sh --support
  ```
 
 * To show the all available usage options, execute:
+
  ```bash
  ./viya4-init-tool.sh --help
  ```
