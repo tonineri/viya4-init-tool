@@ -1,6 +1,6 @@
 <div align="center">
 
-![SAS Viya](/assets/sasviya_logo_header_gh.png)
+![SAS Viya](/assets/sasviya.png)
 
 # **SAS Viya Initialization Tool**
 
