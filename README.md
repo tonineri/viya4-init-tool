@@ -2,7 +2,7 @@
 
 ![SAS Viya](/assets/sasviya.png)
 
-# **SAS Viya Initialization Tool**
+# **Initialization Tool**
 
 </div>
 
