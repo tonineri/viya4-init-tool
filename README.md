@@ -8,8 +8,6 @@
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE.md)
 
-![divider](/assets/divider.png)
-
 ## Supported SAS Viya versions
 
 | **Cadence** | **Version(s)** |
@@ -140,7 +138,7 @@ We welcome contributions to improve the `viya4-init-tool`. Please submit your id
 
 ## License
 
-This project is licensed under the [Apache 2.0 License](LICENSE.md).
+This project is licensed under the [Apache 2.0 License](LICENSE.md). 
 
 ![divider](/assets/divider.png)
 
