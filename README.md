@@ -4,9 +4,9 @@
 
 # **Initialization Tool**
 
-</div>
-
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE.md)
+
+</div>
 
 ## Supported SAS Viya versions
 
