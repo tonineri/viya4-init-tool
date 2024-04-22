@@ -312,7 +312,7 @@ clear
 
 exitTool() {
     echo -ne "\n$DATETIME | ${INFOMSG} | Tool execution completed." >> $LOG
-    echo -e "\nThank you for using this tool.\n"
+    echo -e "\nThank you for using the ${BCYAN}SAS Viya${NONE} ${BOLD}Initialization Tool${NONE}.\n"
     exit 0
 }
 
@@ -593,7 +593,7 @@ requiredClients() {
             [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED5" ]]; then
             # requiredClients: kustomize | pre-installation
             echo 
-            echo -e "INFO: Installing kustomize $KUSTOMIZEVERSION..."
+            echo -e "${INFOMSG} | Installing kustomize $KUSTOMIZEVERSION..."
             cd $deploy
             loadingStart "${loadAniModern[@]}"
             # requiredClients: kustomize | installation
@@ -617,7 +617,7 @@ requiredClients() {
     # requiredClients: node-shell | log
     echo -ne "\n$DATETIME | ${INFOMSG} | Required clients - node-shell installation procedure started." >> $LOG
     # requiredClients: node-shell | pre-installation
-    echo -e "INFO: Installing latest node-shell..."
+    echo -e "${INFOMSG} | Installing latest node-shell..."
     cd $deploy
     loadingStart "${loadAniModern[@]}"
     # requiredClients: node-shell | installation
@@ -633,9 +633,9 @@ requiredClients() {
     fi
     echo -e "\n"
     # requiredClients: helm 3 | log
-    echo -ne "\n$DATETIME | ${INFOMSG} | Required clients - helm 3 installation procedure started." >> $LOG
+    echo -ne "\n$DATETIME | ${INFOMSG} | Required clients - Helm 3 installation procedure started." >> $LOG
     # requiredClients: helm 3 | pre-installation
-    echo -e "Installing latest helm 3..."
+    echo -e "Installing latest Helm 3..."
     cd $deploy
     loadingStart "${loadAniModern[@]}"
     # requiredClients: helm 3 | installation
@@ -782,10 +782,10 @@ getOrder() {
           ORDERCHECK=1
       else
           echo -e "\n${ERRORMSG} | Invalid Order Number."
-          echo -e "${BYELLOW}NOTE${NONE}: A valid Order Number:"
+          echo -e "${BCYAN}NOTE${NONE}: A valid Order Number:"
           echo -e "- Consists of 6 alphanumeric [0-9,A-Z] characters (no lowercase)"
           echo -e "- Starts with '0' (if internal) or '9C' (if external)"
-          echo -e "- If the second character is capital letter 'C' for external orders or [A-Z] for internal ones"
+          echo -e "- Has 'C' as second character for external orders or [A-Z] for internal ones"
       fi
     done
     ## getOrder | input cadence and version
@@ -1633,12 +1633,12 @@ elif [ "$1" == "--whitelist" ]; then
 elif [ "$1" == "--support" ]; then
     echo ""
     echo "-----------------------------------"
-    echo "   Supported SAS Viya versions:"
+    echo "   Supported ${BCYAN}SAS Viya${NONE} versions:"
     echo "-----------------------------------"
-    echo "- Stable $ESVIYASTABLE-$LSVIYASTABLE"
-    echo "- LTS    $ESVIYALTS-$LSVIYALTS"
+    echo "- ${BOLD}Stable${NONE}: $ESVIYASTABLE-$LSVIYASTABLE"
+    echo "- ${BOLD}LTS${NONE}:    $ESVIYALTS-$LSVIYALTS"
     echo "-----------------------------------"
-    echo "NOTE: The tool is not maintained by SAS Institute Inc."
+    echo "${BCYAN}NOTE${NONE} | The tool is not maintained by SAS Institute Inc."
     echo "For support, open an issue at https://github.com/tonineri/viya4-init-tool"
     echo ""
     exit 0
@@ -1658,7 +1658,7 @@ elif [ "$1" == "--help" ]; then
     echo -e ""
     exit 0
 else
-    echo -e "ERROR: Unsupported arguement."
+    echo -e "${ERRORMSG} | Unsupported arguement."
     exit 0
 fi
 
