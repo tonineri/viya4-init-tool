@@ -322,25 +322,20 @@ requiredPackages() {
     echo -ne "\n$DATETIME | ${INFOMSG} | Required packages installation procedure started." >> $LOG
     # requiredPackages | pre-installation
     cd $deploy
-    echo -ne "Installing required packages. This might take a minute or two...\n"
+    echo -ne "Installing required packages. This might take some time due to ${ITALIC}plocate${NONE} initialization...\n"
     loadingStart "${loadAniModern[@]}"
-    requiredPackages=("zsh" "zip" "unzip" "git" "mlocate" "jq" "bat" "python3" "python3-pip")
+    requiredPackages=("zsh" "zip" "unzip" "git" "plocate" "jq" "bat" "python3" "python3-pip")
     # requiredPackages | installation
     for package in "${requiredPackages[@]}"; do
         sudo apt install $package -y -qq >> $LOG 2>&1
     done
     rm -rf $HOME/.oh-my-zsh >> $LOG 2>&1
-    curl -fsSL -o zsh-install.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh >> $LOG 2>&1
-    sudo chmod +x zsh-install.sh && ./zsh-install.sh --unattended >> $LOG 2>&1
-    rm -f zsh-install.sh >> $LOG 2>&1
-    sh -c "$(curl -fsSL https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh)" "" --unattended >> $LOG 2>&1
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended >> $LOG 2>&1
     # requiredPackages | zsh customization
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions >> $LOG 2>&1
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting >> $LOG 2>&1
     git clone https://github.com/jonmosco/kube-ps1.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/kube-ps1 >> $LOG 2>&1
     zshrcContent
-    # requiredPackages | updatedb for mlocate
-    sudo updatedb >> $LOG 2>&1
     # requiredPackages | clone pyviyatools & viya4-ark
     mkdir $HOME/$VIYA_NS/viya-utils && cd $HOME/$VIYA_NS/viya-utils
     git clone https://github.com/sassoftware/pyviyatools >> $LOG 2>&1
@@ -478,24 +473,27 @@ k8s() {
 zshrcContent() {
 tee ~/.zshrc >> /dev/null << EOF
 # zsh customization
-export ZSH="$HOME/.oh-my-zsh"
+export ZSH="\$HOME/.oh-my-zsh"
 ZSH_THEME="agnoster"
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting kubectl kube-ps1)
-source $ZSH/oh-my-zsh.sh
+source \$ZSH/oh-my-zsh.sh
 TERM=xterm-256color
 
 # Global
 export KUBECONFIG=\$HOME/.kube/config
 alias bat="batcat"
 alias ll="ls -la"
+alias locate="plocate"
 
 # SAS Viya variables
-export ORDER=9CXXX
-export CADENCE=lts
-export VERSION=2023.10
-export VIYA_NS=\$VIYA_NS
-export deploy=~/\$HOME/\$VIYA_NS/deploy
-export DEPLOY=\$deploy
+export ORDER=<9CXXX>
+export CADENCE=<lts>
+export VERSION=<2023.10>
+export VIYA_NS=<sas-viya>
+export VIYA_PATH=\$HOME/\$VIYA_NS
+export VIYA_HOME=\$VIYA_PATH
+export DEPLOY=\$VIYA_HOME/deploy
+export deploy=\$DEPLOY
 
 # Container Registry
 export REGISTRY="<cr.hostname.com>"
