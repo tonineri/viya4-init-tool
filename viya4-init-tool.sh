@@ -523,13 +523,13 @@ requiredClients() {
     echo -ne "\n$DATETIME | ${INFOMSG} | Required clients - kubectl installation procedure started." >> $LOG
     # requiredClients: kubectl | input
     KCTLVERMINSUPPORTED="24" # <--- Minimum supported version
-    KCTLVERMAXSUPPORTED="28" # <--- Maximum supported version
+    KCTLVERMAXSUPPORTED="29" # <--- Maximum supported version
     echo -e "${BYELLOW}----------------------------${NONE}"
     echo -e "${BYELLOW}       INPUT REQUIRED       ${NONE}"
     echo -e "${BYELLOW}----------------------------${NONE}"
     KUBECTLCHECK=0
     while [[ "$KUBECTLCHECK" -eq 0 ]]; do
-        echo -e "Input kubectl version to be installed based on your Kubernetes Cluster version (example 1.27.7):"
+        echo -e "Input kubectl version to be installed based on your Kubernetes Cluster version (example 1.28.7):"
         echo -e "Supported versions: 1.${KCTLVERMINSUPPORTED}.0 - 1.${KCTLVERMAXSUPPORTED}.XX"
         read KUBECTLVER
         KCTLVERMAJ=$(echo $KUBECTLVER | cut -d"." -f1)
