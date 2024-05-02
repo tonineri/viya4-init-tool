@@ -804,8 +804,7 @@ getOrder() {
                 VERSIONMOCTAL=$(echo $VERSIONM | sed 's/^0*//') # remove leading zero
                 ## getOrder | check if version is valid / supported
                 if [[ "$CADENCE" == stable ]]; then
-                    if  [[ "$VERSIONY" -eq 2023 && "$VERSIONMOCTAL" -eq 12 && ${#VERSION} -eq 7 ]] || \
-                        [[ "$VERSIONY" -eq 2024 && "$VERSIONMOCTAL" -ge 1 && "$VERSIONMOCTAL" -le 3 && ${#VERSION} -eq 7 ]]; then
+                    if [[ "$VERSIONY" -eq 2024 && "$VERSIONMOCTAL" -ge 1 && "$VERSIONMOCTAL" -le 4 && ${#VERSION} -eq 7 ]]; then
                         VERSIONCHECK=1
                     else
                         echo -e "\n${ERRORMSG} | Invalid or unsupported software Version for stable Cadence."
@@ -815,6 +814,8 @@ getOrder() {
                     if [[ "$VERSIONY" -eq 2022 && "$VERSIONMOCTAL" -eq 9 && ${#VERSION} -eq 7 ]]; then
                         VERSIONCHECK=1
                     elif [[ "$VERSIONY" -eq 2023 && ( "$VERSIONMOCTAL" -eq 3 || "$VERSIONMOCTAL" -eq 10 ) && ${#VERSION} -eq 7 ]]; then
+                        VERSIONCHECK=1
+                    if [[ "$VERSIONY" -eq 2024 && "$VERSIONMOCTAL" -eq 3 && ${#VERSION} -eq 7 ]]; then
                         VERSIONCHECK=1
                     else
                         echo -e "\n${ERRORMSG} | Invalid or unsupported software Version for LTS Cadence."
