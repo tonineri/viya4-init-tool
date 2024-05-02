@@ -8,6 +8,8 @@
 
 </div>
 
+![divider](/assets/divider.png)
+
 ## Supported SAS Viya versions
 
 | **Cadence** | **Version(s)** |
@@ -159,3 +161,5 @@ This project is licensed under the [Apache 2.0 License](LICENSE.md).
 >* [SAS Viya4-IaC-AWS](https://github.com/sassoftware/viya4-iac-aws)
 >* [SAS Viya4-IaC-GCP](https://github.com/sassoftware/viya4-iac-gcp)
 >* [SAS Viya4-IaC-k8s](https://github.com/sassoftware/viya4-iac-k8s)
+
+![divider](/assets/divider.png)
