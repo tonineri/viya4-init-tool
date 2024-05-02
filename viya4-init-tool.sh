@@ -339,7 +339,9 @@ requiredPackages() {
     # requiredPackages | clone pyviyatools & viya4-ark
     mkdir $HOME/$VIYA_NS/viya-utils && cd $HOME/$VIYA_NS/viya-utils
     git clone https://github.com/sassoftware/pyviyatools >> $LOG 2>&1
+    pip3 install -r pyviyatools/requirements.txt >> $LOG 2>&1
     git clone https://github.com/sassoftware/viya4-ark >> $LOG 2>&1
+    pip3 install -r pyviyatools/requirements.txt >> $LOG 2>&1
     cd $deploy
     # requiredPackages | post-installation & check if all required packages were installed
     loadingStop
