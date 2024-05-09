@@ -627,7 +627,7 @@ requiredClients() {
     # requiredClients: node-shell | post-installation & check if installed
     loadingStop
     if which node-shell >/dev/null 2>&1; then
-        echo -ne "\n${SUCCESSMSG} | node-shell $(node-shell --version | awk 'NR==1{print $2}') installed."
+        echo -ne "\n${SUCCESSMSG} | node-shell v$(node-shell --version | awk 'NR==1{print $2}') installed."
     else
         echo -ne "\n${ERRORMSG} | node-shell installation failed. Check $LOG for details."
     fi
