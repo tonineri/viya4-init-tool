@@ -939,7 +939,7 @@ mirrormgrCli() {
         mkdir "$deploy/mirrormgr" && cd "$deploy/mirrormgr" >> $LOG 2>&1
         wget -N https://support.sas.com/installation/viya/4/sas-mirror-manager/lax/mirrormgr-linux.tgz > /dev/null 2>&1
         tar --extract --file mirrormgr-linux.tgz mirrormgr >> $LOG 2>&1
-        sudo install mirrormgr -o root -g root -m 755 /usr/local/mirrormgr >> $LOG 2>&1
+        sudo install mirrormgr -o root -g root -m 755 /usr/local/bin/mirrormgr >> $LOG 2>&1
         cd $deploy
         rm -rf "$deploy/mirrormgr"
         # mirrormgrCli | post-installation
