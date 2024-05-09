@@ -641,7 +641,7 @@ requiredClients() {
     # requiredClients: helm 3 | installation
     curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null >> $LOG 2>&1
     sudo apt-get install apt-transport-https --yes >> $LOG 2>&1
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list >> $LOG 2>&1
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" >> $LOG 2>&1 | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list >> $LOG 2>&1
     sudo apt-get update && sudo apt-get install helm >> $LOG 2>&1
     # requiredClients: helm 3 | post-installation & check if installed
     loadingStop
