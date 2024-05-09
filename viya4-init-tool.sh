@@ -639,7 +639,7 @@ requiredClients() {
     cd $deploy
     loadingStart "${loadAniModern[@]}"
     # requiredClients: helm 3 | installation
-    curl https://baltocdn.com/helm/signing.asc >> $LOG 2>&1 | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+    curl -s https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg >/dev/null
     sudo apt-get install apt-transport-https --yes >> $LOG 2>&1
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list >> $LOG 2>&1
     sudo apt-get update >> $LOG 2>&1
