@@ -99,11 +99,19 @@ You will be prompted to input the desired name for your SAS Viya namespace. The 
 
 1. **Provider Selection Menu**: Choose from a list of supported cloud providers (Azure, AWS, GCP) or Open Source K8s. The provider selection determines the platform for which the tool will prepare the bastion host for SAS Viya 4  cluster creation and management.
 
-  <div align="center"> <img src="/assets/providerSelectionMenu.png" width="450"/> </div>
+  <div align="center"> 
+  
+  ![Provider Selection Menu](/assets/providerSelectionMenu.png)
+  
+  </div>
 
 2. **Mode Selection Menu**: Select the desired mode for your task. The modes determine the type of process you will be guided through and may vary depending on the chosen provider.
 
-  <div align="center"> <img src="/assets/modeSelectionMenu.png" width="450"/> </div>
+  <div align="center"> 
+  
+  ![Mode Selection Menu](/assets/modeSelectionMenu.png) 
+  
+  </div>
 
 After making your selections, you will be guided through a tailored process, with the tool asking for your input and providing feedback when necessary. This ensures a smooth, efficient, and user-centric experience.
 
