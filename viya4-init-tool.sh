@@ -386,7 +386,7 @@ aws-cli() {
     echo -ne "\n$DATETIME | ${INFOMSG} | aws-cli installation procedure started." >> $LOG
     # aws-cli | pre-installation
     cd $deploy
-    echo -e "Installing latest ${YELLOW}aws-cli${NONE}..."
+    echo -e "${INFOMSG} | Installing latest ${YELLOW}aws-cli${NONE}..."
     loadingStart "${loadAniModern[@]}"
     # aws-cli | installation
     curl -s "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" >> $LOG 2>&1
@@ -407,7 +407,7 @@ gcloud-cli() {
     echo -ne "\n$DATETIME | ${INFOMSG} | gcloud-cli installation procedure started." >> $LOG
     # gcloud-cli | pre-installation
     cd $deploy
-    echo -e "Installing latest ${RED}gcloud-cli${NONE}..."
+    echo -e "${INFOMSG} | Installing latest ${RED}gcloud-cli${NONE}..."
     loadingStart "${loadAniModern[@]}"
     # gcloud-cli | installation
     sudo apt-get install apt-transport-https ca-certificates gnupg -y >> $LOG 2>&1
@@ -430,7 +430,7 @@ k8s() {
     echo -ne "\n$DATETIME | ${INFOMSG} | ansible and docker installation procedure started." >> $LOG
     # k8s | pre-installation
     cd $deploy
-    echo -e "Installing latest docker..."
+    echo -e "${INFOMSG} | Installing latest docker..."
     loadingStart "${loadAniModern[@]}"
     # k8s | docker installation
     sudo apt install -y -qq ca-certificates curl gnupg lsb-release >> $LOG 2>&1
@@ -635,7 +635,7 @@ requiredClients() {
     # requiredClients: helm 3 | log
     echo -ne "\n$DATETIME | ${INFOMSG} | Required clients - Helm 3 installation procedure started." >> $LOG
     # requiredClients: helm 3 | pre-installation
-    echo -e "Installing latest Helm 3..."
+    echo -e "${INFOMSG} | Installing latest Helm 3..."
     cd $deploy
     loadingStart "${loadAniModern[@]}"
     # requiredClients: helm 3 | installation
@@ -655,7 +655,7 @@ requiredClients() {
     # requiredClients: yq | log
     echo -ne "\n$DATETIME | ${INFOMSG} | Required clients - yq installation procedure started." >> $LOG
     # requiredClients: yq | pre-installation
-    echo -e "Installing latest yq..."
+    echo -e "${INFOMSG} | Installing latest yq..."
     cd $deploy
     loadingStart "${loadAniModern[@]}"
     # requiredClients: yq | installation
@@ -673,7 +673,7 @@ requiredClients() {
     # requiredClients: k9s | log
     echo -ne "\n$DATETIME | ${INFOMSG} | Required clients - k9s installation procedure started." >> $LOG
     # requiredClients: k9s | pre-installation
-    echo -e "Installing latest k9s..."
+    echo -e "${INFOMSG} | Installing latest k9s..."
     cd $deploy
     loadingStart "${loadAniModern[@]}"
     # requiredClients: k9s | installation
@@ -697,7 +697,7 @@ viya4OrdersCli() {
     # viya4OrdersCli | log
     echo -ne "\n$DATETIME | ${INFOMSG} | viya4-orders-cli installation procedure started." >> $LOG
     # viya4OrdersCli | pre-installation
-    echo -e "Installing latest viya4-orders-cli..."
+    echo -e "${INFOMSG} | Installing latest viya4-orders-cli..."
     cd $deploy
     loadingStart "${loadAniModern[@]}"
     # viya4OrdersCli | pre-installation 
@@ -964,7 +964,7 @@ terraformClient() {
     # terraformClient | log
     echo -ne "\n$DATETIME | ${INFOMSG} | terraform installation procedure started." >> $LOG
     # terraformClient | pre-installation
-    echo -e "Installing latest terraform..."
+    echo -e "${INFOMSG} | Installing latest terraform..."
     cd $deploy
     loadingStart "${loadAniModern[@]}"
     # terraformClient | installation
