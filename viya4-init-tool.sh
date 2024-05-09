@@ -100,9 +100,9 @@ SUCCESSMSG="${BGREEN}SUCCESS${NONE}"
 providerMenu(){
 clear
     echo -e "${CYAN}__________________________________________________${NONE}"
-    echo -e "\n            ${BCYAN}SAS Viya${NONE} ${BOLD}Initialization Tool${NONE}"
+    echo -e "\n           ${BCYAN}SAS Viya${NONE} ${BOLD}Initialization Tool"
     echo -e "${CYAN}__________________________________________________${NONE}"
-    echo -e "\n          ${BOLD}| Provider Selection Menu |${NONE}"
+    echo -e "\n           ${BOLD}| Provider Selection Menu |${NONE}"     
     echo -e "\nInput ${BCYAN}1${NONE} : for Microsoft Azure (AKS)"
     echo -e "Input ${BCYAN}2${NONE} : for Amazon Web Services (EKS)"
     echo -e "Input ${BCYAN}3${NONE} : for Google Cloud Plaform (GKE)"
@@ -193,9 +193,9 @@ clear
 modeSelectionMenu(){
 clear
     echo -e "${CYAN}__________________________________________________${NONE}"
-    echo -e "\n            ${BCYAN}SAS Viya${NONE} ${BOLD}Initialization Tool${NONE}"
+    echo -e "\n           ${BCYAN}SAS Viya${NONE} ${BOLD}Initialization Tool"
     echo -e "${CYAN}__________________________________________________${NONE}"
-    echo -e "\n             ${BOLD}| Mode Selection Menu |${NONE}"
+    echo -e "\n           ${BOLD}| Mode Selection Menu |${NONE}"
     echo -e "\n${BCYAN}default${NONE}:"
     echo -e "- Installs required packages and clients"
     echo -e "- Installs provider CLI (if defined)"
