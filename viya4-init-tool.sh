@@ -946,7 +946,7 @@ mirrormgrCli() {
         loadingStop
         if which mirrormgr >/dev/null 2>&1; then
             MIRRORMGRCHECK=1
-            echo -ne "\n${SUCCESSMSG} | SAS Mirror Manager $(mirrormgr -v | awk '/version/ {match($0, /version[[:space:]]*:[[:space:]]*(v[[:digit:].-]+)/, arr); print arr[1]}') installed."
+            echo -ne "\n${SUCCESSMSG} | SAS Mirror Manager $(mirrormgr -v | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1) installed."
             echo -e "\n"
         else
             MIRRORMGRCHECK=0
