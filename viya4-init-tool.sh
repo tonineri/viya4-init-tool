@@ -1540,9 +1540,9 @@ fullMode() {
 
 namespaceDefinition () {
     echo -e "${CYAN}__________________________________________________${NONE}"
-    echo -e "\n            ${BCYAN}SAS Viya${NONE} ${BOLD}Initialization Tool${NONE}"
+    echo -e "\n           ${BCYAN}SAS Viya${NONE} ${BOLD}Initialization Tool${NONE}"
     echo -e "${CYAN}__________________________________________________${NONE}"
-    echo -e "\nInput desired ${BCYAN}SAS Viya{$NODE} namespace name:"
+    echo -e "\nInput desired ${BCYAN}SAS Viya${NONE} namespace name:"
     read VIYA_NS
 
     # create "$deploy directory"
