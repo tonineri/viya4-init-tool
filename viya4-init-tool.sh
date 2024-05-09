@@ -538,7 +538,7 @@ requiredClients() {
         KCTLVERMIN=$(echo $KUBECTLVER | cut -d"." -f2)
         if [[ "$KCTLVERMAJ" -eq 1 ]] && [[ "$KCTLVERMIN" -ge "$KCTLVERMINSUPPORTED" ]] && [[ "$KCTLVERMIN" -le "$KCTLVERMAXSUPPORTED" ]]; then
             # requiredClients: kubectl | pre-installation
-            echo -e "Installing kubectl $KUBECTLVER..."
+            echo -e "${INFOMSG} | Installing kubectl $KUBECTLVER..."
             cd $deploy
             loadingStart "${loadAniModern[@]}"
             # requiredClients: kubectl | installation
@@ -948,7 +948,7 @@ mirrormgrCli() {
         loadingStop
         if which mirrormgr >/dev/null 2>&1; then
             MIRRORMGRCHECK=1
-            echo -ne "\n${SUCCESSMSG} | SAS Mirror Manager $(mirrormgr -v | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1) installed."
+            echo -ne "\n${SUCCESSMSG} | SAS Mirror Manager v$(mirrormgr -v | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1) installed."
             echo -e "\n"
         else
             MIRRORMGRCHECK=0
