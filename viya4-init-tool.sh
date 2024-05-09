@@ -817,7 +817,7 @@ getOrder() {
                         VERSIONCHECK=1
                     elif [[ "$VERSIONY" -eq 2023 && ( "$VERSIONMOCTAL" -eq 3 || "$VERSIONMOCTAL" -eq 10 ) && ${#VERSION} -eq 7 ]]; then
                         VERSIONCHECK=1
-                    if [[ "$VERSIONY" -eq 2024 && "$VERSIONMOCTAL" -eq 3 && ${#VERSION} -eq 7 ]]; then
+                    elif [[ "$VERSIONY" -eq 2024 && "$VERSIONMOCTAL" -eq 3 && ${#VERSION} -eq 7 ]]; then
                         VERSIONCHECK=1
                     else
                         echo -e "\n${ERRORMSG} | Invalid or unsupported software Version for LTS Cadence."
