@@ -10,10 +10,10 @@
 
 # --------------------------------------------------  info  ---------------------------------------------------
 
-V4ITVER="v1.1.0"            # viya4-init-tool version
-VERDATE="May 19th, 2024"    # viya4-init-tool version date
-VIYALTS=("2023.03" "2023.10" "2024.03")              ## Supported SAS Viya LTS versions
-VIYASTABLE=("2024.02" "2024.03" "2024.04" "2024.05") ## Supported SAS Viya Stable versions
+V4ITVER="v1.1.0"                                     # viya4-init-tool version
+VERDATE="May 19th, 2024"                             # viya4-init-tool version date
+VIYALTS=("2022.09" "2023.03" "2023.10" "2024.03")    # Supported SAS Viya LTS versions
+VIYASTABLE=("2024.02" "2024.03" "2024.04" "2024.05") # Supported SAS Viya Stable versions
 
 # ---------------------------------------------- preRequirements ----------------------------------------------
 
@@ -320,7 +320,7 @@ requiredPackages() {
     echo -ne "\n$DATETIME | ${INFOMSG} | Required packages installation procedure started." >> $LOG
     # requiredPackages | pre-installation
     cd $deploy
-    echo -ne "Installing required packages. This might take some time due to ${ITALIC}plocate${NONE} initialization...\n"
+    echo -ne "${INFOMSG} | Installing required packages. This might take some time due to ${ITALIC}plocate${NONE} initialization...\n"
     loadingStart "${loadAniModern[@]}"
     requiredPackages=("zsh" "zip" "unzip" "git" "plocate" "jq" "bat" "python3" "python3-pip")
     # requiredPackages | installation
@@ -364,7 +364,7 @@ az-cli() {
     echo -ne "\n$DATETIME | ${INFOMSG} | azure-cli nstallation procedure started." >> $LOG
     # az-cli | pre-installation
     cd $deploy
-    echo -ne "Installing latest ${CYAN}azure-cli${NONE}..."
+    echo -ne "${INFOMSG} | Installing latest ${CYAN}azure-cli${NONE}..."
     loadingStart "${loadAniModern[@]}"
     # az-cli | installation
     echo -ne "\n$DATETIME | ${INFOMSG} | Downloading https://aka.ms/InstallAzureCLIDeb and executing." >> $LOG 2>&1
@@ -450,7 +450,7 @@ k8s() {
     # k8s | ansible supported version
     ANSIVER="2.15.6"
     # k8s | ansible installation
-    echo -e "\nInstalling ansible-core $ANSIVER..."
+    echo -e "\n${INFOMSG} | Installing ansible-core $ANSIVER..."
     loadingStart "${loadAniModern[@]}"
     sudo apt-get install python3 -y -qq >> $LOG 2>&1
     curl -sfSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py >> $LOG 2>&1
@@ -799,7 +799,7 @@ getOrder() {
         elif [[ "$CADENCE" == "lts" ]]; then
             VERSIONS=("${VIYALTS[@]}")
         else
-            echo -e "\n${ERRORMSG} Invalid software Cadence. Accepted inputs [stable/lts]."
+            echo -e "\n${ERRORMSG} | Invalid software Cadence. Accepted inputs [stable/lts]."
             continue
         fi
         while [[ "$VERSIONCHECK" -eq 0 ]]; do
@@ -808,7 +808,7 @@ getOrder() {
             if [[ " ${VERSIONS[*]} " =~ " $VERSION " ]]; then
                 VERSIONCHECK=1
             else
-                echo -e "\n${ERRORMSG} Invalid or unsupported software Version for $CADENCE cadence."
+                echo -e "\n${ERRORMSG} | Invalid or unsupported software Version for $CADENCE cadence."
                 echo -e "Supported versions: ${VERSIONS[*]}"
             fi
         done
@@ -918,7 +918,7 @@ mirrormgrCli() {
         # mirrormgrCli | log
         echo -ne "\n$DATETIME | ${INFOMSG} | SAS Mirror Manager installation procedure started." >> $LOG
         # mirrormgrCli | pre-installation
-        echo -e "\nInstalling latest mirrormgr..."
+        echo -e "\n${INFOMSG} | Installing latest mirrormgr..."
         loadingStart "${loadAniModern[@]}"
         # mirrormgrCli | pre-installation
         mkdir "$deploy/mirrormgr" && cd "$deploy/mirrormgr" >> $LOG 2>&1
