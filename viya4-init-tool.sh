@@ -12,10 +12,8 @@
 
 V4ITVER="v1.1.0"            # viya4-init-tool version
 VERDATE="May 19th, 2024"    # viya4-init-tool version date
-LSVIYASTABLE="2024.05"      # latest SAS Viya Stable supported version by tool
-ESVIYASTABLE="2024.02"      # earliest SAS Viya Stable supported version by tool
-LSVIYALTS="2024.03"         # latest SAS Viya LTS supported version by tool
-ESVIYALTS="2023.03"         # earliest SAS Viya LTS supported version by tool
+VIYALTS=("2023.03" "2023.10" "2024.03")              ## Supported SAS Viya LTS versions
+VIYASTABLE=("2024.02" "2024.03" "2024.04" "2024.05") ## Supported SAS Viya Stable versions
 
 # ---------------------------------------------- preRequirements ----------------------------------------------
 
@@ -793,43 +791,28 @@ getOrder() {
     ## getOrder | input cadence and version
     CADENCECHECK=0
     VERSIONCHECK=0  
-    while [[ "$CADENCECHECK" -eq 0 ]] ; do
+    while [[ "$CADENCECHECK" -eq 0 ]]; do
         echo -e "\nInput software Cadence [stable/lts]:"
         read CADENCE
-        ## getOrder | check if cadence is valid
-        if [[ "$CADENCE" == stable ]] || [[ "$CADENCE" == lts ]]; then
-            CADENCECHECK=1
-            ## getOrder | input version
-            while [[ "$VERSIONCHECK" -eq 0 ]]; do
-                echo -e "\nInput SAS Viya software version (example 2024.03):"
-                read VERSION
-                VERSIONY=$(echo $VERSION | cut -d"." -f1)
-                VERSIONM=$(echo $VERSION | cut -d"." -f2)
-                VERSIONMOCTAL=$(echo $VERSIONM | sed 's/^0*//') # remove leading zero
-                ## getOrder | check if version is valid / supported
-                if [[ "$CADENCE" == stable ]]; then
-                    if [[ "$VERSIONY" -eq 2024 && "$VERSIONMOCTAL" -ge 1 && "$VERSIONMOCTAL" -le 4 && ${#VERSION} -eq 7 ]]; then
-                        VERSIONCHECK=1
-                    else
-                        echo -e "\n${ERRORMSG} | Invalid or unsupported software Version for stable Cadence."
-                        echo -e "Supported stable versions: Min $ESVIYASTABLE | Max $LSVIYASTABLE."
-                    fi
-                elif [[ "$CADENCE" == lts ]]; then
-                    if [[ "$VERSIONY" -eq 2022 && "$VERSIONMOCTAL" -eq 9 && ${#VERSION} -eq 7 ]]; then
-                        VERSIONCHECK=1
-                    elif [[ "$VERSIONY" -eq 2023 && ( "$VERSIONMOCTAL" -eq 3 || "$VERSIONMOCTAL" -eq 10 ) && ${#VERSION} -eq 7 ]]; then
-                        VERSIONCHECK=1
-                    elif [[ "$VERSIONY" -eq 2024 && "$VERSIONMOCTAL" -eq 3 && ${#VERSION} -eq 7 ]]; then
-                        VERSIONCHECK=1
-                    else
-                        echo -e "\n${ERRORMSG} | Invalid or unsupported software Version for LTS Cadence."
-                        echo -e "Supported versions: Min LTS $ESVIYALTS | Max LTS $LSVIYALTS."
-                    fi
-                fi
-            done
+        if [[ "$CADENCE" == "stable" ]]; then
+            VERSIONS=("${VIYASTABLE[@]}")
+        elif [[ "$CADENCE" == "lts" ]]; then
+            VERSIONS=("${VIYALTS[@]}")
         else
-            echo -e "\n${ERRORMSG} | Invalid software Cadence. Accepted inputs [stable/lts]."
+            echo -e "\n${ERRORMSG} Invalid software Cadence. Accepted inputs [stable/lts]."
+            continue
         fi
+        while [[ "$VERSIONCHECK" -eq 0 ]]; do
+            echo -e "\nInput SAS Viya software version (example 2024.03):"
+            read VERSION
+            if [[ " ${VERSIONS[*]} " =~ " $VERSION " ]]; then
+                VERSIONCHECK=1
+            else
+                echo -e "\n${ERRORMSG} Invalid or unsupported software Version for $CADENCE cadence."
+                echo -e "Supported versions: ${VERSIONS[*]}"
+            fi
+        done
+        CADENCECHECK=1
     done
     ## getOrder | ask for info confirmation
     CONFIRMCHECK=0
@@ -1638,8 +1621,8 @@ elif [ "$1" == "--support" ]; then
     echo "-----------------------------------"
     echo "   Supported ${BCYAN}SAS Viya${NONE} versions:"
     echo "-----------------------------------"
-    echo "- ${BOLD}Stable${NONE}: $ESVIYASTABLE-$LSVIYASTABLE"
-    echo "- ${BOLD}LTS${NONE}:    $ESVIYALTS-$LSVIYALTS"
+    echo "- ${BOLD}Stable${NONE}: $VIYASTABLE"
+    echo "- ${BOLD}LTS${NONE}:    $VIYALTS"
     echo "-----------------------------------"
     echo "${BCYAN}NOTE${NONE} | The tool is not maintained by SAS Institute Inc."
     echo "For support, open an issue at https://github.com/tonineri/viya4-init-tool"
