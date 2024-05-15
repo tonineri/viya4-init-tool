@@ -1547,27 +1547,26 @@ clear
 logCreation () {
 # create log
 LOG="$HOME/$VIYA_NS/viya4-init-tool.log"
-touch $LOG
-echo -e "\n" > $LOG
-echo -e "      .:-======-:.      " >> $LOG
-echo -e "    .========----==:    " >> $LOG
-echo -e "   -=====-.        .:   " >> $LOG
-echo -e "  -=====.               " >> $LOG
-echo -e "  =====.   :==-         " >> $LOG
-echo -e "  -====.   :====:       " >> $LOG
-echo -e "   ====-    .=====.     " >> $LOG
-echo -e "    -====.    :====-    " >> $LOG
-echo -e "     .====-     =====   " >> $LOG
-echo -e "       :====:   .====-  " >> $LOG
-echo -e "         -==:   .=====  " >> $LOG
-echo -e "               .=====-  " >> $LOG
-echo -e "   :.        .-=====-   " >> $LOG
-echo -e "    :==----========:    " >> $LOG
-echo -e "      .:-======-:.      " >> $LOG
-echo -e "     viya4-init-tool    " >> $LOG
-echo -e "\n" >> $LOG
-echo -ne "\n$DATETIME | ${INFOMSG} | SAS Viya Initialization Tool inizialized." >> $LOG
-echo -e "\n" >> $LOG
+cat << 'EOF' > $LOG
+
+      .:-======-:.      
+    .========----==:    
+   -=====-.        .:   
+  -=====.               
+  =====.   :==-         
+  -====.   :====:       
+   ====-    .=====.     
+    -====.    :====-    
+     .====-     =====   
+       :====:   .====-  
+         -==:   .=====  
+               .=====-  
+   :.        .-=====-   
+    :==----========:    
+      .:-======-:.      
+     viya4-init-tool    
+
+EOF
 }
 
 # --------------------------------------------  startScript  --------------------------------------------
