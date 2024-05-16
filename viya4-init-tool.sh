@@ -3,15 +3,15 @@
 # -------------------------------------------------  header  --------------------------------------------------
 
 # SAS Viya Initializaton Tool
-# Description: the script can fully prepare a bastion host for a SAS Viya 4 cluster creation and management on Azure, AWS and Google Cloud Plaform.
-
-# Copyright © 2024, SAS Institute Inc., Cary, NC, USA. All Rights Reserved.
+# Description: the script can fully prepare a bastion host for a SAS Viya 4 cluster creation and management on 
+# Azure, AWS and Google Cloud Plaform.
+#
 # SPDX-License-Identifier: Apache-2.0
 
 # --------------------------------------------------  info  ---------------------------------------------------
 
 V4ITVER="v1.1.0"                                     # viya4-init-tool version
-VERDATE="May 19th, 2024"                             # viya4-init-tool version date
+VERDATE="May 16th, 2024"                             # viya4-init-tool version date
 VIYALTS=("2022.09" "2023.03" "2023.10" "2024.03")    # Supported SAS Viya LTS versions
 VIYASTABLE=("2024.02" "2024.03" "2024.04" "2024.05") # Supported SAS Viya Stable versions
 
@@ -565,30 +565,27 @@ requiredClients() {
     # requiredClients: kustomize | log
     echo -ne "\n$DATETIME | ${INFOMSG} | Required clients - kustomize installation procedure started." >> $LOG
     # requiredClients: kustomize | input
-    KUSTOMIZESUPPORTED1="3.7.0" # for SAS Viya <= SAS Viya 2023.01
-    KUSTOMIZESUPPORTED2="4.5.7" # for SAS Viya 2023.02 - performance issues!
-    KUSTOMIZESUPPORTED3="5.0.0" # for SAS Viya >= 2023.03 and <= 2023.05
-    KUSTOMIZESUPPORTED4="5.0.3" # for SAS Viya >= 2023.06 and <= 2023.11
-    KUSTOMIZESUPPORTED5="5.1.1" # for SAS Viya 2023.12 or later
+    KUSTOMIZESUPPORTED1="3.7.0" # for SAS Viya LTS 2022.09
+    KUSTOMIZESUPPORTED2="5.0.0" # for SAS Viya LTS 2023.03
+    KUSTOMIZESUPPORTED3="5.0.3" # for SAS Viya LTS 2023.10
+    KUSTOMIZESUPPORTED4="5.1.1" # for SAS Viya 2023.12 or later
     echo -e "${BYELLOW}----------------------------${NONE}"
     echo -e "${BYELLOW}       INPUT REQUIRED       ${NONE}"
     echo -e "${BYELLOW}----------------------------${NONE}"
     KUSTOCHECK=0
     while [[ "$KUSTOCHECK" -eq 0 ]]; do
         echo -e "Supported kustomize versions:"
-        echo -e "$KUSTOMIZESUPPORTED1 | SAS Viya <= 2022.09"
-        echo -e "$KUSTOMIZESUPPORTED2 | SAS Viya 2023.02 - performance issues!"
-        echo -e "$KUSTOMIZESUPPORTED3 | SAS Viya >= 2023.03 and <= 2023.05"
-        echo -e "$KUSTOMIZESUPPORTED4 | SAS Viya >= 2023.06 and <= 2023.11"
-        echo -e "$KUSTOMIZESUPPORTED5 | SAS Viya 2023.12 or later"
+        echo -e "$KUSTOMIZESUPPORTED1 | for SAS Viya LTS 2022.09"
+        echo -e "$KUSTOMIZESUPPORTED2 | for SAS Viya LTS 2023.03"
+        echo -e "$KUSTOMIZESUPPORTED3 | for SAS Viya LTS 2023.10"
+        echo -e "$KUSTOMIZESUPPORTED4 | for SAS Viya 2023.12 or later"
         echo ""
         echo -e "Input kustomize version to be installed based on your SAS Viya version:"
         read KUSTOMIZEVERSION
         if  [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED1" ]] || \
             [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED2" ]] || \
             [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED3" ]] || \
-            [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED4" ]] || \
-            [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED5" ]]; then
+            [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED4" ]]; then
             # requiredClients: kustomize | pre-installation
             echo 
             echo -e "${INFOMSG} | Installing kustomize $KUSTOMIZEVERSION..."
