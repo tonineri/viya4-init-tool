@@ -3,57 +3,21 @@
 # -------------------------------------------------  header  --------------------------------------------------
 
 # SAS Viya Initializaton Tool
-# Description: the script can fully prepare a bastion host for a SAS Viya 4 cluster creation and management on Azure, AWS and Google Cloud Plaform.
-
-# Copyright © 2023, SAS Institute Inc., Cary, NC, USA. All Rights Reserved.
+# Description: the script can fully prepare a bastion host for a SAS Viya 4 cluster creation and management on 
+# Azure, AWS and Google Cloud Plaform.
+#
 # SPDX-License-Identifier: Apache-2.0
 
 # --------------------------------------------------  info  ---------------------------------------------------
 
-V4ITVER="v1.0.9"                # viya4-init-tool version
-VERDATE="April 21st, 2024"      # viya4-init-tool version date
-LSVIYASTABLE="2024.04"          # latest SAS Viya Stable supported version by tool
-ESVIYASTABLE="2024.01"          # earliest SAS Viya Stable supported version by tool
-LSVIYALTS="2023.10"             # latest SAS Viya LTS supported version by tool
-ESVIYALTS="2022.09"             # earliest SAS Viya LTS supported version by tool
+V4ITVER="v1.1.0"                                     # viya4-init-tool version
+VERDATE="May 16th, 2024"                             # viya4-init-tool version date
+VIYALTS=("2022.09" "2023.03" "2023.10" "2024.03")    # Supported SAS Viya LTS versions
+VIYASTABLE=("2024.02" "2024.03" "2024.04" "2024.05") # Supported SAS Viya Stable versions
 
 # ---------------------------------------------- preRequirements ----------------------------------------------
 
 DATETIME=$(date +'%Y-%m-%d | %H:%M:%S') # DATETIME in YYYY-MM-DD | HH:MM:SS format for logging
-echo -e "Input desired SAS Viya namespace name:"
-read VIYA_NS
-# create "$deploy directory"
-if [ ! -d "$HOME/$VIYA_NS/deploy" ]; then
-    mkdir -p "$HOME/$VIYA_NS/deploy" && cd "$HOME/$VIYA_NS/deploy"
-    deploy="$HOME/$VIYA_NS/deploy"
-else
-    deploy="$HOME/$VIYA_NS/deploy"
-    cd $deploy
-fi
-
-# create log
-LOG="$HOME/$VIYA_NS/viya4-init-tool.log"
-touch $LOG
-echo -e "\n" > $LOG
-echo -e "      .:-======-:.      " >> $LOG
-echo -e "    .========----==:    " >> $LOG
-echo -e "   -=====-.        .:   " >> $LOG
-echo -e "  -=====.               " >> $LOG
-echo -e "  =====.   :==-         " >> $LOG
-echo -e "  -====.   :====:       " >> $LOG
-echo -e "   ====-    .=====.     " >> $LOG
-echo -e "    -====.    :====-    " >> $LOG
-echo -e "     .====-     =====   " >> $LOG
-echo -e "       :====:   .====-  " >> $LOG
-echo -e "         -==:   .=====  " >> $LOG
-echo -e "               .=====-  " >> $LOG
-echo -e "   :.        .-=====-   " >> $LOG
-echo -e "    :==----========:    " >> $LOG
-echo -e "      .:-======-:.      " >> $LOG
-echo -e "     viya4-init-tool    " >> $LOG
-echo -e "\n" >> $LOG
-echo -ne "\n$DATETIME | ${INFOMSG} | Tool inizialized." >> $LOG
-echo -e "\n" >> $LOG
 
 # ---------------------------------------------- loadingAnimation ----------------------------------------------
 
@@ -112,14 +76,14 @@ REVERSE='\e[7m'
 HIDDEN='\e[8m'
 
 # textStyle | mixed
-BBLACK='\033[1;30m'  # Black
-BRED='\033[1;31m'    # Red
-BGREEN='\033[1;32m'  # Green
-BYELLOW='\033[1;33m' # Yellow
-BBLUE='\033[1;34m'   # Blue
-BPURPLE='\033[1;35m' # Purple
-BCYAN='\033[1;36m'   # Cyan
-BWHITE='\033[1;37m'  # White
+BBLACK='\033[1;30m'
+BRED='\033[1;31m'
+BGREEN='\033[1;32m'
+BYELLOW='\033[1;33m'
+BBLUE='\033[1;34m'
+BPURPLE='\033[1;35m'
+BCYAN='\033[1;36m'
+BWHITE='\033[1;37m'
 
 # textStyle | messages
 INFOMSG="${BCYAN}INFO${NONE}"
@@ -134,9 +98,9 @@ SUCCESSMSG="${BGREEN}SUCCESS${NONE}"
 providerMenu(){
 clear
     echo -e "${CYAN}__________________________________________________${NONE}"
-    echo -e "\n            ${BCYAN}SAS Viya${NONE} ${BOLD}Initialization Tool${NONE}"
+    echo -e "\n           ${BCYAN}SAS Viya${NONE} ${BOLD}Initialization Tool"
     echo -e "${CYAN}__________________________________________________${NONE}"
-    echo -e "\n          ${BOLD}| Provider Selection Menu |${NONE}"
+    echo -e "\n           ${BOLD}| Provider Selection Menu |${NONE}"     
     echo -e "\nInput ${BCYAN}1${NONE} : for Microsoft Azure (AKS)"
     echo -e "Input ${BCYAN}2${NONE} : for Amazon Web Services (EKS)"
     echo -e "Input ${BCYAN}3${NONE} : for Google Cloud Plaform (GKE)"
@@ -227,9 +191,9 @@ clear
 modeSelectionMenu(){
 clear
     echo -e "${CYAN}__________________________________________________${NONE}"
-    echo -e "\n            ${BCYAN}SAS Viya${NONE} ${BOLD}Initialization Tool${NONE}"
+    echo -e "\n           ${BCYAN}SAS Viya${NONE} ${BOLD}Initialization Tool"
     echo -e "${CYAN}__________________________________________________${NONE}"
-    echo -e "\n             ${BOLD}| Mode Selection Menu |${NONE}"
+    echo -e "\n           ${BOLD}| Mode Selection Menu |${NONE}"
     echo -e "\n${BCYAN}default${NONE}:"
     echo -e "- Installs required packages and clients"
     echo -e "- Installs provider CLI (if defined)"
@@ -346,7 +310,7 @@ clear
 
 exitTool() {
     echo -ne "\n$DATETIME | ${INFOMSG} | Tool execution completed." >> $LOG
-    echo -e "\nThank you for using this tool.\n"
+    echo -e "\nThank you for using the ${BCYAN}SAS Viya${NONE} ${BOLD}Initialization Tool${NONE}.\n"
     exit 0
 }
 
@@ -356,29 +320,26 @@ requiredPackages() {
     echo -ne "\n$DATETIME | ${INFOMSG} | Required packages installation procedure started." >> $LOG
     # requiredPackages | pre-installation
     cd $deploy
-    echo -ne "Installing required packages. This might take a minute or two...\n"
+    echo -ne "${INFOMSG} | Installing required packages. This might take some time due to ${ITALIC}plocate${NONE} initialization...\n"
     loadingStart "${loadAniModern[@]}"
-    requiredPackages=("zsh" "zip" "unzip" "git" "mlocate" "jq" "bat" "python3" "python3-pip")
+    requiredPackages=("zsh" "zip" "unzip" "git" "plocate" "jq" "bat" "python3" "python3-pip")
     # requiredPackages | installation
     for package in "${requiredPackages[@]}"; do
         sudo apt install $package -y -qq >> $LOG 2>&1
     done
     rm -rf $HOME/.oh-my-zsh >> $LOG 2>&1
-    curl -fsSL -o zsh-install.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh >> $LOG 2>&1
-    sudo chmod +x zsh-install.sh && ./zsh-install.sh --unattended >> $LOG 2>&1
-    rm -f zsh-install.sh >> $LOG 2>&1
-    sh -c "$(curl -fsSL https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh)" "" --unattended >> $LOG 2>&1
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended >> $LOG 2>&1
     # requiredPackages | zsh customization
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions >> $LOG 2>&1
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting >> $LOG 2>&1
     git clone https://github.com/jonmosco/kube-ps1.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/kube-ps1 >> $LOG 2>&1
     zshrcContent
-    # requiredPackages | updatedb for mlocate
-    sudo updatedb >> $LOG 2>&1
     # requiredPackages | clone pyviyatools & viya4-ark
     mkdir $HOME/$VIYA_NS/viya-utils && cd $HOME/$VIYA_NS/viya-utils
     git clone https://github.com/sassoftware/pyviyatools >> $LOG 2>&1
+    pip3 install -r pyviyatools/requirements.txt >> $LOG 2>&1
     git clone https://github.com/sassoftware/viya4-ark >> $LOG 2>&1
+    pip3 install -r pyviyatools/requirements.txt >> $LOG 2>&1
     cd $deploy
     # requiredPackages | post-installation & check if all required packages were installed
     loadingStop
@@ -403,7 +364,7 @@ az-cli() {
     echo -ne "\n$DATETIME | ${INFOMSG} | azure-cli nstallation procedure started." >> $LOG
     # az-cli | pre-installation
     cd $deploy
-    echo -ne "Installing latest ${CYAN}azure-cli${NONE}..."
+    echo -ne "${INFOMSG} | Installing latest ${CYAN}azure-cli${NONE}..."
     loadingStart "${loadAniModern[@]}"
     # az-cli | installation
     echo -ne "\n$DATETIME | ${INFOMSG} | Downloading https://aka.ms/InstallAzureCLIDeb and executing." >> $LOG 2>&1
@@ -423,7 +384,7 @@ aws-cli() {
     echo -ne "\n$DATETIME | ${INFOMSG} | aws-cli installation procedure started." >> $LOG
     # aws-cli | pre-installation
     cd $deploy
-    echo -e "Installing latest ${YELLOW}aws-cli${NONE}..."
+    echo -e "${INFOMSG} | Installing latest ${YELLOW}aws-cli${NONE}..."
     loadingStart "${loadAniModern[@]}"
     # aws-cli | installation
     curl -s "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" >> $LOG 2>&1
@@ -444,7 +405,7 @@ gcloud-cli() {
     echo -ne "\n$DATETIME | ${INFOMSG} | gcloud-cli installation procedure started." >> $LOG
     # gcloud-cli | pre-installation
     cd $deploy
-    echo -e "Installing latest ${RED}gcloud-cli${NONE}..."
+    echo -e "${INFOMSG} | Installing latest ${RED}gcloud-cli${NONE}..."
     loadingStart "${loadAniModern[@]}"
     # gcloud-cli | installation
     sudo apt-get install apt-transport-https ca-certificates gnupg -y >> $LOG 2>&1
@@ -467,7 +428,7 @@ k8s() {
     echo -ne "\n$DATETIME | ${INFOMSG} | ansible and docker installation procedure started." >> $LOG
     # k8s | pre-installation
     cd $deploy
-    echo -e "Installing latest docker..."
+    echo -e "${INFOMSG} | Installing latest docker..."
     loadingStart "${loadAniModern[@]}"
     # k8s | docker installation
     sudo apt install -y -qq ca-certificates curl gnupg lsb-release >> $LOG 2>&1
@@ -486,13 +447,15 @@ k8s() {
     else
         echo -ne "\n${ERRORMSG} | docker installation failed. Check $LOG for details."
     fi
+    # k8s | ansible supported version
+    ANSIVER="2.15.6"
     # k8s | ansible installation
-    echo -e "\nInstalling latest ansible-core..."
+    echo -e "\n${INFOMSG} | Installing ansible-core $ANSIVER..."
     loadingStart "${loadAniModern[@]}"
     sudo apt-get install python3 -y -qq >> $LOG 2>&1
     curl -sfSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py >> $LOG 2>&1
     python3 get-pip.py --user >> $LOG 2>&1
-    python3 -m pip install --user ansible-core --no-warn-script-location >> $LOG 2>&1
+    python3 -m pip install --user ansible-core==$ANSIVER --no-warn-script-location >> $LOG 2>&1
     source $HOME/.profile
     # k8s | post-installation
     loadingStop
@@ -512,48 +475,30 @@ tee ~/.zshrc >> /dev/null << EOF
 # zsh customization
 export ZSH="\$HOME/.oh-my-zsh"
 ZSH_THEME="agnoster"
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting kubectl)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting kubectl kube-ps1)
 source \$ZSH/oh-my-zsh.sh
 TERM=xterm-256color
 
 # Global
-export KUBECONFIG=~/path/to/kubeconfig
+export KUBECONFIG=\$HOME/.kube/config
 alias bat="batcat"
 alias ll="ls -la"
+alias locate="plocate"
 
 # SAS Viya variables
-export ORDER=<ORDER>
-export CADENCE=<cadence>
-export VERSION=<version>
-export VIYA_NS=<viya-namespace>
-export VIYA_HOME=\$HOME/sas-viya/\$VIYA_NS
+export ORDER=<9CXXX>
+export CADENCE=<lts>
+export VERSION=<2023.10>
+export VIYA_NS=<sas-viya>
+export VIYA_PATH=\$HOME/\$VIYA_NS
+export VIYA_HOME=\$VIYA_PATH
 export DEPLOY=\$VIYA_HOME/deploy
 export deploy=\$DEPLOY
-export RELEASE=$(cat \$deploy/current_release.txt)
-
-# SAS Viya CLI
-export SAS_CLI_PROFILE=<sas-viya-cli-profile-name>
-export SSL_CERT_FILE="\$VIYA_HOME/viya-utilities/\$SAS_CLI_PROFILE.pem"
-export REQUESTS_CA_BUNDLE="\$VIYA_HOME/viya-utilities/\${SAS_CLI_PROFILE}_CA.pem"
 
 # Container Registry
-#DOCKER_OPTS="--insecure-registry=registry.domain.com:port"
 export REGISTRY="<cr.hostname.com>"
 export REGISTRY_USER="<username>"
 export REGISTRY_PASS="<password>"
-
-# OpenShift
-#export OCPSERVER="https://api.ocpdemo.domain.com:6443"
-#export OCPUSER="ocpadmin"
-#alias oc-login="oc login -u \$OCPUSER --server \$OCPSERVER --insecure-skip-tls-verify=true"
-
-# Kubectl aliases
-alias kgpv="kubectl get pv"
-alias kgsc="kubectl get storageclass"
-alias kdel="kubectl delete pod"
-alias klog="kubectl logs -f"
-alias kns="node-shell"
-alias kdelj="kubectl get jobs --no-headers | grep '1/1' | awk '{print \$1}' | xargs -I {} kubectl delete job {}"
 
 # SAS Viya aliases
 alias setviya="kubectl config set-context --current --namespace=\$VIYA_NS"
@@ -567,11 +512,6 @@ alias sas-viya-start="kubectl create job sas-start-all-`date +%s` --from cronjob
 alias sas-viya-stop="kubectl create job sas-stop-all-`date +%s` --from cronjobs/sas-stop-all -n \$VIYA_NS"
 alias sas-viya-status="watch -n1 'kubectl get sasdeployments -n \$VIYA_NS && echo -e && kubectl get pods -n \$VIYA_NS'"
 alias sas-viya-k9s="k9s --kubeconfig \$KUBECONFIG --namespace \$VIYA_NS"
-
-# Startup commands
-# oc-login
-export WORKDIR $VIYA_HOME
-
 EOF
 }
 
@@ -583,20 +523,20 @@ requiredClients() {
     echo -ne "\n$DATETIME | ${INFOMSG} | Required clients - kubectl installation procedure started." >> $LOG
     # requiredClients: kubectl | input
     KCTLVERMINSUPPORTED="24" # <--- Minimum supported version
-    KCTLVERMAXSUPPORTED="28" # <--- Maximum supported version
+    KCTLVERMAXSUPPORTED="29" # <--- Maximum supported version
     echo -e "${BYELLOW}----------------------------${NONE}"
     echo -e "${BYELLOW}       INPUT REQUIRED       ${NONE}"
     echo -e "${BYELLOW}----------------------------${NONE}"
     KUBECTLCHECK=0
     while [[ "$KUBECTLCHECK" -eq 0 ]]; do
-        echo -e "Input kubectl version to be installed based on your Kubernetes Cluster version (example 1.27.7):"
+        echo -e "Input kubectl version to be installed based on your Kubernetes Cluster version (example 1.28.7):"
         echo -e "Supported versions: 1.${KCTLVERMINSUPPORTED}.0 - 1.${KCTLVERMAXSUPPORTED}.XX"
         read KUBECTLVER
         KCTLVERMAJ=$(echo $KUBECTLVER | cut -d"." -f1)
         KCTLVERMIN=$(echo $KUBECTLVER | cut -d"." -f2)
         if [[ "$KCTLVERMAJ" -eq 1 ]] && [[ "$KCTLVERMIN" -ge "$KCTLVERMINSUPPORTED" ]] && [[ "$KCTLVERMIN" -le "$KCTLVERMAXSUPPORTED" ]]; then
             # requiredClients: kubectl | pre-installation
-            echo -e "Installing kubectl $KUBECTLVER..."
+            echo -e "${INFOMSG} | Installing kubectl $KUBECTLVER..."
             cd $deploy
             loadingStart "${loadAniModern[@]}"
             # requiredClients: kubectl | installation
@@ -625,33 +565,30 @@ requiredClients() {
     # requiredClients: kustomize | log
     echo -ne "\n$DATETIME | ${INFOMSG} | Required clients - kustomize installation procedure started." >> $LOG
     # requiredClients: kustomize | input
-    KUSTOMIZESUPPORTED1="3.7.0" # for SAS Viya <= SAS Viya 2023.01
-    KUSTOMIZESUPPORTED2="4.5.7" # for SAS Viya 2023.02 - performance issues!
-    KUSTOMIZESUPPORTED3="5.0.0" # for SAS Viya >= 2023.03 and <= 2023.05
-    KUSTOMIZESUPPORTED4="5.0.3" # for SAS Viya >= 2023.06 and <= 2023.11
-    KUSTOMIZESUPPORTED5="5.1.1" # for SAS Viya 2023.12 or later
+    KUSTOMIZESUPPORTED1="3.7.0" # for SAS Viya LTS 2022.09
+    KUSTOMIZESUPPORTED2="5.0.0" # for SAS Viya LTS 2023.03
+    KUSTOMIZESUPPORTED3="5.0.3" # for SAS Viya LTS 2023.10
+    KUSTOMIZESUPPORTED4="5.1.1" # for SAS Viya 2023.12 or later
     echo -e "${BYELLOW}----------------------------${NONE}"
     echo -e "${BYELLOW}       INPUT REQUIRED       ${NONE}"
     echo -e "${BYELLOW}----------------------------${NONE}"
     KUSTOCHECK=0
     while [[ "$KUSTOCHECK" -eq 0 ]]; do
         echo -e "Supported kustomize versions:"
-        echo -e "$KUSTOMIZESUPPORTED1 | SAS Viya <= 2022.09"
-        echo -e "$KUSTOMIZESUPPORTED2 | SAS Viya 2023.02 - performance issues!"
-        echo -e "$KUSTOMIZESUPPORTED3 | SAS Viya >= 2023.03 and <= 2023.05"
-        echo -e "$KUSTOMIZESUPPORTED4 | SAS Viya >= 2023.06 and <= 2023.11"
-        echo -e "$KUSTOMIZESUPPORTED5 | SAS Viya 2023.12 or later"
+        echo -e "$KUSTOMIZESUPPORTED1 | for SAS Viya LTS 2022.09"
+        echo -e "$KUSTOMIZESUPPORTED2 | for SAS Viya LTS 2023.03"
+        echo -e "$KUSTOMIZESUPPORTED3 | for SAS Viya LTS 2023.10"
+        echo -e "$KUSTOMIZESUPPORTED4 | for SAS Viya 2023.12 or later"
         echo ""
         echo -e "Input kustomize version to be installed based on your SAS Viya version:"
         read KUSTOMIZEVERSION
         if  [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED1" ]] || \
             [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED2" ]] || \
             [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED3" ]] || \
-            [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED4" ]] || \
-            [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED5" ]]; then
+            [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED4" ]]; then
             # requiredClients: kustomize | pre-installation
             echo 
-            echo -e "INFO: Installing kustomize $KUSTOMIZEVERSION..."
+            echo -e "${INFOMSG} | Installing kustomize $KUSTOMIZEVERSION..."
             cd $deploy
             loadingStart "${loadAniModern[@]}"
             # requiredClients: kustomize | installation
@@ -675,7 +612,7 @@ requiredClients() {
     # requiredClients: node-shell | log
     echo -ne "\n$DATETIME | ${INFOMSG} | Required clients - node-shell installation procedure started." >> $LOG
     # requiredClients: node-shell | pre-installation
-    echo -e "INFO: Installing latest node-shell..."
+    echo -e "${INFOMSG} | Installing latest node-shell..."
     cd $deploy
     loadingStart "${loadAniModern[@]}"
     # requiredClients: node-shell | installation
@@ -685,21 +622,23 @@ requiredClients() {
     # requiredClients: node-shell | post-installation & check if installed
     loadingStop
     if which node-shell >/dev/null 2>&1; then
-        echo -ne "\n${SUCCESSMSG} | node-shell $(node-shell --version | awk 'NR==1{print $2}') installed."
+        echo -ne "\n${SUCCESSMSG} | node-shell v$(node-shell --version | awk 'NR==1{print $2}') installed."
     else
         echo -ne "\n${ERRORMSG} | node-shell installation failed. Check $LOG for details."
     fi
     echo -e "\n"
     # requiredClients: helm 3 | log
-    echo -ne "\n$DATETIME | ${INFOMSG} | Required clients - helm 3 installation procedure started." >> $LOG
+    echo -ne "\n$DATETIME | ${INFOMSG} | Required clients - Helm 3 installation procedure started." >> $LOG
     # requiredClients: helm 3 | pre-installation
-    echo -e "Installing latest helm 3..."
+    echo -e "${INFOMSG} | Installing latest Helm 3..."
     cd $deploy
     loadingStart "${loadAniModern[@]}"
     # requiredClients: helm 3 | installation
-    curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 >> $LOG 2>&1
-    chmod 700 get_helm.sh && ./get_helm.sh >> $LOG 2>&1
-    rm -f get_helm.sh
+    curl -s https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg >/dev/null
+    sudo apt-get install apt-transport-https --yes >> $LOG 2>&1
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list >> $LOG 2>&1
+    sudo apt-get update >> $LOG 2>&1
+    sudo apt-get install helm >> $LOG 2>&1
     # requiredClients: helm 3 | post-installation & check if installed
     loadingStop
     if which helm >/dev/null 2>&1; then
@@ -711,7 +650,7 @@ requiredClients() {
     # requiredClients: yq | log
     echo -ne "\n$DATETIME | ${INFOMSG} | Required clients - yq installation procedure started." >> $LOG
     # requiredClients: yq | pre-installation
-    echo -e "Installing latest yq..."
+    echo -e "${INFOMSG} | Installing latest yq..."
     cd $deploy
     loadingStart "${loadAniModern[@]}"
     # requiredClients: yq | installation
@@ -729,7 +668,7 @@ requiredClients() {
     # requiredClients: k9s | log
     echo -ne "\n$DATETIME | ${INFOMSG} | Required clients - k9s installation procedure started." >> $LOG
     # requiredClients: k9s | pre-installation
-    echo -e "Installing latest k9s..."
+    echo -e "${INFOMSG} | Installing latest k9s..."
     cd $deploy
     loadingStart "${loadAniModern[@]}"
     # requiredClients: k9s | installation
@@ -753,7 +692,7 @@ viya4OrdersCli() {
     # viya4OrdersCli | log
     echo -ne "\n$DATETIME | ${INFOMSG} | viya4-orders-cli installation procedure started." >> $LOG
     # viya4OrdersCli | pre-installation
-    echo -e "Installing latest viya4-orders-cli..."
+    echo -e "${INFOMSG} | Installing latest viya4-orders-cli..."
     cd $deploy
     loadingStart "${loadAniModern[@]}"
     # viya4OrdersCli | pre-installation 
@@ -840,51 +779,37 @@ getOrder() {
           ORDERCHECK=1
       else
           echo -e "\n${ERRORMSG} | Invalid Order Number."
-          echo -e "${BYELLOW}NOTE${NONE}: A valid Order Number:"
+          echo -e "${BCYAN}NOTE${NONE}: A valid Order Number:"
           echo -e "- Consists of 6 alphanumeric [0-9,A-Z] characters (no lowercase)"
           echo -e "- Starts with '0' (if internal) or '9C' (if external)"
-          echo -e "- If the second character is capital letter 'C' for external orders or [A-Z] for internal ones"
+          echo -e "- Has 'C' as second character for external orders or [A-Z] for internal ones"
       fi
     done
     ## getOrder | input cadence and version
     CADENCECHECK=0
     VERSIONCHECK=0  
-    while [[ "$CADENCECHECK" -eq 0 ]] ; do
+    while [[ "$CADENCECHECK" -eq 0 ]]; do
         echo -e "\nInput software Cadence [stable/lts]:"
         read CADENCE
-        ## getOrder | check if cadence is valid
-        if [[ "$CADENCE" == stable ]] || [[ "$CADENCE" == lts ]]; then
-            CADENCECHECK=1
-            ## getOrder | input version
-            while [[ "$VERSIONCHECK" -eq 0 ]]; do
-                echo -e "\nInput SAS Viya software version (example 2024.03):"
-                read VERSION
-                VERSIONY=$(echo $VERSION | cut -d"." -f1)
-                VERSIONM=$(echo $VERSION | cut -d"." -f2)
-                VERSIONMOCTAL=$(echo $VERSIONM | sed 's/^0*//') # remove leading zero
-                ## getOrder | check if version is valid / supported
-                if [[ "$CADENCE" == stable ]]; then
-                    if  [[ "$VERSIONY" -eq 2023 && "$VERSIONMOCTAL" -eq 12 && ${#VERSION} -eq 7 ]] || \
-                        [[ "$VERSIONY" -eq 2024 && "$VERSIONMOCTAL" -ge 1 && "$VERSIONMOCTAL" -le 3 && ${#VERSION} -eq 7 ]]; then
-                        VERSIONCHECK=1
-                    else
-                        echo -e "\n${ERRORMSG} | Invalid or unsupported software Version for stable Cadence."
-                        echo -e "Supported stable versions: Min $ESVIYASTABLE | Max $LSVIYASTABLE."
-                    fi
-                elif [[ "$CADENCE" == lts ]]; then
-                    if [[ "$VERSIONY" -eq 2022 && "$VERSIONMOCTAL" -eq 9 && ${#VERSION} -eq 7 ]]; then
-                        VERSIONCHECK=1
-                    elif [[ "$VERSIONY" -eq 2023 && ( "$VERSIONMOCTAL" -eq 3 || "$VERSIONMOCTAL" -eq 10 ) && ${#VERSION} -eq 7 ]]; then
-                        VERSIONCHECK=1
-                    else
-                        echo -e "\n${ERRORMSG} | Invalid or unsupported software Version for LTS Cadence."
-                        echo -e "Supported versions: Min LTS $ESVIYALTS | Max LTS $LSVIYALTS."
-                    fi
-                fi
-            done
+        if [[ "$CADENCE" == "stable" ]]; then
+            VERSIONS=("${VIYASTABLE[@]}")
+        elif [[ "$CADENCE" == "lts" ]]; then
+            VERSIONS=("${VIYALTS[@]}")
         else
             echo -e "\n${ERRORMSG} | Invalid software Cadence. Accepted inputs [stable/lts]."
+            continue
         fi
+        while [[ "$VERSIONCHECK" -eq 0 ]]; do
+            echo -e "\nInput SAS Viya software version (example 2024.03):"
+            read VERSION
+            if [[ " ${VERSIONS[*]} " =~ " $VERSION " ]]; then
+                VERSIONCHECK=1
+            else
+                echo -e "\n${ERRORMSG} | Invalid or unsupported software Version for $CADENCE cadence."
+                echo -e "Supported versions: ${VERSIONS[*]}"
+            fi
+        done
+        CADENCECHECK=1
     done
     ## getOrder | ask for info confirmation
     CONFIRMCHECK=0
@@ -990,20 +915,20 @@ mirrormgrCli() {
         # mirrormgrCli | log
         echo -ne "\n$DATETIME | ${INFOMSG} | SAS Mirror Manager installation procedure started." >> $LOG
         # mirrormgrCli | pre-installation
-        echo -e "\nInstalling latest mirrormgr..."
+        echo -e "\n${INFOMSG} | Installing latest mirrormgr..."
         loadingStart "${loadAniModern[@]}"
         # mirrormgrCli | pre-installation
         mkdir "$deploy/mirrormgr" && cd "$deploy/mirrormgr" >> $LOG 2>&1
         wget -N https://support.sas.com/installation/viya/4/sas-mirror-manager/lax/mirrormgr-linux.tgz > /dev/null 2>&1
         tar --extract --file mirrormgr-linux.tgz mirrormgr >> $LOG 2>&1
-        sudo install mirrormgr -o root -g root -m 755 /usr/local/mirrormgr >> $LOG 2>&1
+        sudo install mirrormgr -o root -g root -m 755 /usr/local/bin/mirrormgr >> $LOG 2>&1
         cd $deploy
         rm -rf "$deploy/mirrormgr"
         # mirrormgrCli | post-installation
         loadingStop
         if which mirrormgr >/dev/null 2>&1; then
             MIRRORMGRCHECK=1
-            echo -ne "\n${SUCCESSMSG} | SAS Mirror Manager $(mirrormgr -v | awk '/version/ {match($0, /version[[:space:]]*:[[:space:]]*(v[[:digit:].-]+)/, arr); print arr[1]}') installed."
+            echo -ne "\n${SUCCESSMSG} | SAS Mirror Manager v$(mirrormgr -v | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1) installed."
             echo -e "\n"
         else
             MIRRORMGRCHECK=0
@@ -1019,7 +944,7 @@ terraformClient() {
     # terraformClient | log
     echo -ne "\n$DATETIME | ${INFOMSG} | terraform installation procedure started." >> $LOG
     # terraformClient | pre-installation
-    echo -e "Installing latest terraform..."
+    echo -e "${INFOMSG} | Installing latest terraform..."
     cd $deploy
     loadingStart "${loadAniModern[@]}"
     # terraformClient | installation
@@ -1595,9 +1520,57 @@ fullMode() {
     fi
 }
 
+namespaceDefinition () {
+    echo -e "${CYAN}__________________________________________________${NONE}"
+    echo -e "\n           ${BCYAN}SAS Viya${NONE} ${BOLD}Initialization Tool${NONE}"
+    echo -e "${CYAN}__________________________________________________${NONE}"
+    echo -e "\nInput desired ${BCYAN}SAS Viya${NONE} namespace name:"
+    read VIYA_NS
+
+    # create "$deploy directory"
+    if [ ! -d "$HOME/$VIYA_NS/deploy" ]; then
+        mkdir -p "$HOME/$VIYA_NS/deploy"
+        deploy="$HOME/$VIYA_NS/deploy"
+        DEPLOY=$DEPLOY
+        cd $deploy
+    else
+        deploy="$HOME/$VIYA_NS/deploy"
+        DEPLOY=$DEPLOY
+        cd $deploy
+    fi
+clear
+}
+
+logCreation () {
+# create log
+LOG="$HOME/$VIYA_NS/viya4-init-tool.log"
+cat << 'EOF' > $LOG
+
+      .:-======-:.      
+    .========----==:    
+   -=====-.        .:   
+  -=====.               
+  =====.   :==-         
+  -====.   :====:       
+   ====-    .=====.     
+    -====.    :====-    
+     .====-     =====   
+       :====:   .====-  
+         -==:   .=====  
+               .=====-  
+   :.        .-=====-   
+    :==----========:    
+      .:-======-:.      
+     viya4-init-tool    
+
+EOF
+}
+
 # --------------------------------------------  startScript  --------------------------------------------
 
 if [ "$#" -eq 0 ]; then
+  namespaceDefinition
+  logCreation
   providerMenu
 elif [ "$1" == "--version" ]; then
     echo ""
@@ -1642,12 +1615,12 @@ elif [ "$1" == "--whitelist" ]; then
 elif [ "$1" == "--support" ]; then
     echo ""
     echo "-----------------------------------"
-    echo "   Supported SAS Viya versions:"
+    echo "   Supported ${BCYAN}SAS Viya${NONE} versions:"
     echo "-----------------------------------"
-    echo "- Stable $ESVIYASTABLE-$LSVIYASTABLE"
-    echo "- LTS    $ESVIYALTS-$LSVIYALTS"
+    echo "- ${BOLD}Stable${NONE}: $VIYASTABLE"
+    echo "- ${BOLD}LTS${NONE}:    $VIYALTS"
     echo "-----------------------------------"
-    echo "NOTE: The tool is not maintained by SAS Institute Inc."
+    echo "${BCYAN}NOTE${NONE} | The tool is not maintained by SAS Institute Inc."
     echo "For support, open an issue at https://github.com/tonineri/viya4-init-tool"
     echo ""
     exit 0
@@ -1667,7 +1640,7 @@ elif [ "$1" == "--help" ]; then
     echo -e ""
     exit 0
 else
-    echo -e "ERROR: Unsupported arguement."
+    echo -e "${ERRORMSG} | Unsupported arguement."
     exit 0
 fi
 
