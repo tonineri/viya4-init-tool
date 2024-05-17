@@ -333,6 +333,7 @@ requiredPackages() {
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions >> $LOG 2>&1
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting >> $LOG 2>&1
     git clone https://github.com/jonmosco/kube-ps1.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/kube-ps1 >> $LOG 2>&1
+    git clone https://github.com/MichaelAquilina/zsh-you-should-use.git $ZSH_CUSTOM/plugins/you-should-use >> $LOG 2>&1
     zshrcContent
     # requiredPackages | clone pyviyatools & viya4-ark
     mkdir $HOME/$VIYA_NS/viya-utils && cd $HOME/$VIYA_NS/viya-utils
@@ -475,7 +476,14 @@ tee ~/.zshrc >> /dev/null << EOF
 # zsh customization
 export ZSH="\$HOME/.oh-my-zsh"
 ZSH_THEME="agnoster"
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting kubectl kube-ps1)
+plugins=(
+    git
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+    kubectl
+    kube-ps1
+    you-should-use
+)
 source \$ZSH/oh-my-zsh.sh
 TERM=xterm-256color
 
