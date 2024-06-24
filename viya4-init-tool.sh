@@ -10,10 +10,10 @@
 
 # --------------------------------------------------  info  ---------------------------------------------------
 
-V4ITVER="v1.1.0"                                     # viya4-init-tool version
-VERDATE="May 16th, 2024"                             # viya4-init-tool version date
+V4ITVER="v1.1.1"                                     # viya4-init-tool version
+VERDATE="June 24th, 2024"                             # viya4-init-tool version date
 VIYALTS=("2022.09" "2023.03" "2023.10" "2024.03")    # Supported SAS Viya LTS versions
-VIYASTABLE=("2024.02" "2024.03" "2024.04" "2024.05") # Supported SAS Viya Stable versions
+VIYASTABLE=("2024.03" "2024.04" "2024.05" "2024.06") # Supported SAS Viya Stable versions
 
 # ---------------------------------------------- preRequirements ----------------------------------------------
 
@@ -580,7 +580,8 @@ requiredClients() {
     KUSTOMIZESUPPORTED1="3.7.0" # for SAS Viya LTS 2022.09
     KUSTOMIZESUPPORTED2="5.0.0" # for SAS Viya LTS 2023.03
     KUSTOMIZESUPPORTED3="5.0.3" # for SAS Viya LTS 2023.10
-    KUSTOMIZESUPPORTED4="5.1.1" # for SAS Viya 2023.12 or later
+    KUSTOMIZESUPPORTED4="5.1.1" # for SAS Viya 2023.12 to 2024.04
+    KUSTOMIZESUPPORTED5="5.3.0" # for SAS Viya 2024.05 and later
     echo -e "${BYELLOW}----------------------------${NONE}"
     echo -e "${BYELLOW}       INPUT REQUIRED       ${NONE}"
     echo -e "${BYELLOW}----------------------------${NONE}"
@@ -590,14 +591,16 @@ requiredClients() {
         echo -e "$KUSTOMIZESUPPORTED1 | for SAS Viya LTS 2022.09"
         echo -e "$KUSTOMIZESUPPORTED2 | for SAS Viya LTS 2023.03"
         echo -e "$KUSTOMIZESUPPORTED3 | for SAS Viya LTS 2023.10"
-        echo -e "$KUSTOMIZESUPPORTED4 | for SAS Viya 2023.12 or later"
+        echo -e "$KUSTOMIZESUPPORTED4 | for SAS Viya 2023.12 to 2024.05"
+        echo -e "$KUSTOMIZESUPPORTED5 | for SAS Viya 2024.06 and later"
         echo ""
         echo -e "Input kustomize version to be installed based on your SAS Viya version:"
         read KUSTOMIZEVERSION
         if  [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED1" ]] || \
             [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED2" ]] || \
             [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED3" ]] || \
-            [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED4" ]]; then
+            [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED4" ]] || \
+            [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED5" ]]; then
             # requiredClients: kustomize | pre-installation
             echo 
             echo -e "${INFOMSG} | Installing kustomize $KUSTOMIZEVERSION..."
