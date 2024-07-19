@@ -14,8 +14,8 @@
 
 | **Cadence** | **Version(s)** |
 |---------|----------|
-| **Stable**  | `2024.03` \| `2024.04` \| `2024.05` \| `2024.06`
-| **LTS**    | `2022.09` \| `2023.03` \| `2023.10` \| `2024.03` |
+| **Stable**  | `2024.04` \| `2024.05` \| `2024.06` \| `2024.07`
+| **LTS**    | `2022.09` \| `2023.03` \| `2023.10` \| `2024.03`
 
 ![divider](/assets/divider.png)
 
@@ -60,28 +60,28 @@ To get started with the `viya4-init-tool`, follow these steps:
 
 1. Get the latest version of the tool:
 
- * Option 1 - Download the latest tarball:
+   * Option 1 - Download the latest tarball:
 
-  ```bash
-  cd ~
-  wget -O - https://github.com/tonineri/viya4-init-tool/releases/latest/download/viya4-init-tool.tgz | tar xz
-  cd viya4-init-tool
-  ```
+     ```bash
+     cd ~
+     wget -O - https://github.com/tonineri/viya4-init-tool/releases/latest/download/viya4-init-tool.tgz | tar xz
+     cd viya4-init-tool
+     ```
 
- * Option 2 - Clone the repository:
+    * Option 2 - Clone the repository:
 
-  ```bash
-  cd ~
-  git clone https://github.com/tonineri/viya4-init-tool
-  cd viya4-init-tool
-  ```
+      ```bash
+      cd ~
+      git clone https://github.com/tonineri/viya4-init-tool
+      cd viya4-init-tool
+      ```
 
 2. Run the main script to launch the tool:
 
- ```bash
- chmod +x viya4-init-tool.sh
- ./viya4-init-tool.sh
- ```
+   ```bash
+   chmod +x viya4-init-tool.sh
+   ./viya4-init-tool.sh
+   ```
 
 3. Interact with the tool: Follow the on-screen prompts to navigate through the menus, select your `Provider` and `Mode`, and engage in the guided process tailored to your choices.
 
@@ -91,15 +91,15 @@ To get started with the `viya4-init-tool`, follow these steps:
 
 * To run the tool, execute:
 
- ```bash
- ./viya4-init-tool.sh
- ```
+  ```bash
+  ./viya4-init-tool.sh
+  ```
 
 You will be prompted to input the desired name for your SAS Viya namespace. The tool will then proceed with the two menus:
 
 1. **Provider Selection Menu**: Choose from a list of supported cloud providers (Azure, AWS, GCP) or Open Source K8s. The provider selection determines the platform for which the tool will prepare the bastion host for SAS Viya 4  cluster creation and management.
 
-  <div align="center"> 
+  <div align="center">
   
   ![Provider Selection Menu](/assets/providerSelectionMenu.png)
   
@@ -107,9 +107,9 @@ You will be prompted to input the desired name for your SAS Viya namespace. The 
 
 2. **Mode Selection Menu**: Select the desired mode for your task. The modes determine the type of process you will be guided through and may vary depending on the chosen provider.
 
-  <div align="center"> 
+  <div align="center">
   
-  ![Mode Selection Menu](/assets/modeSelectionMenu.png) 
+  ![Mode Selection Menu](/assets/modeSelectionMenu.png)
   
   </div>
 
@@ -117,27 +117,28 @@ After making your selections, you will be guided through a tailored process, wit
 
 * To show the tool version, execute:
 
- ```bash
- ./viya4-init-tool.sh --version
- ```
+  ```bash
+  ./viya4-init-tool.sh --version
+  ```
 
 * To show the URLs that need to be whitelisted for the script to run fully, execute:
 
- ```bash
- ./viya4-init-tool.sh --whitelist
- ```
+  ```bash
+  ./viya4-init-tool.sh --whitelist
+  ```
 
 * To show the latest SAS Viya versions supported by the tool, execute:
 
- ```bash
- ./viya4-init-tool.sh --support
- ```
+   ```bash
+   ./viya4-init-tool.sh --support
+   ```
 
 * To show the all available usage options, execute:
 
- ```bash
- ./viya4-init-tool.sh --help
- ```
+  ```bash
+  ./viya4-init-tool.sh --help
+  ```
+
 ![divider](/assets/divider.png)
 
 ## Contributing
@@ -148,7 +149,7 @@ We welcome contributions to improve the `viya4-init-tool`. Please submit your id
 
 ## License
 
-This project is licensed under the [Apache 2.0 License](LICENSE.md). 
+This project is licensed under the [Apache 2.0 License](LICENSE.md).
 
 ![divider](/assets/divider.png)
 
