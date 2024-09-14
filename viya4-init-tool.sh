@@ -10,10 +10,10 @@
 
 # --------------------------------------------------  info  ---------------------------------------------------
 
-V4ITVER="v1.1.3"                                     # viya4-init-tool version
-VERDATE="August 31st, 2024"                            # viya4-init-tool version date
+V4ITVER="v1.1.4"                                     # viya4-init-tool version
+VERDATE="September 20th, 2024"                            # viya4-init-tool version date
 VIYALTS=("2022.09" "2023.03" "2023.10" "2024.03")    # Supported SAS Viya LTS versions
-VIYASTABLE=("2024.05" "2024.06" "2024.07" "2024.08") # Supported SAS Viya Stable versions
+VIYASTABLE=("2024.06" "2024.07" "2024.08" "2024.09") # Supported SAS Viya Stable versions
 
 # ---------------------------------------------- preRequirements ----------------------------------------------
 
