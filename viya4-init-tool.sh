@@ -1588,10 +1588,7 @@ if [ "$#" -eq 0 ]; then
   logCreation
   providerMenu
 elif [ "$1" == "--version" ]; then
-    echo ""
-    echo -e "${BCYAN}SAS Viya${NONE} ${BOLD}Initialization Tool${NONE}"
-    echo "  $V4ITVER | $VERDATE"
-    echo ""
+    echo "$V4ITVER"
     exit 0
 elif [ "$1" == "--whitelist" ]; then
     urls=$(grep -oE 'https?://[^/"]+' "$0" | awk -F/ '{ print $1 "//" $3 "/" }' | sort -u)
@@ -1629,29 +1626,29 @@ elif [ "$1" == "--whitelist" ]; then
     exit 0
 elif [ "$1" == "--support" ]; then
     echo ""
-    echo "-----------------------------------"
-    echo "   Supported ${BCYAN}SAS Viya${NONE} versions:"
-    echo "-----------------------------------"
-    echo "- ${BOLD}Stable${NONE}: $VIYASTABLE"
-    echo "- ${BOLD}LTS${NONE}:    $VIYALTS"
-    echo "-----------------------------------"
-    echo "${BCYAN}NOTE${NONE} | The tool is not maintained by SAS Institute Inc."
-    echo "For support, open an issue at https://github.com/tonineri/viya4-init-tool/issues"
+    echo -e "-----------------------------------------"
+    echo -e "      Supported ${BCYAN}SAS Viya${NONE} versions:"
+    echo -e "-----------------------------------------"
+    echo -e "- ${BOLD}Stable${NONE}: ${VIYASTABLE[*]}"
+    echo -e "- ${BOLD}LTS${NONE}:    ${VIYALTS[*]}"
+    echo -e "-----------------------------------------"
+    echo -e "${BCYAN}NOTE${NONE} | The tool is not maintained by SAS Institute Inc."
+    echo -e "For support, open an issue at https://github.com/tonineri/viya4-init-tool/issues"
     echo ""
     exit 0
 elif [ "$1" == "--help" ]; then
     echo -e ""
-    echo -e "-----------------------------------------------------------------------------------------------"
+    echo -e "-------------------------------------------------------------------------------------------------"
     echo -e "|                             ${BCYAN}SAS Viya${NONE} ${BOLD}Initialization Tool${NONE} - Usage                            |"
-    echo -e "-----------------------------------------------------------------------------------------------"
-    echo -e "|   OPTION   |         EXAMPLE COMMAND          |                 DESCRIPTION                 |"
-    echo -e "|------------|----------------------------------|---------------------------------------------|"
-    echo -e "|[no option] | ./viya4-init-tool.sh             | executes the GUI                            |"
-    echo -e "|--version   | ./viya4-init-tool.sh --version   | shows the tool's version                    |"
-    echo -e "|--whitelist | ./viya4-init-tool.sh --whitelist | prints the URLs to be whitelisted           |"
-    echo -e "|--support   | ./viya4-init-tool.sh --support   | shows the latest SAS Viya supported versions|"
-    echo -e "|--help      | ./viya4-init-tool.sh --help      | shows the usage message                     |"
-    echo -e "-----------------------------------------------------------------------------------------------"
+    echo -e "-------------------------------------------------------------------------------------------------"
+    echo -e "|    OPTION   |         EXAMPLE COMMAND           |                 DESCRIPTION                 |"
+    echo -e "|-------------|-----------------------------------|---------------------------------------------|"
+    echo -e "| [no option] | ./viya4-init-tool.sh              | executes the GUI                            |"
+    echo -e "| --version   | ./viya4-init-tool.sh --version    | shows the tool's version                    |"
+    echo -e "| --whitelist | ./viya4-init-tool.sh --whitelist  | prints the URLs to be whitelisted           |"
+    echo -e "| --support   | ./viya4-init-tool.sh --support    | shows the latest SAS Viya supported versions|"
+    echo -e "| --help      | ./viya4-init-tool.sh --help       | shows the usage message                     |"
+    echo -e "-------------------------------------------------------------------------------------------------"
     echo -e ""
     exit 0
 else
