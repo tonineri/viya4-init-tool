@@ -14,7 +14,7 @@
 
 | **Cadence** | **Version(s)** |
 |---------|----------|
-| **Stable**  | `2024.05` \| `2024.06` \| `2024.07` \| `2024.08`
+| **Stable**  | `2024.06` \| `2024.07` \| `2024.08` \| `2024.09`
 | **LTS**    | `2022.09` \| `2023.03` \| `2023.10` \| `2024.03`
 
 ![divider](/assets/divider.png)
@@ -68,7 +68,7 @@ To get started with the `viya4-init-tool`, follow these steps:
      cd viya4-init-tool
      ```
 
-    * Option 2 - Clone the repository:
+   * Option 2 - Clone the repository:
 
       ```bash
       cd ~
@@ -89,11 +89,11 @@ To get started with the `viya4-init-tool`, follow these steps:
 
 ## Usage
 
-* To run the tool, execute:
+To run the tool, execute:
 
-  ```bash
-  ./viya4-init-tool.sh
-  ```
+```bash
+./viya4-init-tool.sh
+```
 
 You will be prompted to input the desired name for your SAS Viya namespace. The tool will then proceed with the two menus:
 

@@ -10,10 +10,10 @@
 
 # --------------------------------------------------  info  ---------------------------------------------------
 
-V4ITVER="v1.1.3"                                     # viya4-init-tool version
-VERDATE="August 31st, 2024"                            # viya4-init-tool version date
+V4ITVER="v1.1.4"                                     # viya4-init-tool version
+VERDATE="September 19th, 2024"                       # viya4-init-tool version date
 VIYALTS=("2022.09" "2023.03" "2023.10" "2024.03")    # Supported SAS Viya LTS versions
-VIYASTABLE=("2024.05" "2024.06" "2024.07" "2024.08") # Supported SAS Viya Stable versions
+VIYASTABLE=("2024.06" "2024.07" "2024.08" "2024.09") # Supported SAS Viya Stable versions
 
 # ---------------------------------------------- preRequirements ----------------------------------------------
 
@@ -535,7 +535,7 @@ requiredClients() {
     echo -ne "\n$DATETIME | ${INFOMSG} | Required clients - kubectl installation procedure started." >> $LOG
     # requiredClients: kubectl | input
     KCTLVERMINSUPPORTED="24" # <--- Minimum supported version
-    KCTLVERMAXSUPPORTED="29" # <--- Maximum supported version
+    KCTLVERMAXSUPPORTED="30" # <--- Maximum supported version
     echo -e "${BYELLOW}----------------------------${NONE}"
     echo -e "${BYELLOW}       INPUT REQUIRED       ${NONE}"
     echo -e "${BYELLOW}----------------------------${NONE}"
@@ -1636,7 +1636,7 @@ elif [ "$1" == "--support" ]; then
     echo "- ${BOLD}LTS${NONE}:    $VIYALTS"
     echo "-----------------------------------"
     echo "${BCYAN}NOTE${NONE} | The tool is not maintained by SAS Institute Inc."
-    echo "For support, open an issue at https://github.com/tonineri/viya4-init-tool"
+    echo "For support, open an issue at https://github.com/tonineri/viya4-init-tool/issues"
     echo ""
     exit 0
 elif [ "$1" == "--help" ]; then
