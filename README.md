@@ -68,7 +68,7 @@ To get started with the `viya4-init-tool`, follow these steps:
      cd viya4-init-tool
      ```
 
-    * Option 2 - Clone the repository:
+   * Option 2 - Clone the repository:
 
       ```bash
       cd ~
@@ -89,11 +89,11 @@ To get started with the `viya4-init-tool`, follow these steps:
 
 ## Usage
 
-* To run the tool, execute:
+To run the tool, execute:
 
-  ```bash
-  ./viya4-init-tool.sh
-  ```
+```bash
+./viya4-init-tool.sh
+```
 
 You will be prompted to input the desired name for your SAS Viya namespace. The tool will then proceed with the two menus:
 
