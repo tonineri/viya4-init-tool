@@ -1626,12 +1626,12 @@ elif [ "$1" == "--whitelist" ]; then
     exit 0
 elif [ "$1" == "--support" ]; then
     echo ""
-    echo -e "-----------------------------------"
-    echo -e "   Supported ${BCYAN}SAS Viya${NONE} versions:"
-    echo -e "-----------------------------------"
-    echo -e "- ${BOLD}Stable${NONE}: $VIYASTABLE"
-    echo -e "- ${BOLD}LTS${NONE}:    $VIYALTS"
-    echo -e "-----------------------------------"
+    echo -e "-----------------------------------------"
+    echo -e "      Supported ${BCYAN}SAS Viya${NONE} versions:"
+    echo -e "-----------------------------------------"
+    echo -e "- ${BOLD}Stable${NONE}: ${VIYASTABLE[*]}"
+    echo -e "- ${BOLD}LTS${NONE}:    ${VIYALTS[*]}"
+    echo -e "-----------------------------------------"
     echo -e "${BCYAN}NOTE${NONE} | The tool is not maintained by SAS Institute Inc."
     echo -e "For support, open an issue at https://github.com/tonineri/viya4-init-tool/issues"
     echo ""
