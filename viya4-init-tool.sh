@@ -10,10 +10,10 @@
 
 # --------------------------------------------------  info  ---------------------------------------------------
 
-V4ITVER="v1.1.4"                                     # viya4-init-tool version
-VERDATE="September 19th, 2024"                       # viya4-init-tool version date
+V4ITVER="v1.1.5"                                     # viya4-init-tool version
+VERDATE="October 24th, 2024"                       # viya4-init-tool version date
 VIYALTS=("2022.09" "2023.03" "2023.10" "2024.03")    # Supported SAS Viya LTS versions
-VIYASTABLE=("2024.06" "2024.07" "2024.08" "2024.09") # Supported SAS Viya Stable versions
+VIYASTABLE=("2024.07" "2024.08" "2024.09" "2024.10") # Supported SAS Viya Stable versions
 
 # ---------------------------------------------- preRequirements ----------------------------------------------
 
@@ -332,7 +332,7 @@ requiredPackages() {
     # requiredPackages | zsh customization
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting >> $LOG 2>&1
     git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions >> $LOG 2>&1
-    git clone https://github.com/zsh-users/zsh-completions.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-zsh-completions >> $LOG 2>&1
+    git clone https://github.com/zsh-users/zsh-completions.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-completions >> $LOG 2>&1
     git clone https://github.com/zsh-users/zsh-history-substring-search.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-history-substring-search >> $LOG 2>&1
     git clone https://github.com/MichaelAquilina/zsh-you-should-use.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/you-should-use >> $LOG 2>&1
     git clone https://github.com/jonmosco/kube-ps1.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/kube-ps1 >> $LOG 2>&1
@@ -509,8 +509,8 @@ export deploy=\$DEPLOY
 
 # Container Registry
 export REGISTRY="<cr.hostname.com>"
-export REGISTRY_USER="<username>"
-export REGISTRY_PASS="<password>"
+export REGUSER="<username>"
+export REGPASS="<password>"
 
 # SAS Viya aliases
 alias setviya="kubectl config set-context --current --namespace=\$VIYA_NS"
@@ -581,7 +581,8 @@ requiredClients() {
     KUSTOMIZESUPPORTED2="5.0.0" # for SAS Viya LTS 2023.03
     KUSTOMIZESUPPORTED3="5.0.3" # for SAS Viya LTS 2023.10
     KUSTOMIZESUPPORTED4="5.1.1" # for SAS Viya 2023.12 to 2024.04
-    KUSTOMIZESUPPORTED5="5.3.0" # for SAS Viya 2024.05 and later
+    KUSTOMIZESUPPORTED5="5.3.0" # for SAS Viya 2024.05 to 2024.09
+    KUSTOMIZESUPPORTED6="5.4.3" # for SAS Viya 2024.10 and later
     echo -e "${BYELLOW}----------------------------${NONE}"
     echo -e "${BYELLOW}       INPUT REQUIRED       ${NONE}"
     echo -e "${BYELLOW}----------------------------${NONE}"
@@ -592,7 +593,8 @@ requiredClients() {
         echo -e "$KUSTOMIZESUPPORTED2 | for SAS Viya LTS 2023.03"
         echo -e "$KUSTOMIZESUPPORTED3 | for SAS Viya LTS 2023.10"
         echo -e "$KUSTOMIZESUPPORTED4 | for SAS Viya 2023.12 to 2024.05"
-        echo -e "$KUSTOMIZESUPPORTED5 | for SAS Viya 2024.06 and later"
+        echo -e "$KUSTOMIZESUPPORTED5 | for SAS Viya 2024.05 to 2024.09"
+        echo -e "$KUSTOMIZESUPPORTED6 | for SAS Viya 2024.10 and later"
         echo ""
         echo -e "Input kustomize version to be installed based on your SAS Viya version:"
         read KUSTOMIZEVERSION
@@ -600,7 +602,8 @@ requiredClients() {
             [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED2" ]] || \
             [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED3" ]] || \
             [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED4" ]] || \
-            [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED5" ]]; then
+            [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED5" ]] || \
+            [[ "$KUSTOMIZEVERSION" == "$KUSTOMIZESUPPORTED6" ]]; then
             # requiredClients: kustomize | pre-installation
             echo 
             echo -e "${INFOMSG} | Installing kustomize $KUSTOMIZEVERSION..."
